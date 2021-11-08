@@ -15,4 +15,6 @@ Prostor bo tudi vseboval razne pasti, ki ga bodo pri bežanju ovirale in upočas
 ### TEHNOLOGIJE
 Uporabljena bo knjižnica WebGl, ki pa je napisana v programskem jeziku JavaScript.
 
+Naš artistični pristop za izdelavo modelov bo low poly, 
+
 **Avtorji**: Mark Loboda (63200174), Irinej Slapal (63200268), Filip Jeretina (63200120)
