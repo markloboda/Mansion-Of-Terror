@@ -18,6 +18,7 @@ class App extends Application {
         if (!this.camera.camera) {
             throw new Error('Camera node does not contain a camera reference');
         }
+        console.log(this.camera)
 
         this.pointerlockchangeHandler = this.pointerlockchangeHandler.bind(this);
         document.addEventListener('pointerlockchange', this.pointerlockchangeHandler);
