@@ -18,7 +18,6 @@ class App extends Application {
         if (!this.camera.camera) {
             throw new Error('Camera node does not contain a camera reference');
         }
-        console.log(this.camera)
 
         this.pointerlockchangeHandler = this.pointerlockchangeHandler.bind(this);
         document.addEventListener('pointerlockchange', this.pointerlockchangeHandler);
@@ -59,9 +58,9 @@ class App extends Application {
         }
 
         if (document.pointerLockElement === this.canvas) {
-            this.camera.enable();
+            this.camera.camera.enable();
         } else {
-            this.camera.disable();
+            this.camera.camera.disable();
         }
     }
     update() {
@@ -70,7 +69,7 @@ class App extends Application {
         this.startTime = this.time;
 
         if (this.camera) {
-            this.camera.update(dt);
+            this.camera.camera.update(dt);
         }
 
         if (this.physics) {
@@ -82,8 +81,8 @@ class App extends Application {
         const h = this.canvas.clientHeight;
         this.aspect = w / h;
         if (this.camera) {
-            this.camera.aspect = this.aspect;
-            this.camera.updateProjection();
+            this.camera.camera.aspect = this.aspect;
+            this.camera.camera.updateProjection();
         }
     }
 
