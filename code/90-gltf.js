@@ -25,6 +25,10 @@ class App extends Application {
         this.resize();
     }
 
+    enableCamera() {
+        this.canvas.requestPointerLock();
+    }
+
     render() {
         if (this.renderer) {
             this.renderer.render(this.scene, this.camera);
