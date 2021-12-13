@@ -1,7 +1,10 @@
-import { Application } from '../../common/engine/Application.js';
+import { Application } from '../common/engine/Application.js';
 import { GUI } from '../lib/dat.gui.module.js';
 import { GLTFLoader } from './GLTFLoader.js';
 import { Renderer } from './Renderer.js';
+import { Camera } from './Camera.js';
+import { Physics } from './Physics.js';
+
 
 class App extends Application {
 
@@ -10,7 +13,10 @@ class App extends Application {
         await this.loader.load('../../common/models/room/isometric room.gltf');
 
         this.scene = await this.loader.loadScene(this.loader.defaultScene);
-        this.camera = await this.loader.loadNode('Camera');
+        console.log(this.scene)
+        this.camera = await this.loader.loadNode("Camera");
+        this.scene.addNode(this.camera);
+        console.log(this.scene)
         if (!this.scene || !this.camera) {
             throw new Error('Scene or Camera not present in glTF');
         }
@@ -18,9 +24,9 @@ class App extends Application {
         if (!this.camera.camera) {
             throw new Error('Camera node does not contain a camera reference');
         }
-
         this.pointerlockchangeHandler = this.pointerlockchangeHandler.bind(this);
         document.addEventListener('pointerlockchange', this.pointerlockchangeHandler);
+        this.physics = new Physics(this.scene);
         this.renderer = new Renderer(this.gl);
         this.camera.camera.aspect = this.aspect;
         this.camera.camera.updateProjection();
