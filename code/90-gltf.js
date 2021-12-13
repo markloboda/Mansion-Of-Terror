@@ -26,8 +26,7 @@ class App extends Application {
         document.addEventListener('pointerlockchange', this.pointerlockchangeHandler);
         this.physics = new Physics(this.scene);
         this.renderer = new Renderer(this.gl);
-        this.camera.camera.aspect = this.aspect;
-        this.camera.camera.updateProjection();
+        this.camera.camera.updateCameraMatrix();
         this.renderer.prepareScene(this.scene);
         this.resize();
     }
@@ -91,7 +90,7 @@ class App extends Application {
         this.aspect = w / h;
         if (this.camera) {
             this.camera.camera.aspect = this.aspect;
-            this.camera.camera.updateProjection();
+            this.camera.camera.updateCameraMatrix();
         }
     }
 
