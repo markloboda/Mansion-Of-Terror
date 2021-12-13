@@ -10,13 +10,11 @@ class App extends Application {
 
     async start() {
         this.loader = new GLTFLoader();
-        await this.loader.load('../../common/models/room/isometric room.gltf');
+        await this.loader.load('../../common/models/room/room.gltf');
 
         this.scene = await this.loader.loadScene(this.loader.defaultScene);
-        console.log(this.scene)
         this.camera = await this.loader.loadNode("Camera");
-        this.scene.addNode(this.camera);
-        console.log(this.scene)
+        this.scene.addNode(this.camera.camera);
         if (!this.scene || !this.camera) {
             throw new Error('Scene or Camera not present in glTF');
         }
@@ -70,6 +68,7 @@ class App extends Application {
         }
     }
     update() {
+
         const t = this.time = Date.now();
         const dt = (this.time - this.startTime) * 0.001;
         this.startTime = this.time;
@@ -80,6 +79,10 @@ class App extends Application {
 
         if (this.physics) {
             this.physics.update(dt);
+        }
+
+        if (this.camera && this.camera.translation[0] != 0) {
+            console.log(this.camera);
         }
     }
     resize() {
