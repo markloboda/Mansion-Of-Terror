@@ -26,7 +26,6 @@ class App extends Application {
         document.addEventListener('pointerlockchange', this.pointerlockchangeHandler);
         this.physics = new Physics(this.scene);
         this.renderer = new Renderer(this.gl);
-        this.camera.camera.updateCameraMatrix();
         this.renderer.prepareScene(this.scene);
         this.resize();
     }
@@ -41,16 +40,6 @@ class App extends Application {
         }
     }
 
-    resize() {
-        const w = this.canvas.clientWidth;
-        const h = this.canvas.clientHeight;
-        const aspectRatio = w / h;
-
-        if (this.camera) {
-            this.camera.camera.aspect = aspectRatio;
-            this.camera.camera.updateMatrix();
-        }
-    }
     enableCamera() {
         this.canvas.requestPointerLock();
     }
@@ -79,10 +68,6 @@ class App extends Application {
         if (this.physics) {
             this.physics.update(dt);
         }
-
-        if (this.camera && this.camera.translation[0] != 0) {
-            console.log(this.camera);
-        }
     }
     resize() {
         const w = this.canvas.clientWidth;
@@ -92,6 +77,7 @@ class App extends Application {
             this.camera.camera.aspect = this.aspect;
             this.camera.camera.updateCameraMatrix();
         }
+        console.log(this.camera)
     }
 
 }
