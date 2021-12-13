@@ -32,7 +32,7 @@ export class Camera extends Node {
         const c = this;
 
         const forward = vec3.set(vec3.create(),
-            -Math.sin(c.rotation[1]), 0, -Math.cos(c.rotation[1]));
+            -Math.sin(c.rotation[1]), -Math.cos(c.rotation[1]), 0);
         const right = vec3.set(vec3.create(),
             Math.cos(c.rotation[1]), 0, -Math.sin(c.rotation[1]));
 
@@ -96,7 +96,7 @@ export class Camera extends Node {
 
         const pi = Math.PI;
         const twopi = pi * 2;
-        const halfpi = pi / 2;
+        const halfpi = pi / 2; 
 
         if (c.rotation[0] > halfpi) {
             c.rotation[0] = halfpi;
@@ -106,6 +106,10 @@ export class Camera extends Node {
         }
 
         c.rotation[1] = ((c.rotation[1] % twopi) + twopi) % twopi;
+        // c.rotation[0] = 0;
+        // c.rotation[1] = 1;
+        // c.rotation[2] = 0;
+        // c.rotation[3] -= 0.01;
     }
 
     keydownHandler(e) {
