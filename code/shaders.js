@@ -13,6 +13,21 @@ void main() {
 }
 `;
 
+const vertexColor = `#version 300 es
+
+in vec4 aPosition;
+in vec4 aColor;
+
+uniform mat4 uMvpMatrix;
+
+out vec4 vColor;
+
+void main() {
+    gl_Position = uMvpMatrix * aPosition;
+    vColor = aColor;
+}
+`;
+
 const fragment = `#version 300 es
 precision mediump float;
 
@@ -27,6 +42,23 @@ void main() {
 }
 `;
 
+
+const fragmentColor = `#version 300 es
+precision mediump float;
+in vec4 vColor
+
+out vec4 oColor;
+
+void main() {
+    oColor = vColor;
+}
+`;
+
+
+
+
 export const shaders = {
-    simple: { vertex, fragment }
+    simple: { vertex, fragment },
+    simpleColor: { vertexColor, fragmentColor }
 };
+

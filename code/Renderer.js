@@ -209,11 +209,12 @@ export class Renderer {
     }
 
     renderPrimitive(primitive) {
+
         const gl = this.gl;
 
         const vao = this.glObjects.get(primitive);
         const material = primitive.material;
-        const texture = material.baseColorTexture;
+        const texture = material.baseColorTexture == null ? material.baseColorFactor : material.baseColorTexture;
         const glTexture = this.glObjects.get(texture.image);
         const glSampler = this.glObjects.get(texture.sampler);
 

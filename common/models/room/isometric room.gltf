@@ -34,7 +34,7 @@
     "nodes" : [
         {
             "camera" : 0,
-            "name" : "Camera_Orientation",
+            "name" : "Camera",
             "rotation" : [
                 -0.7071067690849304,
                 0,
@@ -46,7 +46,6 @@
             "children" : [
                 0
             ],
-            "name" : "Camera",
             "rotation" : [
                 0.6082219481468201,
                 0.2744295597076416,
@@ -415,6 +414,48 @@
         },
         {
             "doubleSided" : true,
+            "name" : "Material.004",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.800000011920929,
+                    0.800000011920929,
+                    0.800000011920929,
+                    1
+                ],
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        },
+        {
+            "doubleSided" : true,
+            "name" : "Material",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.800000011920929,
+                    0.800000011920929,
+                    0.800000011920929,
+                    1
+                ],
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        },
+        {
+            "doubleSided" : true,
+            "name" : "Material.010",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.800000011920929,
+                    0.800000011920929,
+                    0.800000011920929,
+                    1
+                ],
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        },
+        {
+            "doubleSided" : true,
             "name" : "Material.013",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
@@ -502,6 +543,20 @@
                     0.09850405156612396,
                     0.09850405156612396,
                     0.09850405156612396,
+                    1
+                ],
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        },
+        {
+            "doubleSided" : true,
+            "name" : "Material.015",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.800000011920929,
+                    0.800000011920929,
+                    0.800000011920929,
                     1
                 ],
                 "metallicFactor" : 0,
@@ -598,7 +653,8 @@
                         "NORMAL" : 25,
                         "TEXCOORD_0" : 26
                     },
-                    "indices" : 27
+                    "indices" : 27,
+                    "material" : 5
                 }
             ]
         },
@@ -625,7 +681,8 @@
                         "NORMAL" : 33,
                         "TEXCOORD_0" : 34
                     },
-                    "indices" : 35
+                    "indices" : 35,
+                    "material" : 6
                 }
             ]
         },
@@ -638,7 +695,8 @@
                         "NORMAL" : 37,
                         "TEXCOORD_0" : 38
                     },
-                    "indices" : 39
+                    "indices" : 39,
+                    "material" : 7
                 }
             ]
         },
@@ -652,7 +710,7 @@
                         "TEXCOORD_0" : 42
                     },
                     "indices" : 43,
-                    "material" : 5
+                    "material" : 8
                 },
                 {
                     "attributes" : {
@@ -675,7 +733,7 @@
                         "TEXCOORD_0" : 50
                     },
                     "indices" : 51,
-                    "material" : 6
+                    "material" : 9
                 },
                 {
                     "attributes" : {
@@ -684,7 +742,7 @@
                         "TEXCOORD_0" : 54
                     },
                     "indices" : 55,
-                    "material" : 7
+                    "material" : 10
                 },
                 {
                     "attributes" : {
@@ -693,7 +751,7 @@
                         "TEXCOORD_0" : 58
                     },
                     "indices" : 59,
-                    "material" : 8
+                    "material" : 11
                 },
                 {
                     "attributes" : {
@@ -702,7 +760,7 @@
                         "TEXCOORD_0" : 62
                     },
                     "indices" : 63,
-                    "material" : 9
+                    "material" : 12
                 }
             ]
         },
@@ -716,7 +774,7 @@
                         "TEXCOORD_0" : 66
                     },
                     "indices" : 67,
-                    "material" : 10
+                    "material" : 13
                 }
             ]
         },
@@ -730,7 +788,7 @@
                         "TEXCOORD_0" : 70
                     },
                     "indices" : 67,
-                    "material" : 10
+                    "material" : 13
                 }
             ]
         },
@@ -744,7 +802,7 @@
                         "TEXCOORD_0" : 73
                     },
                     "indices" : 74,
-                    "material" : 11
+                    "material" : 14
                 },
                 {
                     "attributes" : {
@@ -753,7 +811,7 @@
                         "TEXCOORD_0" : 77
                     },
                     "indices" : 78,
-                    "material" : 10
+                    "material" : 13
                 }
             ]
         },
@@ -767,7 +825,7 @@
                         "TEXCOORD_0" : 81
                     },
                     "indices" : 82,
-                    "material" : 12
+                    "material" : 15
                 }
             ]
         },
@@ -780,7 +838,8 @@
                         "NORMAL" : 84,
                         "TEXCOORD_0" : 85
                     },
-                    "indices" : 82
+                    "indices" : 82,
+                    "material" : 16
                 }
             ]
         },
@@ -803,7 +862,7 @@
                         "TEXCOORD_0" : 92
                     },
                     "indices" : 55,
-                    "material" : 13
+                    "material" : 17
                 }
             ]
         },
@@ -817,7 +876,7 @@
                         "TEXCOORD_0" : 95
                     },
                     "indices" : 74,
-                    "material" : 11
+                    "material" : 14
                 },
                 {
                     "attributes" : {
@@ -826,7 +885,7 @@
                         "TEXCOORD_0" : 98
                     },
                     "indices" : 78,
-                    "material" : 10
+                    "material" : 13
                 }
             ]
         },
@@ -849,7 +908,7 @@
                         "TEXCOORD_0" : 104
                     },
                     "indices" : 55,
-                    "material" : 13
+                    "material" : 17
                 }
             ]
         },
@@ -872,7 +931,7 @@
                         "TEXCOORD_0" : 110
                     },
                     "indices" : 55,
-                    "material" : 13
+                    "material" : 17
                 }
             ]
         }

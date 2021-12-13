@@ -212,6 +212,8 @@ export class GLTFLoader {
         return material;
     }
 
+    
+
     async loadMesh(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.meshes, nameOrIndex);
         if (this.cache.has(gltfSpec)) {
