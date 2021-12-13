@@ -1,4 +1,4 @@
-import { vec3, mat4 } from '../../lib/gl-matrix-module.js';
+import { vec3, mat4 } from '../lib/gl-matrix-module.js';
 
 export class Physics {
 
@@ -13,7 +13,7 @@ export class Physics {
                 node.updateTransform();
                 this.scene.traverse(other => {
                     if (node !== other) {
-                        this.resolveCollision(node, other);
+                        //this.resolveCollision(node, other);
                     }
                 });
             }
@@ -88,7 +88,7 @@ export class Physics {
         }
 
         vec3.add(a.translation, a.translation, minDirection);
-        a.updateTransform();
+        a.updateMatrix();
     }
 
 }

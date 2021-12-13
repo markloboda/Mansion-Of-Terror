@@ -1,4 +1,4 @@
-import { vec3, vec4 } from '../../lib/gl-matrix-module.js';
+import { vec3, vec4 } from '../lib/gl-matrix-module.js';
 
 export class Material {
 
