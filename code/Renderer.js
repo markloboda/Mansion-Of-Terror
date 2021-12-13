@@ -179,7 +179,7 @@ export class Renderer {
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        const program = this.programs.simple;
+        const program = this.programs.simpleColor;
         gl.useProgram(program.program);
         gl.uniform1i(program.uniforms.uTexture, 0);
 
@@ -196,7 +196,7 @@ export class Renderer {
         mat4.mul(mvpMatrix, mvpMatrix, node.matrix);
 
         if (node.mesh) {
-            const program = this.programs.simple;
+            const program = this.programs.simpleColor;
             gl.uniformMatrix4fv(program.uniforms.uMvpMatrix, false, mvpMatrix);
             for (const primitive of node.mesh.primitives) {
                 this.renderPrimitive(primitive);

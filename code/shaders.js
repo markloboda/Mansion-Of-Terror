@@ -1,4 +1,6 @@
-const vertex = `#version 300 es
+const glsl = x => x;
+const vertex = glsl`#version 300 es
+#pragma vscode_glsllint_stage: vert
 
 layout (location = 0) in vec4 aPosition;
 layout (location = 1) in vec2 aTexCoord;
@@ -13,7 +15,8 @@ void main() {
 }
 `;
 
-const vertexColor = `#version 300 es
+const vertexColor = glsl`#version 300 es
+#pragma vscode_glsllint_stage: vert
 
 in vec4 aPosition;
 in vec4 aColor;
@@ -28,7 +31,8 @@ void main() {
 }
 `;
 
-const fragment = `#version 300 es
+const fragment = glsl`#version 300 es
+#pragma vscode_glsllint_stage: frag
 precision mediump float;
 
 uniform mediump sampler2D uTexture;
@@ -43,9 +47,10 @@ void main() {
 `;
 
 
-const fragmentColor = `#version 300 es
+const fragmentColor = glsl`#version 300 es
+#pragma vscode_glsllint_stage: frag
 precision mediump float;
-in vec4 vColor
+in vec4 vColor;
 
 out vec4 oColor;
 
@@ -59,6 +64,6 @@ void main() {
 
 export const shaders = {
     simple: { vertex, fragment },
-    simpleColor: { vertexColor, fragmentColor }
+    simpleColor: { vertex: vertexColor, fragment: fragmentColor }
 };
 
