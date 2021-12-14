@@ -38,6 +38,14 @@ export class Camera extends Node {
 
         // 1: add movement acceleration
         let acc = vec3.create();
+        if (this.keys["ShiftLeft"]) {
+            c.maxSpeed = 20;
+            c.acceleration = 60;
+        }
+        else {
+            c.maxSpeed = 3;
+            c.acceleration = 20;
+        }
         if (this.keys['KeyW']) {
             vec3.add(acc, acc, forward);
         }
@@ -90,9 +98,8 @@ export class Camera extends Node {
         const dx = e.movementX;
         const dy = e.movementY;
         const c = this;
-
-        quat.rotateY(c.rotation, c.rotation, -dx * c.mouseSensitivity);
-        quat.rotateX(c.rotation, c.rotation, -dy * c.mouseSensitivity);
+        quat.rotateX(c.rotation, quat.clone(c.rotation), -dy * c.mouseSensitivity);
+        quat.rotateY(c.rotation, quat.clone(c.rotation), -dx * c.mouseSensitivity);
     }
 
     keydownHandler(e) {
