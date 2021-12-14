@@ -30,6 +30,7 @@ class App extends Application {
         this.renderer = new Renderer(this.gl);
         this.renderer.prepareScene(this.scene);
         this.resize();
+        console.log(this.camera);
     }
 
     enableCamera() {

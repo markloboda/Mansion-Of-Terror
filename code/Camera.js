@@ -31,10 +31,10 @@ export class Camera extends Node {
     update(dt) {
         const c = this;
 
-        const forward = vec3.fromValues(0, 0, -1)
-        vec3.transformQuat(forward, forward, c.rotation)
-        const right = vec3.fromValues(1, 0, 0)
-        vec3.transformQuat(right, right, c.rotation)
+        const forward = vec3.set(vec3.create(),
+            -Math.sin(c.rotation[1]), -Math.cos(c.rotation[1]), 0);
+        const right = vec3.set(vec3.create(),
+            Math.cos(c.rotation[1]), 0, -Math.sin(c.rotation[1]));
 
         // 1: add movement acceleration
         let acc = vec3.create();
@@ -66,8 +66,7 @@ export class Camera extends Node {
         if (!this.keys['KeyW'] &&
             !this.keys['KeyS'] &&
             !this.keys['KeyD'] &&
-            !this.keys['KeyA'])
-        {
+            !this.keys['KeyA']) {
             vec3.scale(c.velocity, c.velocity, 1 - c.friction);
         }
 
@@ -102,6 +101,22 @@ export class Camera extends Node {
         quat.rotateY(c.rotation, quat.clone(c.rotation), -dx * c.mouseSensitivity);
     }
 
+    eulerToQuaternion(yaw, pitch, roll) {
+        let cy = Math.cos(yaw * 0.5);
+        let sy = Math.sin(yaw * 0.5);
+        let cp = Math.cos(pitch * 0.5);
+        let sp = Math.sin(pitch * 0.5);
+        let cr = Math.cos(roll * 0.5);
+        let sr = Math.sin(roll * 0.5);
+
+        return [
+            sr * cp * cy - cr * sp * sy,
+            cr * sp * cy + sr * cp * sy,
+            cr * cp * sy - sr * sp * cy,
+            cr * cp * cy + sr * sp * sy
+        ]
+    }
+
     keydownHandler(e) {
         this.keys[e.code] = true;
     }
@@ -110,12 +125,14 @@ export class Camera extends Node {
         this.keys[e.code] = false;
     }
 
+
+
 }
 
 Camera.defaults = {
-    velocity         : [0, 0, 0],
-    mouseSensitivity : 0.002,
-    maxSpeed         : 3,
-    friction         : 0.2,
-    acceleration     : 20
-};
+    velocity: [0, 0, 0],
+    mouseSensitivity: 0.002,
+    maxSpeed: 3,
+    friction: 0.2,
+    acceleration: 20
+}; 
