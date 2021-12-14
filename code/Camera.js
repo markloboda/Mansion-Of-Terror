@@ -12,7 +12,7 @@
 // }
 
 
-import { vec3, mat4 } from '../lib/gl-matrix-module.js';
+import { vec3, mat4, quat } from '../lib/gl-matrix-module.js';
 
 import { Utils } from './Utils.js';
 import { Node } from './Node.js';
@@ -31,10 +31,10 @@ export class Camera extends Node {
     update(dt) {
         const c = this;
 
-        const forward = vec3.set(vec3.create(),
-            -Math.sin(c.rotation[1]), -Math.cos(c.rotation[1]), 0);
-        const right = vec3.set(vec3.create(),
-            Math.cos(c.rotation[1]), 0, -Math.sin(c.rotation[1]));
+        const forward = vec3.fromValues(0, 0, -1)
+        vec3.transformQuat(forward, forward, c.rotation)
+        const right = vec3.fromValues(1, 0, 0)
+        vec3.transformQuat(right, right, c.rotation)
 
         // 1: add movement acceleration
         let acc = vec3.create();
@@ -91,25 +91,8 @@ export class Camera extends Node {
         const dy = e.movementY;
         const c = this;
 
-        c.rotation[0] -= dy * c.mouseSensitivity;
-        c.rotation[1] -= dx * c.mouseSensitivity;
-
-        const pi = Math.PI;
-        const twopi = pi * 2;
-        const halfpi = pi / 2; 
-
-        if (c.rotation[0] > halfpi) {
-            c.rotation[0] = halfpi;
-        }
-        if (c.rotation[0] < -halfpi) {
-            c.rotation[0] = -halfpi;
-        }
-
-        c.rotation[1] = ((c.rotation[1] % twopi) + twopi) % twopi;
-        // c.rotation[0] = 0;
-        // c.rotation[1] = 1;
-        // c.rotation[2] = 0;
-        // c.rotation[3] -= 0.01;
+        quat.rotateY(c.rotation, c.rotation, -dx * c.mouseSensitivity);
+        quat.rotateX(c.rotation, c.rotation, -dy * c.mouseSensitivity);
     }
 
     keydownHandler(e) {

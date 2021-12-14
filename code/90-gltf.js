@@ -10,7 +10,9 @@ class App extends Application {
 
     async start() {
         this.loader = new GLTFLoader();
-        await this.loader.load('../../common/models/room/room.gltf');
+        // await this.loader.load('../../common/models/empty_room/empty_room.gltf');
+        await this.loader.load('../../common/models/cottage/cottage_blender.gltf');
+        // await this.loader.load('../../common/models/room/room.gltf');
 
         this.scene = await this.loader.loadScene(this.loader.defaultScene);
         this.camera = await this.loader.loadNode("Camera");
@@ -77,7 +79,6 @@ class App extends Application {
             this.camera.camera.aspect = this.aspect;
             this.camera.camera.updateCameraMatrix();
         }
-        console.log(this.camera)
     }
 
 }
