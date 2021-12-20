@@ -12,7 +12,7 @@
 // }
 
 
-import { vec3, mat4 } from '../lib/gl-matrix-module.js';
+import { vec3, mat4, quat } from '../lib/gl-matrix-module.js';
 
 import { Utils } from './Utils.js';
 import { Node } from './Node.js';
@@ -22,9 +22,9 @@ export class Camera extends Node {
     constructor(options) {
         super(options);
         Utils.init(this, this.constructor.defaults, options);
-        this.mousemoveHandler = this.mousemoveHandler.bind(this);
-        this.keydownHandler = this.keydownHandler.bind(this);
-        this.keyupHandler = this.keyupHandler.bind(this);
+        // this.mousemoveHandler = this.mousemoveHandler.bind(this);
+        // this.keydownHandler = this.keydownHandler.bind(this);
+        // this.keyupHandler = this.keyupHandler.bind(this);
         this.keys = {};
     }
 
@@ -32,12 +32,21 @@ export class Camera extends Node {
         const c = this;
 
         const forward = vec3.set(vec3.create(),
-            -Math.sin(c.rotation[1]), -Math.cos(c.rotation[1]), 0);
+            -Math.sin(c.euler[1]), 0, -Math.cos(c.euler[1]));
         const right = vec3.set(vec3.create(),
-            Math.cos(c.rotation[1]), 0, -Math.sin(c.rotation[1]));
+            Math.cos(c.euler[1]), 0, -Math.sin(c.euler[1]));
+
 
         // 1: add movement acceleration
         let acc = vec3.create();
+        if (this.keys["ShiftLeft"]) {
+            c.maxSpeed = 20;
+            c.acceleration = 60;
+        }
+        else {
+            c.maxSpeed = 3;
+            c.acceleration = 20;
+        }
         if (this.keys['KeyW']) {
             vec3.add(acc, acc, forward);
         }
@@ -53,13 +62,11 @@ export class Camera extends Node {
 
         // 2: update velocity
         vec3.scaleAndAdd(c.velocity, c.velocity, acc, dt * c.acceleration);
-
         // 3: if no movement, apply friction
         if (!this.keys['KeyW'] &&
             !this.keys['KeyS'] &&
             !this.keys['KeyD'] &&
-            !this.keys['KeyA'])
-        {
+            !this.keys['KeyA']) {
             vec3.scale(c.velocity, c.velocity, 1 - c.friction);
         }
 
@@ -91,25 +98,23 @@ export class Camera extends Node {
         const dy = e.movementY;
         const c = this;
 
-        c.rotation[0] -= dy * c.mouseSensitivity;
-        c.rotation[1] -= dx * c.mouseSensitivity;
+        c.euler[0] -= dy * c.mouseSensitivity;
+        c.euler[1] -= dx * c.mouseSensitivity;
 
         const pi = Math.PI;
         const twopi = pi * 2;
-        const halfpi = pi / 2; 
+        const halfpi = pi / 2;
 
-        if (c.rotation[0] > halfpi) {
-            c.rotation[0] = halfpi;
+        if (c.euler[0] > halfpi) {
+            c.euler[0] = halfpi;
         }
-        if (c.rotation[0] < -halfpi) {
-            c.rotation[0] = -halfpi;
+        if (c.euler[0] < -halfpi) {
+            c.euler[0] = -halfpi;
         }
 
-        c.rotation[1] = ((c.rotation[1] % twopi) + twopi) % twopi;
-        // c.rotation[0] = 0;
-        // c.rotation[1] = 1;
-        // c.rotation[2] = 0;
-        // c.rotation[3] -= 0.01;
+        c.euler[1] = ((c.euler[1] % twopi) + twopi) % twopi;
+        const deg = c.euler.map(angle => angle*180/Math.PI);
+        c.rotation = quat.fromEuler(quat.create(), ...deg);
     }
 
     keydownHandler(e) {
@@ -120,12 +125,14 @@ export class Camera extends Node {
         this.keys[e.code] = false;
     }
 
+
+
 }
 
 Camera.defaults = {
-    velocity         : [0, 0, 0],
-    mouseSensitivity : 0.002,
-    maxSpeed         : 3,
-    friction         : 0.2,
-    acceleration     : 20
-};
+    velocity: [0, 0, 0],
+    mouseSensitivity: 0.002,
+    maxSpeed: 3,
+    friction: 0.2,
+    acceleration: 20
+}; 

@@ -8,16 +8,16 @@ export class Physics {
 
     update(dt) {
         this.scene.traverse(node => {
-            if (node.velocity) {
+                if (node.velocity) {
                 vec3.scaleAndAdd(node.translation, node.translation, node.velocity, dt);
-                node.updateMatrix()
-                console.log(node)
+                node.updateMatrix();
+                node.parent?.updateMatrix()
                 this.scene.traverse(other => {
                     if (node !== other) {
                         //this.resolveCollision(node, other);
                     }
                 });
-            }
+            } //else if (node.camera) {node.updateMatrix(); node.parent.updateMatrix()}
         });
     }
 

@@ -1,4 +1,5 @@
 const glsl = x => x;
+
 const vertex = glsl`#version 300 es
 #pragma vscode_glsllint_stage: vert
 
@@ -27,7 +28,8 @@ out vec4 vColor;
 
 void main() {
     gl_Position = uMvpMatrix * aPosition;
-    vColor = aColor;
+    vColor = vec4(1) - aColor;
+    vColor.a = 1.0;
 }
 `;
 
