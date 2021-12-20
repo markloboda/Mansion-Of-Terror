@@ -11,12 +11,12 @@ class App extends Application {
     async start() {
         this.loader = new GLTFLoader();
         // await this.loader.load('../../common/models/empty_room/empty_room.gltf');
-        await this.loader.load('../../common/models/cottage/cottage_blender.gltf');
-        // await this.loader.load('../../common/models/room/room.gltf');
+        // await this.loader.load('../../common/models/cottage/cottage_blender.gltf');
+        await this.loader.load('../../common/models/room/room.gltf');
 
         this.scene = await this.loader.loadScene(this.loader.defaultScene);
         this.camera = await this.loader.loadNode("Camera");
-        this.scene.addNode(this.camera.camera);
+        this.scene.addNode(this.camera);
         if (!this.scene || !this.camera) {
             throw new Error('Scene or Camera not present in glTF');
         }
@@ -30,7 +30,6 @@ class App extends Application {
         this.renderer = new Renderer(this.gl);
         this.renderer.prepareScene(this.scene);
         this.resize();
-        console.log(this.camera);
     }
 
     enableCamera() {
@@ -53,9 +52,9 @@ class App extends Application {
         }
 
         if (document.pointerLockElement === this.canvas) {
-            this.camera.camera.enable();
+            this.camera.enableMovement();
         } else {
-            this.camera.camera.disable();
+            this.camera.disableMovement();
         }
     }
     update() {
@@ -63,9 +62,8 @@ class App extends Application {
         const t = this.time = Date.now();
         const dt = (this.time - this.startTime) * 0.001;
         this.startTime = this.time;
-
         if (this.camera) {
-            this.camera.camera.update(dt);
+            this.camera.update(dt);
         }
 
         if (this.physics) {
@@ -77,7 +75,6 @@ class App extends Application {
         const h = this.canvas.clientHeight;
         this.aspect = w / h;
         if (this.camera) {
-            this.camera.camera.aspect = this.aspect;
             this.camera.camera.updateCameraMatrix();
         }
     }

@@ -22,9 +22,9 @@ export class Camera extends Node {
     constructor(options) {
         super(options);
         Utils.init(this, this.constructor.defaults, options);
-        this.mousemoveHandler = this.mousemoveHandler.bind(this);
-        this.keydownHandler = this.keydownHandler.bind(this);
-        this.keyupHandler = this.keyupHandler.bind(this);
+        // this.mousemoveHandler = this.mousemoveHandler.bind(this);
+        // this.keydownHandler = this.keydownHandler.bind(this);
+        // this.keyupHandler = this.keyupHandler.bind(this);
         this.keys = {};
     }
 
@@ -32,9 +32,10 @@ export class Camera extends Node {
         const c = this;
 
         const forward = vec3.set(vec3.create(),
-            -Math.sin(c.rotation[1]), -Math.cos(c.rotation[1]), 0);
+            -Math.sin(c.euler[1]), 0, -Math.cos(c.euler[1]));
         const right = vec3.set(vec3.create(),
-            Math.cos(c.rotation[1]), 0, -Math.sin(c.rotation[1]));
+            Math.cos(c.euler[1]), 0, -Math.sin(c.euler[1]));
+
 
         // 1: add movement acceleration
         let acc = vec3.create();
@@ -61,7 +62,6 @@ export class Camera extends Node {
 
         // 2: update velocity
         vec3.scaleAndAdd(c.velocity, c.velocity, acc, dt * c.acceleration);
-
         // 3: if no movement, apply friction
         if (!this.keys['KeyW'] &&
             !this.keys['KeyS'] &&
@@ -97,24 +97,24 @@ export class Camera extends Node {
         const dx = e.movementX;
         const dy = e.movementY;
         const c = this;
-        quat.rotateX(c.rotation, quat.clone(c.rotation), -dy * c.mouseSensitivity);
-        quat.rotateY(c.rotation, quat.clone(c.rotation), -dx * c.mouseSensitivity);
-    }
 
-    eulerToQuaternion(yaw, pitch, roll) {
-        let cy = Math.cos(yaw * 0.5);
-        let sy = Math.sin(yaw * 0.5);
-        let cp = Math.cos(pitch * 0.5);
-        let sp = Math.sin(pitch * 0.5);
-        let cr = Math.cos(roll * 0.5);
-        let sr = Math.sin(roll * 0.5);
+        c.euler[0] -= dy * c.mouseSensitivity;
+        c.euler[1] -= dx * c.mouseSensitivity;
 
-        return [
-            sr * cp * cy - cr * sp * sy,
-            cr * sp * cy + sr * cp * sy,
-            cr * cp * sy - sr * sp * cy,
-            cr * cp * cy + sr * sp * sy
-        ]
+        const pi = Math.PI;
+        const twopi = pi * 2;
+        const halfpi = pi / 2;
+
+        if (c.euler[0] > halfpi) {
+            c.euler[0] = halfpi;
+        }
+        if (c.euler[0] < -halfpi) {
+            c.euler[0] = -halfpi;
+        }
+
+        c.euler[1] = ((c.euler[1] % twopi) + twopi) % twopi;
+        const deg = c.euler.map(angle => angle*180/Math.PI);
+        c.rotation = quat.fromEuler(quat.create(), ...deg);
     }
 
     keydownHandler(e) {
