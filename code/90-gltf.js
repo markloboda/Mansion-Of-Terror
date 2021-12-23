@@ -13,7 +13,9 @@ class App extends Application {
         // await this.loader.load('../../common/models/empty_room/empty_room.gltf');
         // await this.loader.load('../../common/models/cottage/cottage_blender.gltf');
         // await this.loader.load('../../common/models/room/room.gltf');
-        await this.loader.load('../../common/models/croc/croc.gltf');
+        // await this.loader.load('../../common/models/croc/croc.gltf');
+        // await this.loader.load('../../common/models/fox/Fox.gltf');
+        await this.loader.load('../../common/models/Shark002.blend/Correctshark002.gltf');
         this.scene = await this.loader.loadScene(this.loader.defaultScene);
         this.camera = await this.loader.loadNode("Camera");
         this.scene.addNode(this.camera);
