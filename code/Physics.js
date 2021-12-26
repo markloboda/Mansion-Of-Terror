@@ -8,16 +8,21 @@ export class Physics {
 
     update(dt) {
         this.scene.traverse(node => {
-                if (node.velocity) {
+            if (node.velocity && !node.velocity.every(item => item === 0)) {
                 vec3.scaleAndAdd(node.translation, node.translation, node.velocity, dt);
                 node.updateMatrix();
                 node.parent?.updateMatrix()
                 this.scene.traverse(other => {
-                    if (node !== other) {
-                        //this.resolveCollision(node, other);
+                    // check if node is moving (only check collision for nodes that are moving)
+                    if (node !== other && node.aabb && other.aabb) {
+                        this.resolveCollision(node, other);
                     }
                 });
-            } //else if (node.camera) {node.updateMatrix(); node.parent.updateMatrix()}
+            }
+            else if (node.camera) {
+                node.updateMatrix(); 
+                node.parent.updateMatrix() 
+            }
         });
     }
 
@@ -38,6 +43,7 @@ export class Physics {
 
         const posa = mat4.getTranslation(vec3.create(), ta);
         const posb = mat4.getTranslation(vec3.create(), tb);
+
 
         const mina = vec3.add(vec3.create(), posa, a.aabb.min);
         const maxa = vec3.add(vec3.create(), posa, a.aabb.max);
