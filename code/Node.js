@@ -74,6 +74,8 @@ export class Node {
                 min: min,
                 max: max
             };
+        } else {
+            console.log(this);
         }
     }
 
@@ -107,6 +109,7 @@ export class Node {
     }
 
     update(dt) {
+        // console.log(mat4.getTranslation(vec3.create(), this.matrix));
         const c = this;
 
         const forward = vec3.set(vec3.create(),
