@@ -43,6 +43,42 @@ export class Node {
             child.parent = this;
         }
         this.parent = null;
+        this.createAABB();
+    }
+
+    createAABB() {
+        let position = mat4.getTranslation(vec3.create(), this.matrix);
+        if (this.camera) {
+            // define AABB for camera
+            this.aabb = {
+                min: [position[0], position[1] - 0.2, position[2] - 0.2],
+                max: [position[0], position[1] + 3, position[2] + 0.2]
+            }
+        } else if (this.mesh) {
+            // define AABB for other nodes
+            let min = [];
+            let max = [];
+            for (let i = 0; i < 3; i++) {
+                this.mesh.primitives.forEach(primitive => {
+                    if (!min[i] || min[i] > primitive.attributes.POSITION.min[i]) {
+                        min[i] = primitive.attributes.POSITION.min[i];
+                    }
+                })
+                this.mesh.primitives.forEach(primitive => {
+                    if (!max[i] || max[i] < primitive.attributes.POSITION.max[i]) {
+                        max[i] = primitive.attributes.POSITION.max[i];
+                    }
+                })
+            };
+            this.aabb = {
+                min: min,
+                max: max
+            };
+        }
+    }
+
+    getGlobalTransform() {
+        return this.matrix;
     }
 
     mousemoveHandler(e) {
@@ -64,9 +100,9 @@ export class Node {
         }
 
         this.euler[1] = ((this.euler[1] % twopi) + twopi) % twopi;
-        const degVertical = this.euler.map(angle => angle*180/Math.PI);
+        const degVertical = this.euler.map(angle => angle * 180 / Math.PI);
         this.rotation = quat.fromEuler(quat.create(), ...degVertical);
-        const degHorizontal = this.parent.euler.map(angle => angle*180/Math.PI);
+        const degHorizontal = this.parent.euler.map(angle => angle * 180 / Math.PI);
         this.parent.rotation = quat.fromEuler(quat.create(), ...degHorizontal)
     }
 
@@ -118,6 +154,14 @@ export class Node {
         if (len > c.maxSpeed) {
             vec3.scale(c.velocity, c.velocity, c.maxSpeed / len);
         }
+
+        // CHECK IF NODE IS STOPPED
+        for (let i = 0; i < this.velocity.length; i++) {
+            if (Math.abs(this.velocity[i]) <= 0.1 * Math.pow(10, -4)) {
+                this.velocity[i] = 0;
+            }
+        }
+
     }
 
     enableMovement() {
