@@ -185,7 +185,7 @@
         },
         {
             "camera" : 0,
-            "name" : "Camera.001_Orientation",
+            "name" : "Camera",
             "rotation" : [
                 -0.7071067690849304,
                 0,
@@ -197,7 +197,6 @@
             "children" : [
                 9
             ],
-            "name" : "Camera.001",
             "translation" : [
                 2.379920244216919,
                 1.9936702251434326,
@@ -224,7 +223,7 @@
     ],
     "cameras" : [
         {
-            "name" : "Camera.002",
+            "name" : "Camera",
             "perspective" : {
                 "aspectRatio" : 1.7777777777777777,
                 "yfov" : 1.1081846952438354,
