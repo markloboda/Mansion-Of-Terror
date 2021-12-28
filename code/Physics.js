@@ -98,4 +98,8 @@ export class Physics {
         a.updateMatrix();
     }
 
+    static acceleration(force, mass) {
+        return force / mass;
+    }
+
 }

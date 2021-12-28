@@ -1,4 +1,5 @@
 import { vec3, mat4, quat } from '../lib/gl-matrix-module.js';
+import { Physics } from './Physics.js';
 
 export class Node {
 
@@ -15,7 +16,7 @@ export class Node {
         this.matrix = options.matrix
             ? mat4.clone(options.matrix)
             : mat4.create();
-        this.euler = [0, 0, 0]
+        this.euler = [0, 0, 0];
 
         if (options.matrix) {
             this.updateTransform();
@@ -43,6 +44,12 @@ export class Node {
             child.parent = this;
         }
         this.parent = null;
+        
+        this.mass = 1;
+        this.forceSumDown = this.mass * 10;  // gravitational acceletarion = 10 // current vector of summed forces for up and down, where positive is when its up
+        this.inAir = false;  
+        this.startDate = new Date();
+
         this.createAABB();
     }
 
@@ -51,8 +58,8 @@ export class Node {
         if (this.camera) {
             // define AABB for camera
             this.aabb = {
-                min: [position[0], position[1] - 0.2, position[2] - 0.2],
-                max: [position[0], position[1] + 3, position[2] + 0.2]
+                min: [position[0] - 0.2, position[1] - 0.2, position[2] - 0.2],
+                max: [position[0] - 0.2, position[1] + 3, position[2] + 0.2]
             }
         } else if (this.mesh) {
             // define AABB for other nodes
@@ -75,7 +82,7 @@ export class Node {
                 max: max
             };
         } else {
-            console.log(this);
+            //
         }
     }
 
@@ -89,33 +96,41 @@ export class Node {
 
         this.euler[0] -= dy * this.mouseSensitivity;
         this.euler[1] -= dx * this.mouseSensitivity;
-
+        
         const pi = Math.PI;
         const twopi = pi * 2;
         const halfpi = pi / 2;
-
+        
         if (this.euler[0] > halfpi) {
             this.euler[0] = halfpi;
         }
         if (this.euler[0] < -halfpi) {
             this.euler[0] = -halfpi;
         }
+        
 
         this.euler[1] = ((this.euler[1] % twopi) + twopi) % twopi;
         const degVertical = this.euler.map(angle => angle * 180 / Math.PI);
         this.rotation = quat.fromEuler(quat.create(), ...degVertical);
         const degHorizontal = this.parent.euler.map(angle => angle * 180 / Math.PI);
-        this.parent.rotation = quat.fromEuler(quat.create(), ...degHorizontal)
+        // this.parent.rotation = quat.fromEuler(quat.create(), ...degHorizontal);              // this line not necessary
     }
 
+
     update(dt) {
-        // console.log(mat4.getTranslation(vec3.create(), this.matrix));
         const c = this;
+        
+        let endDate = new Date();
+        let timeDiff = (endDate.getTime() - c.startDate.getTime()) / 1000;
+        let accY = Physics.acceleration(c.forceSumDown, c.mass)
+        c.velocity[1] = (c.velocity[1] + accY * timeDiff);
 
         const forward = vec3.set(vec3.create(),
             -Math.sin(c.euler[1]), 0, -Math.cos(c.euler[1]));
         const right = vec3.set(vec3.create(),
             Math.cos(c.euler[1]), 0, -Math.sin(c.euler[1]));
+        const up = vec3.set(vec3.create(),
+            0, 1, 0);
 
 
         // 1: add movement acceleration
@@ -140,11 +155,14 @@ export class Node {
         if (this.keys['KeyA']) {
             vec3.sub(acc, acc, right);
         }
+        if (this.keys['Space']) {
+            vec3.add(acc, acc, up);
+        }
 
         // 2: update velocity
         vec3.scaleAndAdd(c.velocity, c.velocity, acc, dt * c.acceleration);
 
-        // 3: if no movement, apply friction
+        // 3: if no movement, apply friction on ground
         if (!this.keys['KeyW'] &&
             !this.keys['KeyS'] &&
             !this.keys['KeyD'] &&
@@ -164,7 +182,8 @@ export class Node {
                 this.velocity[i] = 0;
             }
         }
-
+        
+        c.startDate = new Date();
     }
 
     enableMovement() {
