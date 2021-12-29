@@ -12,9 +12,11 @@ class App extends Application {
         this.loader = new GLTFLoader();
         // await this.loader.load('../../common/models/empty_room/empty_room.gltf');
         // await this.loader.load('../../common/models/cottage/cottage_blender.gltf');
-        await this.loader.load('../../common/models/room/room.gltf');
+        // await this.loader.load('../../common/models/room/room.gltf');
+        await this.loader.load('../../common/models/flat_surface/flat_surface.gltf');
+        // await this.loader.load('../../common/models/flat_surface2/flat_surface2.gltf');
         // await this.loader.load('../../common/models/croc/croc.gltf');
-        // await this.loader.load('../../common/models/first_room/first_room.gltf')
+        // await this.loader.load('../../common/models/first_room/first_room.gltf');
         
         this.scene = await this.loader.loadScene(this.loader.defaultScene);
         this.camera = await this.loader.loadNode("Camera");
