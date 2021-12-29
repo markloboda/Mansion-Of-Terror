@@ -28,6 +28,11 @@ export class Physics {
                 node.updateMatrix(); 
                 node.parent.updateMatrix() 
             }
+
+            // reset Y velocity if on ground
+            if (node.onGround) {
+                node.velocity[1] = 0;
+            }
         });
     }
     intervalIntersection(min1, max1, min2, max2) {
@@ -57,7 +62,7 @@ export class Physics {
         // check if on top of other and if touching
         if (a.translation[0] > minb[0] && a.translation[0] < maxb[0] &&
             a.translation[2] > minb[2] && a.translation[2] < maxb[2] &&
-            mina[1] - 0.1 < maxb[1]) {
+            mina[1] - 0.1 < maxb[1] && maxa[1] > minb[1]) {
             // check if touching
             a.onGround = true;
         }

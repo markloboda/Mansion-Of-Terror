@@ -152,7 +152,7 @@ export class Node {
         }
 
         if (this.keys['Space'] && this.onGround) {
-            this.velocity[1] = 2;
+            this.velocity[1] = 10;
         } else {
             vec3.sub(accY, accY, up)
         }
@@ -211,8 +211,6 @@ export class Node {
                 this.velocity[i] = 0;
             }
         }
-        // console.log(this.velocity);
-        // console.log(this.onGround);
     }
 
     enableMovement() {
