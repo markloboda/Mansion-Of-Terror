@@ -1,4 +1,5 @@
 import { vec3, mat4 } from '../lib/gl-matrix-module.js';
+import { OrinatedBoundingBox } from './OriantedBoundingBox.js';
 
 export class Physics {
 
