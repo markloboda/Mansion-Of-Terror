@@ -19,14 +19,14 @@ export class Physics {
                 this.scene.traverse(other => {
                     // check if node is moving (only check for nodes that are moving)
                     // check for collisions and if on ground
-                    if (node !== other && !other.camera && node.aabb && other.aabb) {
+                    if (node !== other && !other.camera && node.boundry && other.boundry) {
                         this.resolveCollision(node, other);
                     }
                 });
             }
             else if (node.camera) {
                 node.updateMatrix(); 
-                node.parent.updateMatrix() 
+                node.parent.updateMatrix();
             }
 
             // reset Y velocity if on ground
@@ -35,52 +35,48 @@ export class Physics {
             }
         });
     }
-    intervalIntersection(min1, max1, min2, max2) {
-        return !(min1 > max2 || min2 > max1);
-    }
 
-    aabbIntersection(aabb1, aabb2) {
-        return this.intervalIntersection(aabb1.min[0], aabb1.max[0], aabb2.min[0], aabb2.max[0])
-            && this.intervalIntersection(aabb1.min[1], aabb1.max[1], aabb2.min[1], aabb2.max[1])
-            && this.intervalIntersection(aabb1.min[2], aabb1.max[2], aabb2.min[2], aabb2.max[2]);
+    intersection(mina, maxa, minb, maxb) {
+        return (mina[0] <= maxb[0] && maxa[0] >= minb[0]) &&
+               (mina[1] <= maxb[1] && maxa[1] >= minb[1]) &&
+               (mina[2] <= maxb[2] && maxa[2] >= minb[2]);
     }
 
     resolveCollision(a, b) {
+        // console.log(a.boundry);
+        // console.log(b.boundry);
+        // console.log("*******************************");
         // Update bounding boxes with global translation.
-        const ta = a.getGlobalTransform();
-        const tb = b.getGlobalTransform();
+        const posa = [...a.boundry.center];
+        const posb = [...b.boundry.center];
+        
+        if (a.camera) {
+            posa[1] += 1;
+        }
 
-        const posa = mat4.getTranslation(vec3.create(), ta);
-        const posb = mat4.getTranslation(vec3.create(), tb);
-
-        const mina = vec3.add(vec3.create(), posa, a.aabb.min);
-        const maxa = vec3.add(vec3.create(), posa, a.aabb.max);
-        const minb = vec3.add(vec3.create(), posb, b.aabb.min);
-        const maxb = vec3.add(vec3.create(), posb, b.aabb.max);
+        const mina = vec3.add(vec3.create(), posa, a.boundry.min());
+        const maxa = vec3.add(vec3.create(), posa, a.boundry.max());
+        const minb = vec3.add(vec3.create(), posb, b.boundry.min());
+        const maxb = vec3.add(vec3.create(), posb, b.boundry.max());
 
         /// CHECK IF NODE IS ON GROUND
         // check if on top of other and if touching
         if (a.translation[0] > minb[0] && a.translation[0] < maxb[0] &&
             a.translation[2] > minb[2] && a.translation[2] < maxb[2] &&
             mina[1] - 0.1 < maxb[1] && maxa[1] > minb[1]) {
-            // check if touching
-            a.onGround = true;
-        }
+                // check if touching
+                a.onGround = true;
+            }
+            
+            // Check if there is collision.
+            const isColliding = this.intersection(mina, maxa, minb, maxb);
+            
+            
+            if (!isColliding) {
+                return;
+            }
 
-        // Check if there is collision.
-        const isColliding = this.aabbIntersection({
-            min: mina,
-            max: maxa
-        }, {
-            min: minb,
-            max: maxb
-        });
-
-
-        if (!isColliding) {
-            return;
-        }
-
+            
 
         // Move node A minimally to avoid collision.
         const diffa = vec3.sub(vec3.create(), maxb, mina);
@@ -120,5 +116,4 @@ export class Physics {
     static acceleration(force, mass) {
         return force / mass;
     }
-
 }

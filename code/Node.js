@@ -1,9 +1,10 @@
-import { vec3, mat4, quat } from '../lib/gl-matrix-module.js';
+import { vec3, mat4, quat, mat3 } from '../lib/gl-matrix-module.js';
+import { BoundryBox } from './BoundryBox.js';
 import { Physics } from './Physics.js';
 
 export class Node {
 
-    constructor(options = {}) {
+    constructor(options = {}) { 
         this.translation = options.translation
             ? vec3.clone(options.translation)
             : vec3.fromValues(0, 0, 0);
@@ -52,11 +53,53 @@ export class Node {
         }
         this.parent = null;
 
-        this.createAABB()
+        this.createBB()
     }
 
-    createAABB() {
+    createBB() {
         let position = mat4.getTranslation(vec3.create(), this.matrix);
+        if (this.camera) {
+            position[1] = 1;
+            this.boundry = new BoundryBox(position, 0.4, 2, 0.4)
+        } else if (this.mesh) {
+            let extents = [];
+            let center = [];
+
+            // define AABB
+            let min = [];
+            let max = [];
+            for (let i = 0; i < 3; i++) {
+            this.mesh.primitives.forEach(primitive => {
+                    if (!min[i] || min[i] > primitive.attributes.POSITION.min[i]) {
+                        min[i] = primitive.attributes.POSITION.min[i] * this.scale[i];
+                    }
+                })
+                this.mesh.primitives.forEach(primitive => {
+                    if (!max[i] || max[i] < primitive.attributes.POSITION.max[i]) {
+                        max[i] = primitive.attributes.POSITION.max[i] * this.scale[i];
+                    }
+                })
+            };
+
+            for (let i = 0; i < 3; i++) {
+                center = position;
+                extents[i] = max[i] - min[i]; 
+            }
+
+            this.boundry = new BoundryBox(center, ...extents);
+
+            
+            // adjust for rotation
+            let newBoundry = new BoundryBox(position, 0, 0, 0);
+            let rotationMat = mat3.fromQuat(mat3.create(), mat4.getRotation(quat.create(), this.matrix));
+            for (let i = 0; i < 9; i++) {
+                let a = rotationMat[i] * this.boundry.min()[i % 3];
+                let b = rotationMat[i] * this.boundry.max()[i % 3];
+            }
+        }
+        console.log(this.boundry);
+        
+        
         if (this.camera) {
             // define AABB for camera
             this.aabb = {
@@ -78,22 +121,34 @@ export class Node {
                         max[i] = primitive.attributes.POSITION.max[i] * this.scale[i];
                     }
                 })
-            };
-            this.aabb = {
-                min: min,
-                max: max
-            };
+        };
+        this.aabb = {
+            min: min,
+            max: max
+        };
+    }
+    console.log(this.aabb);
+    
+    console.log("-------------");
+}
+
+updateBB() {
+    if (this.camera) {
+            let temp = vec3.copy(vec3.create(), this.translation);
+            this.boundry.center = temp;
+        } else {
+            this.boundry.center = this.translation;
         }
     }
-
-
+    
     getGlobalTransform() {
         return this.matrix;
     }
 
     mousemoveHandler(e) {
-        const dx = e.movementX;
-        const dy = e.movementY;
+        let dx = e.movementX;
+        let dy = e.movementY;
+
 
         this.euler[0] -= dy * this.mouseSensitivity;
         this.euler[1] -= dx * this.mouseSensitivity;
@@ -211,6 +266,8 @@ export class Node {
                 this.velocity[i] = 0;
             }
         }
+
+        this.updateBB();
     }
 
     enableMovement() {
