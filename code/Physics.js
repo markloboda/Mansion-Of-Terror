@@ -114,6 +114,21 @@ export class Physics {
             minDirection = [0, 0, -minDiff];
         }
 
+        // test if stairs
+        // if standing near:
+        if ((a.translation[0] + 0.2 > minb[0] || a.translation[0] - 0.2 < maxb[0]) &&
+            (a.translation[2] + 0.2 > minb[2] || a.translation[2] - 0.2 < maxb[0]) &&
+            (maxb[1] - 0.5 < mina[1])) {
+                minDirection[1] += 0.08;
+            }
+
+
+
+        // console.log("---------------------------------------");
+        // console.log(a);
+        // console.log(b);
+        // console.log(diffb);
+
         vec3.add(a.translation, a.translation, minDirection);
         a.updateMatrix();
     }

@@ -170,7 +170,7 @@ export class Node {
         }
 
         if (this.keys['Space'] && this.onGround) {
-            this.velocity[1] = 10;
+            this.velocity[1] = 3;
         } else {
             vec3.sub(accY, accY, up)
         }
