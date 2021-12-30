@@ -57,9 +57,6 @@ export class Node {
         this.parent = null;
         
         this.createAABB();
-        if (this.aabb) {
-            this.createOBB();
-        }
     }
 
     createAABB() {
@@ -91,17 +88,6 @@ export class Node {
                 max: max
             };
         }
-    }
-
-    createOBB() {
-        const center = vec3.copy(vec3.create(), this.translation);
-        const halfAxes = vec3.create();
-
-        for (let i = 0; i < 3; i++) {
-            halfAxes[i] = (this.aabb.max[i] - this.aabb.min[i]) / 2;
-        }
-        const rotationQuat = vec4.copy(vec4.create(), this.rotation);
-        this.obb = new OrinatedBoundingBox(center, halfAxes, rotationQuat);  
     }
 
 
