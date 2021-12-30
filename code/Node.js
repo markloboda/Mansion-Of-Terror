@@ -57,52 +57,12 @@ export class Node {
     }
 
     createBB() {
-        let position = mat4.getTranslation(vec3.create(), this.matrix);
+        console.log(this);
+        let aabb;
         if (this.camera) {
-            position[1] = 1;
-            this.boundry = new BoundryBox(position, 0.4, 2, 0.4)
-        } else if (this.mesh) {
-            let extents = [];
-            let center = [];
-
-            // define AABB
-            let min = [];
-            let max = [];
-            for (let i = 0; i < 3; i++) {
-            this.mesh.primitives.forEach(primitive => {
-                    if (!min[i] || min[i] > primitive.attributes.POSITION.min[i]) {
-                        min[i] = primitive.attributes.POSITION.min[i] * this.scale[i];
-                    }
-                })
-                this.mesh.primitives.forEach(primitive => {
-                    if (!max[i] || max[i] < primitive.attributes.POSITION.max[i]) {
-                        max[i] = primitive.attributes.POSITION.max[i] * this.scale[i];
-                    }
-                })
-            };
-
-            for (let i = 0; i < 3; i++) {
-                center = position;
-                extents[i] = max[i] - min[i]; 
-            }
-
-            this.boundry = new BoundryBox(center, ...extents);
-
-            
-            // adjust for rotation
-            let newBoundry = new BoundryBox(position, 0, 0, 0);
-            let rotationMat = mat3.fromQuat(mat3.create(), mat4.getRotation(quat.create(), this.matrix));
-            for (let i = 0; i < 9; i++) {
-                let a = rotationMat[i] * this.boundry.min()[i % 3];
-                let b = rotationMat[i] * this.boundry.max()[i % 3];
-            }
-        }
-        console.log(this.boundry);
-        
-        
-        if (this.camera) {
+            let position = mat4.getTranslation(vec3.create(), this.matrix)
             // define AABB for camera
-            this.aabb = {
+            aabb = {
                 min: [position[0] - 0.2, position[1] - 0, position[2] - 0.2],
                 max: [position[0] + 0.2, position[1] + 2, position[2] + 0.2]
             }
@@ -121,23 +81,20 @@ export class Node {
                         max[i] = primitive.attributes.POSITION.max[i] * this.scale[i];
                     }
                 })
-        };
-        this.aabb = {
-            min: min,
-            max: max
-        };
-    }
-    console.log(this.aabb);
-    
-    console.log("-------------");
-}
-
-updateBB() {
-    if (this.camera) {
-            let temp = vec3.copy(vec3.create(), this.translation);
-            this.boundry.center = temp;
-        } else {
-            this.boundry.center = this.translation;
+            };
+            aabb = {
+                min: min,
+                max: max
+            };
+        }
+        if (aabb) {
+            let center = vec3.create();
+            let extents = [];
+            for (let i = 0; i < 3; i++) {
+                center[i] = (aabb.max[i] + aabb.min[i]) / 2;
+                extents[i] = (aabb.max[i] - aabb.min[i]);
+            }
+            this.boundry = new BoundryBox(center, ...extents);
         }
     }
     
@@ -266,8 +223,6 @@ updateBB() {
                 this.velocity[i] = 0;
             }
         }
-
-        this.updateBB();
     }
 
     enableMovement() {

@@ -43,40 +43,38 @@ export class Physics {
     }
 
     resolveCollision(a, b) {
-        // console.log(a.boundry);
-        // console.log(b.boundry);
-        // console.log("*******************************");
         // Update bounding boxes with global translation.
-        const posa = [...a.boundry.center];
-        const posb = [...b.boundry.center];
-        
+        const posa = vec3.clone(a.translation);
+        const posb = vec3.clone(b.translation);
+
         if (a.camera) {
-            posa[1] += 1;
+            posa[1] += 0.5;
         }
 
-        const mina = vec3.add(vec3.create(), posa, a.boundry.min());
-        const maxa = vec3.add(vec3.create(), posa, a.boundry.max());
-        const minb = vec3.add(vec3.create(), posb, b.boundry.min());
-        const maxb = vec3.add(vec3.create(), posb, b.boundry.max());
+        a.boundry.center = posa;
+        b.boundry.center = posb;
+
+
+        const mina = vec3.add(vec3.create(), a.boundry.center, a.boundry.min());
+        const maxa = vec3.add(vec3.create(), a.boundry.center, a.boundry.max());
+        const minb = vec3.add(vec3.create(), b.boundry.center, b.boundry.min());
+        const maxb = vec3.add(vec3.create(), b.boundry.center, b.boundry.max());
 
         /// CHECK IF NODE IS ON GROUND
         // check if on top of other and if touching
-        if (a.translation[0] > minb[0] && a.translation[0] < maxb[0] &&
-            a.translation[2] > minb[2] && a.translation[2] < maxb[2] &&
-            mina[1] - 0.1 < maxb[1] && maxa[1] > minb[1]) {
-                // check if touching
+        if (a.boundry.center[0] > minb[0] && a.boundry.center[0] < maxb[0] &&
+            a.boundry.center[2] > minb[2] && a.boundry.center[2] < maxb[2] &&
+            mina[1] >= minb[1] && mina[1] - 0.1 < minb[1]) {
                 a.onGround = true;
-            }
+        }
             
-            // Check if there is collision.
-            const isColliding = this.intersection(mina, maxa, minb, maxb);
-            
-            
-            if (!isColliding) {
-                return;
-            }
-
-            
+        // Check if there is collision.
+        const isColliding = this.intersection(mina, maxa, minb, maxb);
+        
+        
+        if (!isColliding) {
+            return;
+        }            
 
         // Move node A minimally to avoid collision.
         const diffa = vec3.sub(vec3.create(), maxb, mina);
