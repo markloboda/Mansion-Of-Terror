@@ -1,8 +1,10 @@
 import { vec3, mat4, quat } from '../lib/gl-matrix-module.js';
+import MeshRenderer from './renderers/MeshRenderer.js';
+import SkinRenderer from './renderers/SkinRenderer.js';
 
 export class Node {
 
-    constructor(options = {}) {
+    constructor(options = {}, index) {
         this.translation = options.translation
             ? vec3.clone(options.translation)
             : vec3.fromValues(0, 0, 0);
@@ -16,12 +18,14 @@ export class Node {
             ? mat4.clone(options.matrix)
             : mat4.create();
         this.euler = [0, 0, 0]
-
+        this.name = options.name;
+        this.index = index;
         if (options.matrix) {
             this.updateTransform();
         } else if (options.translation || options.rotation || options.scale) {
             this.updateMatrix();
         }
+        this.mesh = options.mesh;
 
         this.camera = options.camera || null;
         if (this.camera) {
@@ -36,7 +40,14 @@ export class Node {
             this.keydownHandler = this.keydownHandler.bind(this);
             this.keyupHandler = this.keyupHandler.bind(this);
         }
-        this.mesh = options.mesh || null;
+        if (options.mesh) {
+            if (options.mesh.armature) {
+                this.renderer = new SkinRenderer(options.mesh, options.mesh.armature);
+            }
+            else {
+                this.renderer = new MeshRenderer(options.mesh);
+            }
+        }
 
         this.children = [...(options.children || [])];
         for (const child of this.children) {

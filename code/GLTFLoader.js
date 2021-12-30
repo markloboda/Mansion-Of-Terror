@@ -9,18 +9,28 @@ import { PerspectiveCamera } from './PerspectiveCamera.js';
 import { OrthographicCamera } from './OrthographicCamera.js';
 import { Node } from './Node.js';
 import { Scene } from './Scene.js';
+import { Animation } from './animation/Animation.js';
+import { Armature } from './animation/Armature.js';
 
 // This class loads all GLTF resources and instantiates
 // the corresponding classes. Keep in mind that it loads
 // the resources in series (care to optimize?).
 
+const buffer = {
+	5120: Int8Array,
+	5121: Uint8Array,
+	5122: Int16Array,
+	5123: Uint16Array,
+	5125: Uint32Array,
+	5126: Float32Array
+}
+
 export class GLTFLoader {
 
-    constructor() {
-        this.gltf = null;
-        this.gltfUrl = null;
-        this.dirname = null;
-
+	constructor() {
+		this.gltf = null;
+		this.gltfUrl = null;
+		this.dirname = null;
         this.cache = new Map();
     }
 
@@ -39,6 +49,13 @@ export class GLTFLoader {
             image.addEventListener('error', reject);
             image.src = url;
         });
+    }
+
+    extractBufferData(accessor) {
+        const type = accessor.componentType
+        const start = accessor.byteOffset + accessor.bufferView.byteOffset;
+        const end = accessor.count * accessor.numComponents;
+        return new buffer[type](accessor.bufferView.buffer, start, end);
     }
 
     findByNameOrIndex(set, nameOrIndex) {
@@ -212,8 +229,6 @@ export class GLTFLoader {
         return material;
     }
 
-    
-
     async loadMesh(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.meshes, nameOrIndex);
         if (this.cache.has(gltfSpec)) {
@@ -243,6 +258,73 @@ export class GLTFLoader {
         return mesh;
     }
 
+async loadAnimation(nameOrIndex) {
+	const gltfSpec = this.findByNameOrIndex(this.gltf.animations, nameOrIndex);
+	if (this.cache.has(gltfSpec)) {
+		return this.cache.get(gltfSpec);
+	}
+	const keyframes = {};
+	for (const channel of gltfSpec.channels) {
+		if (channel.target.node === undefined) continue;
+		const transformationType = channel.target.path;
+		const sampler = gltfSpec.samplers[channel.sampler];
+		const timeAcc = await this.loadAccessor(sampler.input);
+		const timeData = this.extractBufferData(timeAcc);
+		const transAcc = await this.loadAccessor(sampler.output);
+		const transData = this.extractBufferData(transAcc);
+		for (let [index, time] of timeData.entries()) {
+			// convert time to ms
+			time = Math.floor(parseFloat(time) * 1000);
+			const dataLen = transAcc.numComponents;
+			if (!keyframes[time]) {
+				keyframes[time] = [
+					{
+						type: transformationType,
+						node: await this.loadNode(channel.target.node),
+						transform: transData.subarray(
+							index ? index * dataLen : 0, index ? index * 2*dataLen : dataLen
+							),
+						},
+					];
+					continue;
+				}
+				keyframes[time].push({
+					type: transformationType,
+					node: await this.loadNode(channel.target.node),
+					transform: transData.subarray(
+						index ? index * dataLen : 0, index ? index * 2*dataLen : dataLen
+						),
+					});
+				}
+			}
+			const options = {
+				keyframes: keyframes,
+				name: gltfSpec.name
+			};
+			const animation = new Animation(options);
+			this.cache.set(gltfSpec, animation);
+			return animation;
+		}
+		
+	async bindSkin(nameOrIndex) {
+		const gltfSpec = this.findByNameOrIndex(this.gltf.skins, nameOrIndex);
+		if (this.cache.has(gltfSpec)) {
+			return this.cache.get(gltfSpec);
+		}
+		const jointMatrices = []
+		for (const joint of gltfSpec.joints) {
+			jointMatrices.push(await this.loadNode(joint).then(res => res.matrix));
+		}
+		const inverseBindMatricesData = this.extractBufferData(await this.loadAccessor(gltfSpec.inverseBindMatrices));
+		const inverseBindMatrices = [];
+		for (let i=16; i<=inverseBindMatricesData.length; i+=16) {
+			inverseBindMatrices.push(inverseBindMatricesData.subarray(i-16, i));
+		}
+		const armature = new Armature(jointMatrices, inverseBindMatrices);
+		this.cache.set(gltfSpec, armature);
+		return armature;
+	}
+	
     async loadCamera(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.cameras, nameOrIndex);
         if (this.cache.has(gltfSpec)) {
@@ -293,29 +375,39 @@ export class GLTFLoader {
         if (gltfSpec.mesh !== undefined) {
             options.mesh = await this.loadMesh(gltfSpec.mesh);
         }
-
-        const node = new Node(options);
-        this.cache.set(gltfSpec, node);
-        return node;
-    }
-
-    async loadScene(nameOrIndex) {
-        const gltfSpec = this.findByNameOrIndex(this.gltf.scenes, nameOrIndex);
-        if (this.cache.has(gltfSpec)) {
-            return this.cache.get(gltfSpec);
-        }
-
-        let options = { nodes: [] };
-        if (gltfSpec.nodes) {
-            for (const nodeIndex of gltfSpec.nodes) {
-                const node = await this.loadNode(nodeIndex);
-                options.nodes.push(node);
-            }
-        }
-
-        const scene = new Scene(options);
-        this.cache.set(gltfSpec, scene);
-        return scene;
-    }
-
+		if (gltfSpec.skin !== undefined) {
+			options.mesh.armature = await this.bindSkin(gltfSpec.skin)
+		}
+		
+		const node = new Node(options, nameOrIndex);
+		if (node.mesh?.armature) {
+			console.log(node.armature)
+		}
+		this.cache.set(gltfSpec, node);
+		return node;
+	}
+	
+	async loadScene(nameOrIndex) {
+		const gltfSpec = this.findByNameOrIndex(this.gltf.scenes, nameOrIndex);
+		if (this.cache.has(gltfSpec)) {
+			return this.cache.get(gltfSpec);
+		}
+		
+		let options = { nodes: [] };
+		if (gltfSpec.nodes) {
+			for (const nodeIndex of gltfSpec.nodes) {
+				const node = await this.loadNode(nodeIndex);
+				options.nodes.push(node);
+			}
+		}
+		options.animations = [];
+		for (const index in this.gltf.animations) {
+			const animation = await this.loadAnimation(parseInt(index));
+			options.animations.push(animation)
+		}
+		const scene = new Scene(options);
+		this.cache.set(gltfSpec, scene);
+		return scene;
+	}
 }
+	

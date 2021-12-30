@@ -69,8 +69,11 @@ static createTexture(gl, options) {
     }
 
     gl.bindTexture(target, texture);
-
-    if (options.image) {
+    if (options.image.constructor == Uint8Array) {
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, 
+            gl.RGBA, gl.UNSIGNED_BYTE, options.image);
+    }
+    else if (options.image) {
         gl.texImage2D(
             target, 0, iformat,
             format, type, options.image);

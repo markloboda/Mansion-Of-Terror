@@ -9,6 +9,7 @@ export class Accessor {
         this.numComponents = options.numComponents || 0;
         this.min = options.min || null;
         this.max = options.max || null;
+        this.type = options.type;
     }
 
 }

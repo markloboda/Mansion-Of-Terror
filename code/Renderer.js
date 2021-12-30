@@ -2,7 +2,7 @@ import { mat4 } from '../lib/gl-matrix-module.js';
 
 import { WebGL } from '../common/engine/WebGL.js';
 
-import { shaders } from './shaders.js';
+import { shaders } from './shaders/shaders.js';
 
 // This class prepares all assets for use with WebGL
 // and takes care of rendering.
@@ -92,6 +92,10 @@ export class Renderer {
         if (material.emissiveTexture) {
             this.prepareTexture(material.emissiveTexture);
         }
+        if (material.baseColorFactor && !material.baseColorTexture) {
+            material.baseColorTexture = {image: Uint8Array.from(material.baseColorFactor), sampler: {}}
+            // this.prepareTexture(material.baseColorTexture)
+        }
     }
 
     preparePrimitive(primitive) {
@@ -115,13 +119,13 @@ export class Renderer {
         const attributeNameToIndexMap = {
             POSITION   : 0,
             TEXCOORD_0 : 1,
+            JOINTS_0: 2,
+            WEIGHTS_0: 3
         };
-
         for (const name in primitive.attributes) {
             const accessor = primitive.attributes[name];
             const bufferView = accessor.bufferView;
             const attributeIndex = attributeNameToIndexMap[name];
-
             if (attributeIndex !== undefined) {
                 bufferView.target = gl.ARRAY_BUFFER;
                 const buffer = this.prepareBufferView(bufferView);
@@ -142,6 +146,9 @@ export class Renderer {
     }
 
     prepareMesh(mesh) {
+        if (mesh.armature) {
+            mesh.armature.prepareTexture(this.gl);
+        }
         for (const primitive of mesh.primitives) {
             this.preparePrimitive(primitive);
         }
@@ -180,8 +187,8 @@ export class Renderer {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         const program = this.programs.simple;
-        gl.useProgram(program.program);
-        gl.uniform1i(program.uniforms.uTexture, 0);
+        // gl.useProgram(program.program);
+        // gl.uniform1i(program.uniforms.uTexture, 0);
 
         const mvpMatrix = this.getViewProjectionMatrix(camera);
         for (const node of scene.nodes) {
@@ -195,12 +202,13 @@ export class Renderer {
         mvpMatrix = mat4.clone(mvpMatrix);
         mat4.mul(mvpMatrix, mvpMatrix, node.matrix);
 
-        if (node.mesh) {
-            const program = this.programs.simple;
-            gl.uniformMatrix4fv(program.uniforms.uMvpMatrix, false, mvpMatrix);
-            for (const primitive of node.mesh.primitives) {
-                this.renderPrimitive(primitive);
-            }
+        if (node.renderer) {
+            node.renderer.render(gl, mvpMatrix, this.programs, this.glObjects);
+            // const program = this.programs.simple;
+            // gl.uniformMatrix4fv(program.uniforms.uMvpMatrix, false, mvpMatrix);
+            // for (const primitive of node.mesh.primitives) {
+            //     this.renderPrimitive(primitive);
+            // }
         }
 
         for (const child of node.children) {
@@ -214,7 +222,7 @@ export class Renderer {
 
         const vao = this.glObjects.get(primitive);
         const material = primitive.material;
-        const texture = material.baseColorTexture == null ? material.baseColorFactor : material.baseColorTexture;
+        const texture = material.baseColorTexture;
         const glTexture = this.glObjects.get(texture.image);
         const glSampler = this.glObjects.get(texture.sampler);
 
