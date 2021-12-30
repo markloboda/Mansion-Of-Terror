@@ -124,11 +124,6 @@ export class Physics {
 
 
 
-        // console.log("---------------------------------------");
-        // console.log(a);
-        // console.log(b);
-        // console.log(diffb);
-
         vec3.add(a.translation, a.translation, minDirection);
         a.updateMatrix();
     }
