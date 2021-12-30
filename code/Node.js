@@ -1,4 +1,4 @@
-import { vec3, mat4, quat } from '../lib/gl-matrix-module.js';
+import { vec3, mat3, vec4, mat4, quat } from '../lib/gl-matrix-module.js';
 import { Physics } from './Physics.js';
 
 export class Node {
@@ -27,6 +27,7 @@ export class Node {
         this.velocity = [0, 0, 0];
 
         this.camera = options.camera || null;
+
         if (this.camera) {
             this.keys = {}
             this.mouseSensitivity = 0.001;
@@ -38,6 +39,7 @@ export class Node {
             this.keydownHandler = this.keydownHandler.bind(this);
             this.keyupHandler = this.keyupHandler.bind(this);
         }
+        
         this.g = 10;
         this.maxFallingSpeed = 20;
         this.onGround = true;
@@ -51,8 +53,8 @@ export class Node {
             child.parent = this;
         }
         this.parent = null;
-
-        this.createAABB()
+        
+        this.createAABB();
     }
 
     createAABB() {
@@ -152,7 +154,7 @@ export class Node {
         }
 
         if (this.keys['Space'] && this.onGround) {
-            this.velocity[1] = 10;
+            this.velocity[1] = 3;
         } else {
             vec3.sub(accY, accY, up)
         }
