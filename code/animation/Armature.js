@@ -1,9 +1,15 @@
 import { mat4 } from "../../lib/gl-matrix-module.js";
 
 export class Armature {
-  constructor(jointMatrices, inverseBindMatrices) {
+  constructor(joints, inverseBindMatrices) {
+    this.joints = joints
     this.inverseBindMatrices = inverseBindMatrices;
-    this.jointMatrices = jointMatrices;
+    console.log(this.inverseBindMatrices)
+    this.jointMatrices = [];
+    this.jointData = new Float32Array(16*this.joints.length);
+    for (let i=0; i<this.joints.length; ++i) {
+      this.jointMatrices.push(new Float32Array(this.jointData.buffer, Float32Array.BYTES_PER_ELEMENT * 16 * i, 16));
+    }
   }
 
   prepareTexture(gl) {
@@ -15,8 +21,8 @@ export class Armature {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
   }
   update(gl) {
-    for (const [index, jointMatrix] of this.jointMatrices.entries()) {
-      mat4.mul(this.inverseBindMatrices[index], this.inverseBindMatrices[index], jointMatrix);
+    for (const index in this.joints) {
+      mat4.multiply(this.jointMatrices[index], this.joints[index].matrix, this.inverseBindMatrices[index]);
     }
     gl.bindTexture(gl.TEXTURE_2D, this.jointTexture);
     gl.texImage2D(
@@ -24,34 +30,11 @@ export class Armature {
       0,
       gl.RGBA,
       4,
-      this.jointMatrices.length,
+      this.joints.length,
       0,
       gl.RGBA,
       gl.FLOAT,
-      this.inverseBindMatrices
+      this.jointData
     );
-    // console.log(this.jointMatrices[5])
-    // const globalWorldInverse = m4.inverse(node.worldMatrix);
-    // // go through each joint and get its current worldMatrix
-    // // apply the inverse bind matrices and store the
-    // // entire result in the texture
-    // for (let j = 0; j < this.joints.length; ++j) {
-    //   const joint = this.joints[j];
-    //   const dst = this.jointMatrices[j];
-    //   m4.multiply(globalWorldInverse, joint.worldMatrix, dst);
-    //   m4.multiply(dst, this.inverseBindMatrices[j], dst);
-    // }
-    // gl.bindTexture(gl.TEXTURE_2D, this.jointTexture);
-    // gl.texImage2D(
-    //   gl.TEXTURE_2D,
-    //   0,
-    //   gl.RGBA,
-    //   4,
-    //   this.joints.length,
-    //   0,
-    //   gl.RGBA,
-    //   gl.FLOAT,
-    //   this.jointData
-    // );
   }
 }

@@ -281,9 +281,7 @@ async loadAnimation(nameOrIndex) {
 					{
 						type: transformationType,
 						node: await this.loadNode(channel.target.node),
-						transform: transData.subarray(
-							index ? index * dataLen : 0, index ? index * 2*dataLen : dataLen
-							),
+                        transform: new Float32Array(transData.buffer, transData.byteOffset + Float32Array.BYTES_PER_ELEMENT * dataLen*index , dataLen)
 						},
 					];
 					continue;
@@ -291,10 +289,8 @@ async loadAnimation(nameOrIndex) {
 				keyframes[time].push({
 					type: transformationType,
 					node: await this.loadNode(channel.target.node),
-					transform: transData.subarray(
-						index ? index * dataLen : 0, index ? index * 2*dataLen : dataLen
-						),
-					});
+                    transform: new Float32Array(transData.buffer, transData.byteOffset + Float32Array.BYTES_PER_ELEMENT * dataLen*index , dataLen)
+                });
 				}
 			}
 			const options = {
@@ -311,16 +307,16 @@ async loadAnimation(nameOrIndex) {
 		if (this.cache.has(gltfSpec)) {
 			return this.cache.get(gltfSpec);
 		}
-		const jointMatrices = []
+		const joints = []
 		for (const joint of gltfSpec.joints) {
-			jointMatrices.push(await this.loadNode(joint).then(res => res.matrix));
+			joints.push(await this.loadNode(joint));
 		}
 		const inverseBindMatricesData = this.extractBufferData(await this.loadAccessor(gltfSpec.inverseBindMatrices));
 		const inverseBindMatrices = [];
 		for (let i=16; i<=inverseBindMatricesData.length; i+=16) {
 			inverseBindMatrices.push(inverseBindMatricesData.subarray(i-16, i));
 		}
-		const armature = new Armature(jointMatrices, inverseBindMatrices);
+		const armature = new Armature(joints, inverseBindMatrices);
 		this.cache.set(gltfSpec, armature);
 		return armature;
 	}
@@ -380,9 +376,6 @@ async loadAnimation(nameOrIndex) {
 		}
 		
 		const node = new Node(options, nameOrIndex);
-		if (node.mesh?.armature) {
-			console.log(node.armature)
-		}
 		this.cache.set(gltfSpec, node);
 		return node;
 	}

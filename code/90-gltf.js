@@ -10,13 +10,18 @@ import { PerspectiveCamera } from "./PerspectiveCamera.js";
 
 class App extends Application {
   async start() {
+    let ext = this.gl.getExtension('OES_texture_float_linear');
+    if (!ext) {
+        console.log("gg")
+    }
     this.loader = new GLTFLoader();
     // await this.loader.load('../../common/models/empty_room/empty_room.gltf');
     // await this.loader.load('../../common/models/cottage/cottage_blender.gltf');
     // await this.loader.load('../../common/models/room/room.gltf');
     // await this.loader.load('../../common/models/croc/croc.gltf');
     // await this.loader.load("../../common/models/example_cube/AnimatedCube.gltf");
-    await this.loader.load('../../common/models/RiggedFigure/RiggedFigure.gltf')
+    await this.loader.load('https://webglfundamentals.org/webgl/resources/models/killer_whale/whale.CYCLES.gltf');
+    // await this.loader.load('../../common/models/RiggedFigure/RiggedFigure.gltf')
     this.scene = await this.loader.loadScene(this.loader.defaultScene);
     console.log(this.scene)
     // this.camera = await this.loader.loadNode("Camera");
@@ -90,7 +95,7 @@ class App extends Application {
       this.physics.update(dt);
     }
     if (this.scene && this.scene.animations.length) {
-        // this.scene.animations[0].isActive = false;
+        this.scene.animations[0].isActive = false;
         for (const animation of this.scene.animations) {
             if (!animation.isActive) {
                 continue;

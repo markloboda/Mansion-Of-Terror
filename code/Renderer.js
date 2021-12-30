@@ -186,7 +186,7 @@ export class Renderer {
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        const program = this.programs.simple;
+        // const program = this.programs.simple;
         // gl.useProgram(program.program);
         // gl.uniform1i(program.uniforms.uTexture, 0);
 

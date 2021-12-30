@@ -35,11 +35,10 @@ void main() {
 const vertexSkinned = glsl`#version 300 es
 #pragma vscode_glslint_stage: vert
 layout (location = 0) in vec4 aPosition;
-layout (location=2) in vec4 aBoneNdx;
-layout (location=3) in vec4 aWeight;
+layout (location = 2) in vec4 aBoneIndex;
+layout (location = 3) in vec4 aWeight;
 
 uniform mat4 uMvpMatrix;
-uniform mat4 view;
 uniform sampler2D boneMatrixTexture;
 uniform float numBones;
 
@@ -51,9 +50,9 @@ out vec2 vTexCoord;
 #define ROW1_U ((0.5 + 1.0) / 4.)
 #define ROW2_U ((0.5 + 2.0) / 4.)
 #define ROW3_U ((0.5 + 3.0) / 4.)
- 
-mat4 getBoneMatrix(float boneNdx) {
-  float v = (boneNdx + 0.5) / numBones;
+
+mat4 getBoneMatrix(float boneIndex) {
+  float v = (boneIndex + 0.5) / numBones;
   return mat4(
     texture(boneMatrixTexture, vec2(ROW0_U, v)),
     texture(boneMatrixTexture, vec2(ROW1_U, v)),
@@ -62,17 +61,39 @@ mat4 getBoneMatrix(float boneNdx) {
 }
  
 void main() {
-  gl_Position = uMvpMatrix * aPosition; +
-                (getBoneMatrix(aBoneNdx[0]) * aPosition * aWeight[0] +
-                 getBoneMatrix(aBoneNdx[1]) * aPosition * aWeight[1] +
-                 getBoneMatrix(aBoneNdx[2]) * aPosition * aWeight[2] +
-                 getBoneMatrix(aBoneNdx[3]) * aPosition * aWeight[3]);
- 
+    mat4 skinMat = getBoneMatrix(aBoneIndex[0]) * aWeight[0] +
+                   getBoneMatrix(aBoneIndex[1]) * aWeight[1] +
+                   getBoneMatrix(aBoneIndex[2]) * aWeight[2] +
+                   getBoneMatrix(aBoneIndex[3]) * aWeight[3];
+  gl_Position = uMvpMatrix * skinMat * aPosition;
 }
 ` 
+const vertexSkinnedM = glsl`#version 300 es
+#pragma vscode_glslint_stage: vert
+layout (location = 0) in vec4 aPosition;
+layout (location = 2) in vec4 aBoneIndex;
+layout (location = 3) in vec4 aWeight;
+
+uniform mat4 uMvpMatrix;
+uniform mat4 uBoneMatrix[50];
+uniform float numBones;
+
+layout (location = 1) in vec2 aTexCoord;
+out vec2 vTexCoord;
+
+ 
+void main() {
+    mat4 skinMat = uBoneMatrix[int(aBoneIndex[0])] * aWeight[0] +
+                    uBoneMatrix[int(aBoneIndex[1])] * aWeight[1] +
+                    uBoneMatrix[int(aBoneIndex[2])] * aWeight[2] +
+                    uBoneMatrix[int(aBoneIndex[3])] * aWeight[3];
+  gl_Position = uMvpMatrix * skinMat * aPosition;
+}
+`
 
 export const shaders = {
     simple: { vertex, fragment },
-    simpleSkinned: { vertex: vertexSkinned, fragment: fragment }
+    simpleSkinned: { vertex: vertexSkinned, fragment: fragment },
+    simpleSkinnedM: { vertex: vertexSkinnedM, fragment: fragment }
 };
 

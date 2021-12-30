@@ -11,10 +11,8 @@ export default class SkinRenderer {
       const program = programs.simpleSkinned;
       gl.useProgram(program.program);
       const vao = glObjects.get(primitive);
-
       gl.bindVertexArray(vao);
-      gl.uniform1fv(program.uniforms.numBones, [this.armature.jointMatrices.length]);
-
+      gl.uniform1fv(program.uniforms.numBones, [this.armature.joints.length]);
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, this.armature.jointTexture);
       gl.uniform1i(program.uniforms.boneMatrixTexture, 0);

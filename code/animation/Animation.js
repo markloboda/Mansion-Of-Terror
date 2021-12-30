@@ -1,4 +1,4 @@
-import { quat } from "../../lib/gl-matrix-module.js";
+import { quat, vec4, vec3 } from "../../lib/gl-matrix-module.js";
 
 class AnimationError {
   static keyframesNotSupplied() {
@@ -23,7 +23,6 @@ export class Animation {
     } else {
       throw AnimationError.keyframesNotSupplied();
     }
-    console.log(this);
   }
 
   update() {
@@ -56,9 +55,17 @@ export class Animation {
             quat.slerp(
               transform.node.rotation,
               transform.node.rotation,
-              quat.fromValues(...Array.from(transform.transform)),
+              transform.transform,
               iAmmount
             );
+            transform.node.updateMatrix();
+            break;
+          case "translation":
+            vec3.lerp(
+              transform.node.translation,
+              transform.node.translation,
+              transform.transform,
+              iAmmount);
             transform.node.updateMatrix();
             break;
         }
