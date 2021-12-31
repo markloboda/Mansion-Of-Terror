@@ -3,7 +3,7 @@ import { GUI } from '../lib/dat.gui.module.js';
 import { GLTFLoader } from './GLTFLoader.js';
 import { Renderer } from './Renderer.js';
 import { Camera } from './Camera.js';
-import { Physics } from './Physics.js';
+import { Physics } from './Physics/Physics.js';
 
 
 class App extends Application {
