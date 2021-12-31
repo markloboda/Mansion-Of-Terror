@@ -1,5 +1,7 @@
 import { vec3, mat3, vec4, mat4, quat } from '../lib/gl-matrix-module.js';
-import { Physics } from './Physics.js';
+import { Force } from './Physics/Force.js';
+import { ForceEngine } from './Physics/ForceEngine.js';
+import { Physics } from './Physics/Physics.js';
 
 export class Node {
 
@@ -44,7 +46,10 @@ export class Node {
         this.maxFallingSpeed = 20;
         this.onGround = true;
         this.mass = 70;
-        this.forces = {gravity: -this.g * this.mass};      
+        this.forces = {gravity: -this.g * this.mass};
+        
+        const gravity = new Force(-this.g * this.mass, quat.fromValues(1,0,1,0));
+        this.forceEngine = new ForceEngine([gravity]);
         
         this.mesh = options.mesh || null;
         
@@ -169,7 +174,7 @@ export class Node {
         }
 
         }
-        let accelerationY = Physics.acceleration(forceSum, c.mass);
+        let accelerationY = this.forceEngine.acceleration(c.mass)[1];
         
 
         // 2: update velocity
