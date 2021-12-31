@@ -1,5 +1,6 @@
 import { vec3, mat4, quat } from '../lib/gl-matrix-module.js';
 import MeshRenderer from './renderers/MeshRenderer.js';
+import { Physics } from './Physics.js';
 
 export class Node {
 
@@ -41,6 +42,13 @@ export class Node {
             this.keydownHandler = this.keydownHandler.bind(this);
             this.keyupHandler = this.keyupHandler.bind(this);
         }
+
+        this.g = 10;
+        this.maxFallingSpeed = 20;
+        this.onGround = true;
+        this.mass = 70;
+        this.forces = {gravity: -this.g * this.mass};
+
         if (options.mesh) {
             this.renderer = new MeshRenderer(options.mesh);
         }
