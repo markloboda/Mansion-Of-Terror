@@ -16,7 +16,8 @@ class App extends Application {
     }
     this.loader = new GLTFLoader();
     // await this.loader.load('../../common/models/flat_surface/flat_surface.gltf');
-    await this.loader.load('../../common/models/test_stairs/test_stairs.gltf');
+    // await this.loader.load('../../common/models/test_stairs/test_stairs.gltf');
+    await this.loader.load('../../common/models/ventilator/ventilator.gltf');
     // await this.loader.load('../../common/models/empty_room/empty_room.gltf');
     // await this.loader.load('../../common/models/cottage/cottage_blender.gltf');
     // await this.loader.load('../../common/models/room/room.gltf');
