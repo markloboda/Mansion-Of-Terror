@@ -163,7 +163,7 @@ export class Node {
         } else {
             for (let [key, value] of Object.entries(this.forces)) {
                 forceSum += value;
-        }
+            }
 
         }
         let accelerationY = Physics.acceleration(forceSum, c.mass);
