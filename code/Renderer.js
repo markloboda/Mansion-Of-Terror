@@ -88,7 +88,7 @@ export class Renderer {
     }
 
     prepareMaterial(material) {
-        if (material.baseColorTexture) {
+        if (material.baseColorTexture && !material.baseColorTexture.data) {
             this.prepareTexture(material.baseColorTexture);
         }
         if (material.metallicRoughnessTexture) {
