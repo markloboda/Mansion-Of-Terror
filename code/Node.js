@@ -1,9 +1,10 @@
-import { vec3, mat3, vec4, mat4, quat } from '../lib/gl-matrix-module.js';
+import { vec3, mat4, quat } from '../lib/gl-matrix-module.js';
+import MeshRenderer from './renderers/MeshRenderer.js';
 import { Physics } from './Physics.js';
 
 export class Node {
 
-    constructor(options = {}) {
+    constructor(options = {}, index) {
         this.translation = options.translation
             ? vec3.clone(options.translation)
             : vec3.fromValues(0, 0, 0);
@@ -16,13 +17,15 @@ export class Node {
         this.matrix = options.matrix
             ? mat4.clone(options.matrix)
             : mat4.create();
-        this.euler = [0, 0, 0];
-
+        this.euler = [0, 0, 0]
+        this.name = options.name;
+        this.index = index;
         if (options.matrix) {
             this.updateTransform();
         } else if (options.translation || options.rotation || options.scale) {
             this.updateMatrix();
         }
+        this.mesh = options.mesh;
 
         this.velocity = [0, 0, 0];
 
@@ -39,15 +42,17 @@ export class Node {
             this.keydownHandler = this.keydownHandler.bind(this);
             this.keyupHandler = this.keyupHandler.bind(this);
         }
-        
+
         this.g = 10;
         this.maxFallingSpeed = 20;
         this.onGround = true;
         this.mass = 70;
-        this.forces = {gravity: -this.g * this.mass};      
-        
-        this.mesh = options.mesh || null;
-        
+        this.forces = {gravity: -this.g * this.mass};
+
+        if (options.mesh) {
+            this.renderer = new MeshRenderer(options.mesh);
+        }
+
         this.children = [...(options.children || [])];
         for (const child of this.children) {
             child.parent = this;
@@ -166,7 +171,7 @@ export class Node {
         } else {
             for (let [key, value] of Object.entries(this.forces)) {
                 forceSum += value;
-        }
+            }
 
         }
         let accelerationY = Physics.acceleration(forceSum, c.mass);

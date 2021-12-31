@@ -9,29 +9,38 @@ import { PerspectiveCamera } from './PerspectiveCamera.js';
 import { OrthographicCamera } from './OrthographicCamera.js';
 import { Node } from './Node.js';
 import { Scene } from './Scene.js';
+import { Animation } from './animation/Animation.js';
 
 // This class loads all GLTF resources and instantiates
 // the corresponding classes. Keep in mind that it loads
 // the resources in series (care to optimize?).
 
-export class GLTFLoader {
+const buffer = {
+    5120: Int8Array,
+    5121: Uint8Array,
+    5122: Int16Array,
+    5123: Uint16Array,
+    5125: Uint32Array,
+    5126: Float32Array
+}
 
+export class GLTFLoader {
+    
     constructor() {
         this.gltf = null;
         this.gltfUrl = null;
         this.dirname = null;
-
         this.cache = new Map();
     }
-
+    
     fetchJson(url) {
         return fetch(url).then(response => response.json());
     }
-
+    
     fetchBuffer(url) {
         return fetch(url).then(response => response.arrayBuffer());
     }
-
+    
     fetchImage(url) {
         return new Promise((resolve, reject) => {
             let image = new Image();
@@ -40,7 +49,14 @@ export class GLTFLoader {
             image.src = url;
         });
     }
-
+    
+    extractBufferData(accessor) {
+        const type = accessor.componentType
+        const start = accessor.byteOffset + accessor.bufferView.byteOffset;
+        const end = accessor.count * accessor.numComponents;
+        return new buffer[type](accessor.bufferView.buffer, start, end);
+    }
+    
     findByNameOrIndex(set, nameOrIndex) {
         if (typeof nameOrIndex === 'number') {
             return set[nameOrIndex];
@@ -48,19 +64,19 @@ export class GLTFLoader {
             return set.find(element => element.name === nameOrIndex);
         }
     }
-
+    
     async load(url) {
         this.gltfUrl = new URL(url, window.location);
         this.gltf = await this.fetchJson(url);
         this.defaultScene = this.gltf.scene || 0;
     }
-
+    
     async loadImage(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.images, nameOrIndex);
         if (this.cache.has(gltfSpec)) {
             return this.cache.get(gltfSpec);
         }
-
+        
         if (gltfSpec.uri) {
             const url = new URL(gltfSpec.uri, this.gltfUrl);
             const image = await this.fetchImage(url);
@@ -76,25 +92,25 @@ export class GLTFLoader {
             return image;
         }
     }
-
+    
     async loadBuffer(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.buffers, nameOrIndex);
         if (this.cache.has(gltfSpec)) {
             return this.cache.get(gltfSpec);
         }
-
+        
         const url = new URL(gltfSpec.uri, this.gltfUrl);
         const buffer = await this.fetchBuffer(url);
         this.cache.set(gltfSpec, buffer);
         return buffer;
     }
-
+    
     async loadBufferView(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.bufferViews, nameOrIndex);
         if (this.cache.has(gltfSpec)) {
             return this.cache.get(gltfSpec);
         }
-
+        
         const bufferView = new BufferView({
             ...gltfSpec,
             buffer: await this.loadBuffer(gltfSpec.buffer),
@@ -102,13 +118,13 @@ export class GLTFLoader {
         this.cache.set(gltfSpec, bufferView);
         return bufferView;
     }
-
+    
     async loadAccessor(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.accessors, nameOrIndex);
         if (this.cache.has(gltfSpec)) {
             return this.cache.get(gltfSpec);
         }
-
+        
         const accessorTypeToNumComponentsMap = {
             SCALAR : 1,
             VEC2   : 2,
@@ -118,7 +134,7 @@ export class GLTFLoader {
             MAT3   : 9,
             MAT4   : 16,
         };
-
+        
         const accessor = new Accessor({
             ...gltfSpec,
             bufferView    : await this.loadBufferView(gltfSpec.bufferView),
@@ -127,13 +143,13 @@ export class GLTFLoader {
         this.cache.set(gltfSpec, accessor);
         return accessor;
     }
-
+    
     async loadSampler(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.samplers, nameOrIndex);
         if (this.cache.has(gltfSpec)) {
             return this.cache.get(gltfSpec);
         }
-
+        
         const sampler = new Sampler({
             min   : gltfSpec.minFilter,
             mag   : gltfSpec.magFilter,
@@ -143,13 +159,13 @@ export class GLTFLoader {
         this.cache.set(gltfSpec, sampler);
         return sampler;
     }
-
+    
     async loadTexture(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.textures, nameOrIndex);
         if (this.cache.has(gltfSpec)) {
             return this.cache.get(gltfSpec);
         }
-
+        
         let options = {};
         if (gltfSpec.source !== undefined) {
             options.image = await this.loadImage(gltfSpec.source);
@@ -157,18 +173,18 @@ export class GLTFLoader {
         if (gltfSpec.sampler !== undefined) {
             options.sampler = await this.loadSampler(gltfSpec.sampler);
         }
-
+        
         const texture = new Texture(options);
         this.cache.set(gltfSpec, texture);
         return texture;
     }
-
+    
     async loadMaterial(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.materials, nameOrIndex);
         if (this.cache.has(gltfSpec)) {
             return this.cache.get(gltfSpec);
         }
-
+        
         let options = {};
         const pbr = gltfSpec.pbrMetallicRoughness;
         if (pbr !== undefined) {
@@ -184,42 +200,40 @@ export class GLTFLoader {
             options.metallicFactor = pbr.metallicFactor;
             options.roughnessFactor = pbr.roughnessFactor;
         }
-
+        
         if (gltfSpec.normalTexture !== undefined) {
             options.normalTexture = await this.loadTexture(gltfSpec.normalTexture.index);
             options.normalTexCoord = gltfSpec.normalTexture.texCoord;
             options.normalFactor = gltfSpec.normalTexture.scale;
         }
-
+        
         if (gltfSpec.occlusionTexture !== undefined) {
             options.occlusionTexture = await this.loadTexture(gltfSpec.occlusionTexture.index);
             options.occlusionTexCoord = gltfSpec.occlusionTexture.texCoord;
             options.occlusionFactor = gltfSpec.occlusionTexture.strength;
         }
-
+        
         if (gltfSpec.emissiveTexture !== undefined) {
             options.emissiveTexture = await this.loadTexture(gltfSpec.emissiveTexture.index);
             options.emissiveTexCoord = gltfSpec.emissiveTexture.texCoord;
             options.emissiveFactor = gltfSpec.emissiveFactor;
         }
-
+        
         options.alphaMode = gltfSpec.alphaMode;
         options.alphaCutoff = gltfSpec.alphaCutoff;
         options.doubleSided = gltfSpec.doubleSided;
-
+        
         const material = new Material(options);
         this.cache.set(gltfSpec, material);
         return material;
     }
-
     
-
     async loadMesh(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.meshes, nameOrIndex);
         if (this.cache.has(gltfSpec)) {
             return this.cache.get(gltfSpec);
         }
-
+        
         let options = { primitives: [] };
         for (const primitiveSpec of gltfSpec.primitives) {
             let primitiveOptions = {};
@@ -237,18 +251,64 @@ export class GLTFLoader {
             const primitive = new Primitive(primitiveOptions);
             options.primitives.push(primitive);
         }
-
+        
         const mesh = new Mesh(options);
         this.cache.set(gltfSpec, mesh);
         return mesh;
     }
-
+    
+    async loadAnimation(nameOrIndex) {
+        const gltfSpec = this.findByNameOrIndex(this.gltf.animations, nameOrIndex);
+        if (this.cache.has(gltfSpec)) {
+            return this.cache.get(gltfSpec);
+        }
+        const keyframes = {};
+        for (const channel of gltfSpec.channels) {
+            if (channel.target.node === undefined) continue;
+            const transformationType = channel.target.path;
+            const sampler = gltfSpec.samplers[channel.sampler];
+            const timeAcc = await this.loadAccessor(sampler.input);
+            const timeData = this.extractBufferData(timeAcc);
+            const transAcc = await this.loadAccessor(sampler.output);
+            const transData = this.extractBufferData(transAcc);
+            for (let [index, time] of timeData.entries()) {
+                // convert time to ms
+                time = Math.floor(parseFloat(time) * 1000);
+                const dataLen = transAcc.numComponents;
+                if (!keyframes[time]) {
+                    keyframes[time] = [
+                        {
+                            type: transformationType,
+                            interpolation: sampler.interpolation,
+                            node: await this.loadNode(channel.target.node),
+                            transform: new Float32Array(transData.buffer, transData.byteOffset + Float32Array.BYTES_PER_ELEMENT * dataLen*index , dataLen),
+                        },
+                    ];
+                    continue;
+                }
+                keyframes[time].push({
+                    type: transformationType,
+                    interpolation: sampler.interpolation,
+                    node: await this.loadNode(channel.target.node),
+                    transform: new Float32Array(transData.buffer, transData.byteOffset + Float32Array.BYTES_PER_ELEMENT * dataLen*index , dataLen)
+                });
+            }
+        }
+        const options = {
+            keyframes: keyframes,
+            name: gltfSpec.name
+        };
+        const animation = new Animation(options);
+        this.cache.set(gltfSpec, animation);
+        return animation;
+    }
+    
     async loadCamera(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.cameras, nameOrIndex);
         if (this.cache.has(gltfSpec)) {
             return this.cache.get(gltfSpec);
         }
-
+        
         if (gltfSpec.type === 'perspective') {
             const persp = gltfSpec.perspective;
             const camera = new PerspectiveCamera({
@@ -273,7 +333,7 @@ export class GLTFLoader {
             return camera;
         }
     }
-
+    
     async loadNode(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.nodes, nameOrIndex);
         if (this.cache.has(gltfSpec)) {
@@ -293,18 +353,18 @@ export class GLTFLoader {
         if (gltfSpec.mesh !== undefined) {
             options.mesh = await this.loadMesh(gltfSpec.mesh);
         }
-
-        const node = new Node(options);
+        
+        const node = new Node(options, nameOrIndex);
         this.cache.set(gltfSpec, node);
         return node;
     }
-
+    
     async loadScene(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.scenes, nameOrIndex);
         if (this.cache.has(gltfSpec)) {
             return this.cache.get(gltfSpec);
         }
-
+        
         let options = { nodes: [] };
         if (gltfSpec.nodes) {
             for (const nodeIndex of gltfSpec.nodes) {
@@ -312,10 +372,13 @@ export class GLTFLoader {
                 options.nodes.push(node);
             }
         }
-
+        options.animations = {};
+        for (const index in this.gltf.animations) {
+            const animation = await this.loadAnimation(parseInt(index));
+            options.animations[animation.name] = animation;
+        }
         const scene = new Scene(options);
         this.cache.set(gltfSpec, scene);
         return scene;
     }
-
 }
