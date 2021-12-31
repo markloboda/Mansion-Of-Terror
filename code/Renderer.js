@@ -93,7 +93,8 @@ export class Renderer {
             this.prepareTexture(material.emissiveTexture);
         }
         if (material.baseColorFactor && !material.baseColorTexture) {
-            material.baseColorTexture = {image: Uint8Array.from(material.baseColorFactor), sampler: {}}
+            material.baseColorTexture = {image: material.baseColorFactor, sampler: {}}
+            console.log(material.baseColorTexture)
             // this.prepareTexture(material.baseColorTexture)
         }
     }

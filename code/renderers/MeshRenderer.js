@@ -1,7 +1,7 @@
 
 
 export default class MeshRenderer {
-	constructor(mesh, armature) {
+	constructor(mesh) {
 		this.mesh = mesh;
 	}
 	render(gl, mvpMatrix, programs, glObjects) {

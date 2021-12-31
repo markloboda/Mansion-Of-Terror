@@ -20,7 +20,8 @@ class App extends Application {
     // await this.loader.load('../../common/models/room/room.gltf');
     // await this.loader.load('../../common/models/croc/croc.gltf');
     // await this.loader.load("../../common/models/example_cube/AnimatedCube.gltf");
-    await this.loader.load('https://webglfundamentals.org/webgl/resources/models/killer_whale/whale.CYCLES.gltf');
+    await this.loader.load("../../common/models/step/InterpolationTest.gltf");
+    // await this.loader.load('https://webglfundamentals.org/webgl/resources/models/killer_whale/whale.CYCLES.gltf');
     // await this.loader.load('../../common/models/RiggedFigure/RiggedFigure.gltf')
     this.scene = await this.loader.loadScene(this.loader.defaultScene);
     console.log(this.scene)
@@ -95,7 +96,6 @@ class App extends Application {
       this.physics.update(dt);
     }
     if (this.scene && this.scene.animations.length) {
-        this.scene.animations[0].isActive = false;
         for (const animation of this.scene.animations) {
             if (!animation.isActive) {
                 continue;

@@ -1,6 +1,5 @@
 import { vec3, mat4, quat } from '../lib/gl-matrix-module.js';
 import MeshRenderer from './renderers/MeshRenderer.js';
-import SkinRenderer from './renderers/SkinRenderer.js';
 
 export class Node {
 
@@ -41,12 +40,7 @@ export class Node {
             this.keyupHandler = this.keyupHandler.bind(this);
         }
         if (options.mesh) {
-            if (options.mesh.armature) {
-                this.renderer = new SkinRenderer(options.mesh, options.mesh.armature);
-            }
-            else {
-                this.renderer = new MeshRenderer(options.mesh);
-            }
+            this.renderer = new MeshRenderer(options.mesh);
         }
 
         this.children = [...(options.children || [])];

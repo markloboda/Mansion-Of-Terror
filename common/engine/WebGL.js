@@ -69,9 +69,9 @@ static createTexture(gl, options) {
     }
 
     gl.bindTexture(target, texture);
-    if (options.image.constructor == Uint8Array) {
+    if (options.image.constructor == Float32Array) {
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, 
-            gl.RGBA, gl.UNSIGNED_BYTE, options.image);
+            gl.RGBA, gl.FLOAT, options.image);
     }
     else if (options.image) {
         gl.texImage2D(

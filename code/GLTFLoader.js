@@ -10,7 +10,6 @@ import { OrthographicCamera } from './OrthographicCamera.js';
 import { Node } from './Node.js';
 import { Scene } from './Scene.js';
 import { Animation } from './animation/Animation.js';
-import { Armature } from './animation/Armature.js';
 
 // This class loads all GLTF resources and instantiates
 // the corresponding classes. Keep in mind that it loads
@@ -280,14 +279,16 @@ async loadAnimation(nameOrIndex) {
 				keyframes[time] = [
 					{
 						type: transformationType,
+                        interpolation: sampler.interpolation,
 						node: await this.loadNode(channel.target.node),
-                        transform: new Float32Array(transData.buffer, transData.byteOffset + Float32Array.BYTES_PER_ELEMENT * dataLen*index , dataLen)
+                        transform: new Float32Array(transData.buffer, transData.byteOffset + Float32Array.BYTES_PER_ELEMENT * dataLen*index , dataLen),
 						},
 					];
 					continue;
 				}
 				keyframes[time].push({
 					type: transformationType,
+                    interpolation: sampler.interpolation,
 					node: await this.loadNode(channel.target.node),
                     transform: new Float32Array(transData.buffer, transData.byteOffset + Float32Array.BYTES_PER_ELEMENT * dataLen*index , dataLen)
                 });
@@ -302,25 +303,6 @@ async loadAnimation(nameOrIndex) {
 			return animation;
 		}
 		
-	async bindSkin(nameOrIndex) {
-		const gltfSpec = this.findByNameOrIndex(this.gltf.skins, nameOrIndex);
-		if (this.cache.has(gltfSpec)) {
-			return this.cache.get(gltfSpec);
-		}
-		const joints = []
-		for (const joint of gltfSpec.joints) {
-			joints.push(await this.loadNode(joint));
-		}
-		const inverseBindMatricesData = this.extractBufferData(await this.loadAccessor(gltfSpec.inverseBindMatrices));
-		const inverseBindMatrices = [];
-		for (let i=16; i<=inverseBindMatricesData.length; i+=16) {
-			inverseBindMatrices.push(inverseBindMatricesData.subarray(i-16, i));
-		}
-		const armature = new Armature(joints, inverseBindMatrices);
-		this.cache.set(gltfSpec, armature);
-		return armature;
-	}
-	
     async loadCamera(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.cameras, nameOrIndex);
         if (this.cache.has(gltfSpec)) {
@@ -371,9 +353,6 @@ async loadAnimation(nameOrIndex) {
         if (gltfSpec.mesh !== undefined) {
             options.mesh = await this.loadMesh(gltfSpec.mesh);
         }
-		if (gltfSpec.skin !== undefined) {
-			options.mesh.armature = await this.bindSkin(gltfSpec.skin)
-		}
 		
 		const node = new Node(options, nameOrIndex);
 		this.cache.set(gltfSpec, node);
