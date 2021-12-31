@@ -5,7 +5,7 @@ import { Renderer } from "./Renderer.js";
 import { Camera } from "./Camera.js";
 import { Node } from "./Node.js";
 import { Physics } from "./Physics.js";
-import { PerspectiveCamera } from "./PerspectiveCamera.js";
+import { PerspectiveCamera } from './PerspectiveCamera.js';
 
 
 class App extends Application {
