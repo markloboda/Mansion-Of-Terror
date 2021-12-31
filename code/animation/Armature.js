@@ -4,7 +4,6 @@ export class Armature {
   constructor(joints, inverseBindMatrices) {
     this.joints = joints
     this.inverseBindMatrices = inverseBindMatrices;
-    console.log(this.inverseBindMatrices)
     this.jointMatrices = [];
     this.jointData = new Float32Array(16*this.joints.length);
     for (let i=0; i<this.joints.length; ++i) {
@@ -28,7 +27,7 @@ export class Armature {
     gl.texImage2D(
       gl.TEXTURE_2D,
       0,
-      gl.RGBA,
+      gl.RGBA32F,
       4,
       this.joints.length,
       0,
