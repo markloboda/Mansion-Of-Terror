@@ -30,6 +30,14 @@ export class Animation {
     };
   }
 
+  activate() {
+    this.isActive = true;
+  }
+
+  disable() {
+    this.isActive = false;
+  }
+
   update() {
     if (!this.startTime) {
       this.startTime = Date.now();

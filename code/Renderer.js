@@ -3,6 +3,7 @@ import { mat4 } from '../lib/gl-matrix-module.js';
 import { WebGL } from '../common/engine/WebGL.js';
 
 import { shaders } from './shaders/shaders.js';
+import { Texture } from './Texture.js';
 
 // This class prepares all assets for use with WebGL
 // and takes care of rendering.
@@ -76,6 +77,16 @@ export class Renderer {
         }
     }
 
+    prepareBaseColorFactor(options) {
+        if (this.glObjects.has(options.data)) {
+            return this.glObjects.get(data);
+        }
+
+        const glTexture = WebGL.createTexture(this.gl, options);
+        this.glObjects.set(options.data, glTexture);
+        return glTexture;
+    }
+
     prepareMaterial(material) {
         if (material.baseColorTexture) {
             this.prepareTexture(material.baseColorTexture);
@@ -93,9 +104,8 @@ export class Renderer {
             this.prepareTexture(material.emissiveTexture);
         }
         if (material.baseColorFactor && !material.baseColorTexture) {
-            material.baseColorTexture = {image: material.baseColorFactor, sampler: {}}
-            console.log(material.baseColorTexture)
-            // this.prepareTexture(material.baseColorTexture)
+            material.baseColorTexture = {data: new Uint8Array([255, 255, 255, 255]), width: 1, height: 1};
+            this.prepareBaseColorFactor(material.baseColorTexture)
         }
     }
 

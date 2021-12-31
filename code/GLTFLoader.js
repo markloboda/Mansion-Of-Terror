@@ -372,10 +372,10 @@ export class GLTFLoader {
                 options.nodes.push(node);
             }
         }
-        options.animations = [];
+        options.animations = {};
         for (const index in this.gltf.animations) {
             const animation = await this.loadAnimation(parseInt(index));
-            options.animations.push(animation)
+            options.animations[animation.name] = animation;
         }
         const scene = new Scene(options);
         this.cache.set(gltfSpec, scene);

@@ -24,7 +24,7 @@ class App extends Application {
     // await this.loader.load('https://webglfundamentals.org/webgl/resources/models/killer_whale/whale.CYCLES.gltf');
     // await this.loader.load('../../common/models/RiggedFigure/RiggedFigure.gltf')
     this.scene = await this.loader.loadScene(this.loader.defaultScene);
-    console.log(this.scene)
+    Object.keys(this.scene.animations).map(animation => this.scene.animations[animation].activate()) // how to activate an animation (activates all animations)
     // this.camera = await this.loader.loadNode("Camera");
     const node = new Node({
       children: [
@@ -95,12 +95,12 @@ class App extends Application {
       if (this.physics) {
         this.physics.update(dt);
       }
-      if (this.scene && this.scene.animations.length) {
-        for (const animation of this.scene.animations) {
-          if (!animation.isActive) {
+      if (this.scene && this.scene.animations) {
+        for (const animation in this.scene.animations) {
+          if (!this.scene.animations[animation].isActive) {
             continue;
           }
-          animation.update();
+          this.scene.animations[animation].update();
         }
       }
     }

@@ -10,14 +10,14 @@ export default class MeshRenderer {
 
       const material = primitive.material;
       const texture = material.baseColorTexture;
-      const glTexture = glObjects.get(texture.image);
+      const glTexture = glObjects.get(texture.image || texture.data);
       const glSampler = glObjects.get(texture.sampler);
 
       gl.bindVertexArray(vao);
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, glTexture);
       gl.bindSampler(0, glSampler);
-
+      gl.uniform4fv(program.uniforms.aColor, material.baseColorFactor)
       gl.uniformMatrix4fv(program.uniforms.uMvpMatrix, false, mvpMatrix);
       if (primitive.indices) {
         const mode = primitive.mode;
