@@ -58,6 +58,10 @@ export class Physics {
         const minb = vec3.add(vec3.create(), posb, b.aabb.min);
         const maxb = vec3.add(vec3.create(), posb, b.aabb.max);
 
+        // console.log(mina, maxa);
+        // console.log(minb, maxb);
+        // console.log(".............................");
+
         /// CHECK IF NODE IS ON GROUND
         // check if on top of other and if touching
         if (a.translation[0] > minb[0] && a.translation[0] < maxb[0] &&

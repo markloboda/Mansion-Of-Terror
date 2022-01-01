@@ -35,6 +35,7 @@ export class Node {
         this.camera = options.camera || null;
 
         if (this.camera) {
+            this.initialTranslation = vec3.clone(this.translation);
             this.keys = {}
             this.mouseSensitivity = 0.001;
             this.mouseSensitivity = 0.002;
@@ -96,9 +97,30 @@ export class Node {
         }
     }
 
+    updateWorldMatrix(updateParents, updateChildren) {
+		const parent = this.parent;
+		if (updateParents && parent !== null) {
+			parent.updateWorldMatrix(true, false);
+		}
+
+		if (this.parent === null) {
+            mat4.copy(this.worldMatrix, this.matrix);
+		} else {
+            mat4.multiply(this.worldMatrix, this.parent.worldMatrix, this.matrix);
+		}
+
+		// update children
+		if (updateChildren === true) {
+			const children = this.children;
+			for (let i = 0; i < children.length; i++) {
+				children[i].updateWorldMatrix(false, true);
+			}
+		}
+    }
 
     getGlobalTransform() {
-        return this.matrix;
+		this.updateWorldMatrix(true, false);
+		return this.worldMatrix;
     }
 
     mousemoveHandler(e) {
