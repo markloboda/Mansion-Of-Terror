@@ -1,7 +1,53 @@
 {
     "asset" : {
-        "generator" : "Khronos glTF Blender I/O v1.7.33",
+        "generator" : "Khronos glTF Blender I/O v1.6.16",
         "version" : "2.0"
+    },
+    "extensionsUsed" : [
+        "KHR_lights_punctual"
+    ],
+    "extensionsRequired" : [
+        "KHR_lights_punctual"
+    ],
+    "extensions" : {
+        "KHR_lights_punctual" : {
+            "lights" : [
+                {
+                    "color" : [
+                        0.857086181640625,
+                        1,
+                        0.9413812160491943
+                    ],
+                    "intensity" : 10000,
+                    "type" : "point",
+                    "name" : "Point"
+                },
+                {
+                    "color" : [
+                        1.0142858028411865,
+                        0.29613831639289856,
+                        0.06847818195819855
+                    ],
+                    "intensity" : 10000,
+                    "spot" : {
+                        "innerConeAngle" : 0.30681065850881506,
+                        "outerConeAngle" : 0.3609537184238434
+                    },
+                    "type" : "spot",
+                    "name" : "Spot"
+                },
+                {
+                    "color" : [
+                        1,
+                        1,
+                        1
+                    ],
+                    "intensity" : 1,
+                    "type" : "directional",
+                    "name" : "Sun"
+                }
+            ]
+        }
     },
     "scene" : 0,
     "scenes" : [
@@ -23,25 +69,29 @@
                 13,
                 14,
                 15,
-                16
+                16,
+                18,
+                20,
+                22
             ]
         }
     ],
     "nodes" : [
         {
             "camera" : 0,
-            "name" : "Camera",
+            "name" : "Camera_Orientation",
             "rotation" : [
+                -0.7071067690849304,
                 0,
                 0,
-                0,
-                0
+                0.7071067690849304
             ]
         },
         {
             "children" : [
                 0
             ],
+            "name" : "Camera",
             "translation" : [
                 0,
                 10,
@@ -182,14 +232,95 @@
                 1.8934813737869263,
                 0.07465788722038269
             ]
+        },
+        {
+            "extensions" : {
+                "KHR_lights_punctual" : {
+                    "light" : 0
+                }
+            },
+            "name" : "Light_Orientation",
+            "rotation" : [
+                -0.7071067690849304,
+                0,
+                0,
+                0.7071067690849304
+            ]
+        },
+        {
+            "children" : [
+                17
+            ],
+            "name" : "Light",
+            "translation" : [
+                7.998778820037842,
+                6.276779651641846,
+                5.077322483062744
+            ]
+        },
+        {
+            "extensions" : {
+                "KHR_lights_punctual" : {
+                    "light" : 1
+                }
+            },
+            "name" : "Spot_Orientation",
+            "rotation" : [
+                -0.7071067690849304,
+                0,
+                0,
+                0.7071067690849304
+            ]
+        },
+        {
+            "children" : [
+                19
+            ],
+            "name" : "Spot",
+            "rotation" : [
+                0.060607410967350006,
+                0.07899314910173416,
+                -0.014345243573188782,
+                0.9949276447296143
+            ],
+            "translation" : [
+                0,
+                10.123581886291504,
+                -4.623994827270508
+            ]
+        },
+        {
+            "extensions" : {
+                "KHR_lights_punctual" : {
+                    "light" : 2
+                }
+            },
+            "name" : "Sun_Orientation",
+            "rotation" : [
+                -0.7071067690849304,
+                0,
+                0,
+                0.7071067690849304
+            ]
+        },
+        {
+            "children" : [
+                21
+            ],
+            "name" : "Sun",
+            "translation" : [
+                -9.60604190826416,
+                8.910581588745117,
+                0
+            ]
         }
     ],
     "cameras" : [
         {
-            "name" : "Camera.001",
+            "name" : "Camera",
             "perspective" : {
                 "aspectRatio" : 1.7777777777777777,
-                "yfov" : 0.39959652046304894,
+                "yfov" : 0.750415851665512,
                 "zfar" : 1000,
                 "znear" : 0.10000000149011612
             },

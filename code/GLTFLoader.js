@@ -10,6 +10,7 @@ import { OrthographicCamera } from './OrthographicCamera.js';
 import { Node } from './Node.js';
 import { Scene } from './Scene.js';
 import { Animation } from './animation/Animation.js';
+import { SpotLight } from './lights/SpotLight.js';
 
 // This class loads all GLTF resources and instantiates
 // the corresponding classes. Keep in mind that it loads
@@ -302,6 +303,22 @@ export class GLTFLoader {
         this.cache.set(gltfSpec, animation);
         return animation;
     }
+
+    async loadLight(nameOrIndex) {
+        const gltfSpec = this.findByNameOrIndex(this.gltf.extensions.KHR_lights_punctual.lights, nameOrIndex);
+        if (this.cache.has(gltfSpec)) {
+            return this.cache.get(gltfSpec);
+        }
+        let light = null;
+        if (gltfSpec.type === "spot") {
+            light = new SpotLight(gltfSpec);
+        }
+        else {
+            return;
+        }
+        this.cache.set(gltfSpec, light);
+        return light;
+    }
     
     async loadCamera(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.cameras, nameOrIndex);
@@ -353,8 +370,17 @@ export class GLTFLoader {
         if (gltfSpec.mesh !== undefined) {
             options.mesh = await this.loadMesh(gltfSpec.mesh);
         }
+        if (gltfSpec.extensions) {
+            const extensions = gltfSpec.extensions;
+            if (extensions.KHR_lights_punctual) {
+                options.light = await this.loadLight(extensions.KHR_lights_punctual.light)
+            }
+        }
         
         const node = new Node(options, nameOrIndex);
+        if (options.light) {
+            console.log(node);
+        }
         this.cache.set(gltfSpec, node);
         return node;
     }
@@ -365,10 +391,13 @@ export class GLTFLoader {
             return this.cache.get(gltfSpec);
         }
         
-        let options = { nodes: [] };
+        let options = { nodes: [], lights: [] };
         if (gltfSpec.nodes) {
             for (const nodeIndex of gltfSpec.nodes) {
                 const node = await this.loadNode(nodeIndex);
+                if (node.children[0]?.light) {
+                    options.lights.push(node);
+                }
                 options.nodes.push(node);
             }
         }

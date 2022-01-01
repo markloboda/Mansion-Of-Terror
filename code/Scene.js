@@ -5,6 +5,7 @@ export class Scene {
     constructor(options = {}) {
         this.nodes = [...(options.nodes || [])];
         this.animations = options.animations
+        this.lights = options.lights
     }
 
     addNode(node) {

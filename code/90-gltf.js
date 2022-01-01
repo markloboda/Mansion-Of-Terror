@@ -28,7 +28,7 @@ class App extends Application {
     // await this.loader.load('../../common/models/RiggedFigure/RiggedFigure.gltf')
     this.scene = await this.loader.loadScene(this.loader.defaultScene);
     Object.keys(this.scene.animations).map(animation => this.scene.animations[animation].activate()) // how to activate an animation (activates all animations)
-    this.camera = await this.loader.loadNode("Camera");
+    this.camera = await this.loader.loadNode("Camera_Orientation");
     // const node = new Node({
     //   children: [
     //     new Node({
@@ -59,6 +59,7 @@ class App extends Application {
       this.renderer = new Renderer(this.gl);
       this.renderer.prepareScene(this.scene);
       this.resize();
+      console.log(this.scene)
     }
     
     enableCamera() {

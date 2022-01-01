@@ -26,6 +26,9 @@ export class Node {
             this.updateMatrix();
         }
         this.mesh = options.mesh;
+        this.light = options.light;
+
+        this.worldMatrix = mat4.create();
 
         this.velocity = [0, 0, 0];
 
