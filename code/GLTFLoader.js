@@ -352,6 +352,26 @@ export class GLTFLoader {
         }
         if (gltfSpec.mesh !== undefined) {
             options.mesh = await this.loadMesh(gltfSpec.mesh);
+            let min = undefined;
+            let max = undefined;
+            for (const primitive of options.mesh.primitives) {
+                const position = primitive.attributes["POSITION"];
+                if (min === undefined) {
+                    min = position.min;
+                }
+                if (max === undefined) {
+                    max = position.max;
+                }
+                for (let i=0; i<3; i++) {
+                    if (min[i] > position.min[i]) {
+                        min[i] = position.min[i];
+                    }
+                    if (max[i] < position.max[i]) {
+                        max[i] = position.max[i];
+                    }
+                }
+            }
+            options.aabb = {min, max};
         }
         
         const node = new Node(options, nameOrIndex);
