@@ -93,6 +93,10 @@ export class Node {
         }
     }
 
+    OBBfromAABB() {
+        
+    }
+
 
     getGlobalTransform() {
         return this.matrix;
