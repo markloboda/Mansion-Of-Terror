@@ -3303,7 +3303,7 @@
         },
         {
             "sampler" : 0,
-            "source" : 6
+            "source" : 7
         },
         {
             "sampler" : 0,
@@ -3565,6 +3565,11 @@
             "mimeType" : "image/jpeg",
             "name" : "Seamless-Rust-Texture.jpg",
             "uri" : "Seamless-Rust-Texture_jpg.jpg"
+        },
+        {
+            "mimeType" : "image/jpeg",
+            "name" : "Seamless-Rust-Texture.jpg",
+            "uri" : "Seamless-Rust-Texture_jpg-1.jpg"
         }
     ],
     "accessors" : [
