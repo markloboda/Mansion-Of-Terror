@@ -274,7 +274,7 @@ export class GLTFLoader {
             const transData = this.extractBufferData(transAcc);
             for (let [index, time] of timeData.entries()) {
                 // convert time to ms
-                time = Math.floor(parseFloat(time) * 1000);
+                time = Math.floor(parseFloat(time) * 2000);
                 const dataLen = transAcc.numComponents;
                 if (!keyframes[time]) {
                     keyframes[time] = [

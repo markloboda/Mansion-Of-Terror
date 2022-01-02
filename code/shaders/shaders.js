@@ -81,38 +81,46 @@ const spotlightVert = glsl`#version 300 es
 precision mediump float;
 #pragma vscode_glsllint_stage: vert
 
-in vec4 a_position;
-in vec3 a_normal;
 
-uniform vec3 u_lightWorldPosition;
-uniform vec3 u_viewWorldPosition;
+layout (location = 0) in vec4 aPosition;
+layout (location = 1) in vec2 aTexCoord;
+layout (location = 4) in vec3 aNormal;
 
-uniform mat4 u_world;
-uniform mat4 u_worldViewProjection;
-uniform mat4 u_worldInverseTranspose;
+uniform vec3 uLightPosition;
+uniform vec3 uCameraPosition;
 
-out vec3 v_normal;
+uniform vec4 aColor;
+uniform mat4 uView;
+uniform mat4 uModel;
+uniform mat4 uProjection;
+uniform mat4 uModelInverseTranspose;
 
-out vec3 v_surfaceToLight;
-out vec3 v_surfaceToView;
+out vec3 vNormal;
+out vec4 vColor;
+
+out vec3 vSurfaceToLight;
+out vec3 vSurfaceToCamera;
+out vec2 vTexCoord;
 
 void main() {
   // Multiply the position by the matrix.
-  gl_Position = u_worldViewProjection * a_position;
+  gl_Position = uProjection * (uView * uModel * aPosition);
 
   // orient the normals and pass to the fragment shader
-  v_normal = mat3(u_worldInverseTranspose) * a_normal;
+  vNormal = mat3(uModelInverseTranspose) * aNormal;
 
   // compute the world position of the surfoace
-  vec3 surfaceWorldPosition = (u_world * a_position).xyz;
+  vec3 surfaceWorldPosition = (uModel * aPosition).xyz;
 
   // compute the vector of the surface to the light
   // and pass it to the fragment shader
-  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
+  vSurfaceToLight = uLightPosition - surfaceWorldPosition;
 
   // compute the vector of the surface to the view/camera
   // and pass it to the fragment shader
-  v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
+  vSurfaceToCamera = uCameraPosition - surfaceWorldPosition;
+  vColor = aColor;
+  vTexCoord = aTexCoord;
 }
 `;
 
@@ -121,44 +129,52 @@ precision mediump float;
 #pragma vscode_glsllint_stage: frag
 
 // Passed in from the vertex shader.
-in vec3 v_normal;
-in vec3 v_surfaceToLight;
-in vec3 v_surfaceToView;
+in vec3 vNormal;
+in vec3 vSurfaceToLight;
+in vec3 vSurfaceToCamera;
+in vec2 vTexCoord;
+in vec4 vColor;
 
-uniform vec4 u_color;
-uniform float u_shininess;
-uniform vec3 u_lightDirection;
-uniform float u_innerLimit;          // in dot space
-uniform float u_outerLimit;          // in dot space
+uniform sampler2D uTexture;
+uniform vec4 uColor;
+uniform float uShininess;
+uniform vec3 uLightDirection;
+uniform float uLimit;          // in dot space
 
 // we need to declare an output for the fragment shader
-out vec4 outColor;
+out vec4 oColor;
 
 void main() {
-  // because v_normal is a varying it's interpolated
+  // because vNormal is a varying it's interpolated
   // so it will not be a unit vector. Normalizing it
   // will make it a unit vector again
-  vec3 normal = normalize(v_normal);
+  vec3 normal = normalize(vNormal);
 
-  vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
-  vec3 surfaceToViewDirection = normalize(v_surfaceToView);
+  vec3 surfaceToLightDirection = normalize(vSurfaceToLight);
+  vec3 surfaceToViewDirection = normalize(vSurfaceToCamera);
   vec3 halfVector = normalize(surfaceToLightDirection + surfaceToViewDirection);
 
+  float light = 0.0;
+  float specular = 0.0;
   float dotFromDirection = dot(surfaceToLightDirection,
-                               -u_lightDirection);
-  float limitRange = u_innerLimit - u_outerLimit;
-  float inLight = clamp((dotFromDirection - u_outerLimit) / limitRange, 0.0, 1.0);
-  float light = inLight * dot(normal, surfaceToLightDirection);
-  float specular = inLight * pow(dot(normal, halfVector), u_shininess);
+                               -uLightDirection);
+  if (dotFromDirection >= uLimit) {
+    light = dot(normal, surfaceToLightDirection);
+    if (light > 0.0) {
+      specular = pow(dot(normal, halfVector), uShininess);
+    }
+  }
 
-  outColor = u_color;
+  oColor = uColor;
 
   // Lets multiply just the color portion (not the alpha)
   // by the light
-  outColor.rgb *= light;
+  oColor.rgb *= light;
 
   // Just add in the specular
-  outColor.rgb += specular;
+//   oColor *= texture(uTexture, vTexCoord) * vColor;
+  oColor.rgb += specular;
+  oColor *= texture(uTexture, vTexCoord) * vColor;
 }
 `;
 
