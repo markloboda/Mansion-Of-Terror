@@ -4,7 +4,7 @@ import { Physics } from './Physics.js';
 
 export class Node {
 
-    constructor(options = {}, index) {
+    constructor(options = {}) {
         this.translation = options.translation
             ? vec3.clone(options.translation)
             : vec3.fromValues(0, 0, 0);
@@ -19,7 +19,7 @@ export class Node {
             : mat4.create();
         this.euler = [0, 0, 0]
         this.name = options.name;
-        this.index = index;
+
         if (options.matrix) {
             this.updateTransform();
         } else if (options.translation || options.rotation || options.scale) {
@@ -94,6 +94,10 @@ export class Node {
                 max: max
             };
         }
+    }
+
+    OBBfromAABB() {
+        
     }
 
 
