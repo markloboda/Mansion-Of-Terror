@@ -27,40 +27,25 @@ export default class MeshRenderer {
       gl.uniformMatrix4fv(program.uniforms.uModel, false, model);
       gl.uniformMatrix4fv(program.uniforms.uProjection, false, projection);
 
+      
+      // lightning
       const modelInverse = mat4.clone(model);
       mat4.invert(modelInverse, modelInverse);
-
       gl.uniformMatrix4fv(program.uniforms.uModelInverseTranspose, true, modelInverse);
-      
-      const lightNode = lights[0];
-      const light = lightNode.children[0].light;
       const cameraMat = mat4.clone(view);
       const cameraPos = mat4.getTranslation(vec3.create(), mat4.invert(cameraMat, cameraMat));
-      gl.uniform3fv(program.uniforms.uLightPosition, lightNode.translation);
       gl.uniform3fv(program.uniforms.uCameraPosition, cameraPos);
-      gl.uniform1fv(program.uniforms.uShininess, [light.intensity]);
-      gl.uniform3fv(program.uniforms.uLightDirection, vec3.transformQuat(vec3.create(), [0, -1, 0], lightNode.children[0].rotation));
-      gl.uniform1fv(program.uniforms.uInnerLimit, [light.spot.innerConeAngle])
-      gl.uniform1fv(program.uniforms.uOuterLimit, [light.spot.outerConeAngle])
-      gl.uniform4fv(program.uniforms.uColor, [...light.color, 1]);
+      gl.uniform1iv(program.uniforms.numLights, [lights.length]);
+      for (const [index, lightNode] of lights.entries()) {
+        const light = lightNode.children[0].light;
+        gl.uniform3fv(program.uniforms[`uLightPosition[${index}]`], lightNode.translation);
+        gl.uniform1fv(program.uniforms[`uShininess[${index}]`], [light.intensity]);
+        gl.uniform3fv(program.uniforms[`uLightDirection[${index}]`], vec3.transformQuat(vec3.create(), [0, -1, 0], lightNode.children[0].rotation));
+        gl.uniform1fv(program.uniforms[`uInnerLimit[${index}]`], [light.spot.innerConeAngle])
+        gl.uniform1fv(program.uniforms[`uOuterLimit[${index}]`], [light.spot.outerConeAngle])
+        gl.uniform3fv(program.uniforms[`uColor[${index}]`], light.color);
+      }
 
-      // light
-      // for (const [index, node] of lights.entries()) {
-      //   const light = node.children[0].light;
-      //   let color = vec3.clone(light.ambientColor)
-      //   vec3.scale(color, color, 1.0 / 255.0);
-      //   gl.uniform3fv(program.uniforms['uAmbientColor[' + index + ']'], color);
-      //   color = vec3.clone(light.diffuseColor)
-      //   vec3.scale(color, color, 1.0 / 255.0);
-      //   gl.uniform3fv(program.uniforms['uDiffuseColor[' + index + ']'], color);
-      //   color = vec3.clone(light.specularColor)
-      //   vec3.scale(color, color, 1.0 / 255.0);
-      //   gl.uniform3fv(program.uniforms['uSpecularColor[' + index + ']'], color);
-      //   let position = node.translation;
-      //   gl.uniform3fv(program.uniforms['uLightPosition[' + index + ']'], position);
-      //   gl.uniform1f(program.uniforms['uShininess[' + index + ']'], node.children[0].node.shininess);
-      //   gl.uniform3fv(program.uniforms['uLightAttenuation[' + index + ']'], node.children[0].node.attenuation);
-      // }
 
       if (primitive.indices) {
         const mode = primitive.mode;

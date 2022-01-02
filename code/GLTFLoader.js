@@ -398,9 +398,6 @@ export class GLTFLoader {
         }
         
         const node = new Node(options, nameOrIndex);
-        if (options.light) {
-            console.log(node);
-        }
         this.cache.set(gltfSpec, node);
         return node;
     }
