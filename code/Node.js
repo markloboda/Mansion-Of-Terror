@@ -256,7 +256,6 @@ export class Node {
         mat4.getScaling(this.scale, this.matrix);
     }
 
-
     updateMatrix() {
         mat4.fromRotationTranslationScale(
             this.matrix,

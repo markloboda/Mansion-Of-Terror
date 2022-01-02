@@ -148,10 +148,10 @@ uniform float uShininess[10];
 uniform vec3 uLightDirection[10];
 uniform float uInnerLimit[10];          // in dot space
 uniform float uOuterLimit[10];          // in dot space
-vec3 ambient = 0.1 * vec3(1, 0.6, 0.5);
 
 // we need to declare an output for the fragment shader
 out vec4 oColor;
+
 
 void main() {
   // because vNormal is a varying it's interpolated
@@ -160,7 +160,6 @@ void main() {
   vec3 normal = normalize(vNormal);
   vec3 surfaceToViewDirection = normalize(vSurfaceToCamera);
   oColor = texture(uTexture, vTexCoord) * vColor;
-  oColor.rgb *= ambient;
   for (int i=0; i<numLights; i++) {
     vec3 surfaceToLightDirection = normalize(vSurfaceToLight[i]);
     vec3 halfVector = normalize(surfaceToLightDirection + surfaceToViewDirection);
@@ -169,15 +168,15 @@ void main() {
                                  -uLightDirection[i]);
     float limitRange = uInnerLimit[i] - uOuterLimit[i];
     float inLight = clamp((dotFromDirection - uOuterLimit[i]) / limitRange, 0.0, 1.0);
-    float light = inLight * dot(normal, surfaceToLightDirection);
+    float light = inLight * dot(normal, surfaceToLightDirection) + 0.01;
     float specular = inLight * pow(dot(normal, halfVector), uShininess[i]);
-    oColor.rgb *= uColor[i];
     // Lets multiply just the color portion (not the alpha)
     // by the light
-    oColor.rgb *= light;
+    oColor.rgb = (light + specular) * uColor[i];
+    oColor *= texture(uTexture, vTexCoord) * vColor;
+
+    // float attenuation = 1.0 / (vSurfaceToCamera*vSurfaceToCamera);
   
-    // Just add in the specular
-    oColor.rgb += specular;
   }
 }
 `;

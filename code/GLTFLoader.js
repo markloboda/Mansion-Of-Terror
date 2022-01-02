@@ -401,6 +401,19 @@ export class GLTFLoader {
         this.cache.set(gltfSpec, node);
         return node;
     }
+
+    findLight(node) {
+        let light;
+        for (const child of node.children) {
+            if (child.light) {
+                return child.parent;
+            }
+            light = this.findLight(child);
+            if (light) {
+                return light;
+            }
+        }
+    }
     
     async loadScene(nameOrIndex) {
         const gltfSpec = this.findByNameOrIndex(this.gltf.scenes, nameOrIndex);
@@ -412,8 +425,9 @@ export class GLTFLoader {
         if (gltfSpec.nodes) {
             for (const nodeIndex of gltfSpec.nodes) {
                 const node = await this.loadNode(nodeIndex);
-                if (node.children[0]?.light) {
-                    options.lights.push(node);
+                const light = this.findLight(node);
+                if (light) {
+                    options.lights.push(light);
                 }
                 options.nodes.push(node);
             }
