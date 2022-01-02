@@ -38,9 +38,10 @@ export default class MeshRenderer {
       const cameraPos = mat4.getTranslation(vec3.create(), mat4.invert(cameraMat, cameraMat));
       gl.uniform3fv(program.uniforms.uLightPosition, lightNode.translation);
       gl.uniform3fv(program.uniforms.uCameraPosition, cameraPos);
-      gl.uniform1fv(program.uniforms.uShininess, [light.shininess]);
+      gl.uniform1fv(program.uniforms.uShininess, [light.intensity]);
       gl.uniform3fv(program.uniforms.uLightDirection, vec3.transformQuat(vec3.create(), [0, -1, 0], lightNode.children[0].rotation));
-      gl.uniform1fv(program.uniforms.uLimit, [light.spot.outerConeAngle])
+      gl.uniform1fv(program.uniforms.uInnerLimit, [light.spot.innerConeAngle])
+      gl.uniform1fv(program.uniforms.uOuterLimit, [light.spot.outerConeAngle])
       gl.uniform4fv(program.uniforms.uColor, [...light.color, 1]);
 
       // light

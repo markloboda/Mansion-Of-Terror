@@ -139,7 +139,8 @@ uniform sampler2D uTexture;
 uniform vec4 uColor;
 uniform float uShininess;
 uniform vec3 uLightDirection;
-uniform float uLimit;          // in dot space
+uniform float uInnerLimit;          // in dot space
+uniform float uOuterLimit;          // in dot space
 
 // we need to declare an output for the fragment shader
 out vec4 oColor;
@@ -154,16 +155,13 @@ void main() {
   vec3 surfaceToViewDirection = normalize(vSurfaceToCamera);
   vec3 halfVector = normalize(surfaceToLightDirection + surfaceToViewDirection);
 
-  float light = 0.0;
-  float specular = 0.0;
   float dotFromDirection = dot(surfaceToLightDirection,
                                -uLightDirection);
-  if (dotFromDirection >= uLimit) {
-    light = dot(normal, surfaceToLightDirection);
-    if (light > 0.0) {
-      specular = pow(dot(normal, halfVector), uShininess);
-    }
-  }
+  float limitRange = uInnerLimit - uOuterLimit;
+  float inLight = clamp((dotFromDirection - uOuterLimit) / limitRange, 0.0, 1.0);
+  float light = inLight * dot(normal, surfaceToLightDirection);
+  float specular = inLight * pow(dot(normal, halfVector), uShininess);
+
 
   oColor = uColor;
 
