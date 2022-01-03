@@ -1,4 +1,4 @@
-import { vec3, mat4, quat } from '../lib/gl-matrix-module.js';
+import { vec3, vec4, mat4, quat } from '../lib/gl-matrix-module.js';
 import MeshRenderer from './renderers/MeshRenderer.js';
 import { Physics } from './Physics.js';
 
@@ -19,6 +19,7 @@ export class Node {
             : mat4.create();
         this.euler = [0, 0, 0]
         this.name = options.name;
+        this.light = options.light;
 
         if (options.matrix) {
             this.updateTransform();
