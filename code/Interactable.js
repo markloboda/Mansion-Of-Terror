@@ -9,6 +9,7 @@ export class Interactable extends Node {
     this.inFocus = false;
     this.yOffset = this.translation[1];
     this.zOffset = this.translation[2];
+    this.interactionType = options.interactionType;
   }
 
   updateTransform() {
