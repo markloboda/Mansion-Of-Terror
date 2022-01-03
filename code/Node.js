@@ -1,4 +1,4 @@
-import { vec3, mat4, quat } from '../lib/gl-matrix-module.js';
+import { vec3, vec4, mat4, quat } from '../lib/gl-matrix-module.js';
 import MeshRenderer from './renderers/MeshRenderer.js';
 import { Physics } from './Physics.js';
 
@@ -125,6 +125,9 @@ export class Node {
         this.euler[1] = ((this.euler[1] % twopi) + twopi) % twopi;
         const degVertical = this.euler.map(angle => angle * 180 / Math.PI);
         this.rotation = quat.fromEuler(quat.create(), ...degVertical);
+        console.log(this.children[0])
+        //this.children[0].rotation = vec4.copy(vec4.create(), this.rotation);
+        
     }
 
 
