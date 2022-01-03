@@ -11,7 +11,7 @@ export const scenes = {
   Room2: {
     name: "second_room",
     interactables: [
-      
+      {name: "Flashlight", type: "pick_up", inFocus: true}
     ]
   }
 }
