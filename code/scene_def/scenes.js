@@ -13,5 +13,11 @@ export const scenes = {
     interactables: [
       {name: "Flashlight", type: "pick_up", inFocus: true}
     ]
+  },
+  Room3: {
+    name: "parkour_room",
+    interactables: [
+      {name: "Flashlight", type: "pick_up", inFocus: true}
+    ]
   }
 }

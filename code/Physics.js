@@ -17,6 +17,7 @@ export class Physics {
                     for (const interactable of this.scene.interactables) {
                         if (interactable.inFocus) {
                             interactable.updateTransform();
+                            checkProximity(interactable);
                         }
                     }
                 }
@@ -47,6 +48,11 @@ export class Physics {
             }
         });
     }
+
+    checkProximity(node) {
+        
+    }
+
     intervalIntersection(min1, max1, min2, max2) {
         return !(min1 > max2 || min2 > max1);
     }
