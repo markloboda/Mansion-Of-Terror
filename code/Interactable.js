@@ -8,12 +8,14 @@ export class Interactable extends Node {
     this.master;
     this.inFocus = false;
     this.yOffset = this.translation[1];
+    this.zOffset = this.translation[2];
   }
 
   updateTransform() {
     if (this.master) {
       mat4.getTranslation(this.translation, mat4.clone(this.master.matrix));
       this.translation[1] += this.yOffset;
+      //this.translation[2] += this.zOffset;
       quat.multiply(this.rotation, this.master.parent.rotation, this.master.rotation);
     }
   }

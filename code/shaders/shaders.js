@@ -168,7 +168,7 @@ void main() {
                                  -uLightDirection[i]);
     float limitRange = uInnerLimit[i] - uOuterLimit[i];
     float inLight = clamp((dotFromDirection - uOuterLimit[i]) / limitRange, 0.0, 1.0);
-    float light = inLight * dot(normal, surfaceToLightDirection) + 0.1;
+    float light = inLight * dot(normal, surfaceToLightDirection) + 0.05;
     float specular = inLight * pow(dot(normal, halfVector), uShininess[i]);
     // Lets multiply just the color portion (not the alpha)
     // by the light
