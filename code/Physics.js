@@ -17,7 +17,37 @@ export class Physics {
                     for (const interactable of this.scene.interactables) {
                         if (interactable.inFocus) {
                             interactable.updateTransform();
-                            checkProximity(interactable);
+                        }
+                        const bool = this.checkProximity(node, interactable)
+                        if (interactable.type == "pick_up") {
+                            if (bool) {
+                                const promptImg = document.getElementById('pickup_prompt');
+                                promptImg.style.visibility = "visible";
+                            } else {
+                                const promptImg = document.getElementById('pickup_prompt');
+                                promptImg.style.visibility = "hidden";
+                            }
+                            
+                        }
+                        if (interactable.type == "insert") {
+                            if (bool) {
+                                const promptImg = document.getElementById('insert_prompt');
+                                promptImg.style.visibility = "visible";
+                            } else {
+                                const promptImg = document.getElementById('insert_prompt');
+                                promptImg.style.visibility = "hidden";
+                            }
+                            
+                        }
+                        if (interactable.type == "interact") {
+                            if (bool) {
+                                const promptImg = document.getElementById('interact_prompt');
+                                promptImg.style.visibility = "visible";
+                            } else {
+                                const promptImg = document.getElementById('interact_prompt');
+                                promptImg.style.visibility = "hidden";
+                            }
+                            
                         }
                     }
                 }
@@ -49,8 +79,22 @@ export class Physics {
         });
     }
 
-    checkProximity(node) {
-        
+    checkProximity(a, b) {
+        // use aabb for proximity border of camera
+        const ta = a.getGlobalTransform();
+        const tb = b.getGlobalTransform();
+
+        const posa = mat4.getTranslation(vec3.create(), ta);
+        const posb = mat4.getTranslation(vec3.create(), tb);
+
+        const mina = vec3.sub(vec3.create(), vec3.add(vec3.create(), posa, a.aabb.min), vec3.fromValues(1, 2, 1));
+        const maxa = vec3.add(vec3.create(), vec3.add(vec3.create(), posa, a.aabb.max), vec3.fromValues(1, 2, 1));
+
+        if (posb[0] > mina[0] && posb[1] > mina[1] && posb[2] > mina[2] &&
+            posb[0] < maxa[0] && posb[1] < maxa[1] && posb[2] < maxa[2]) {
+                return true;
+            }
+        return false;
     }
 
     intervalIntersection(min1, max1, min2, max2) {
