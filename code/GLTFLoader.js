@@ -11,7 +11,6 @@ import { Node } from './Node.js';
 import { Scene } from './Scene.js';
 import { Animation } from './animation/Animation.js';
 import { SpotLight } from './lights/SpotLight.js';
-import { Interactable } from './Interactable.js';
 
 // This class loads all GLTF resources and instantiates
 // the corresponding classes. Keep in mind that it loads
@@ -398,12 +397,7 @@ export class GLTFLoader {
             }
         }
         let node;
-        if (options.name === "Flashlight") {
-            node = new Interactable(options);
-        }
-        else {
-            node = new Node(options);
-        }
+        node = new Node(options);
         this.cache.set(gltfSpec, node);
         return node;
     }
@@ -431,9 +425,6 @@ export class GLTFLoader {
         if (gltfSpec.nodes) {
             for (const nodeIndex of gltfSpec.nodes) {
                 const node = await this.loadNode(nodeIndex);
-                if (node instanceof Interactable) {
-                    options.interactables.push(node);
-                }
                 const light = this.findLight(node);
                 if (light) {
                     options.lights.push(light);
