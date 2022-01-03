@@ -12117,14 +12117,14 @@
                 {
                     "sampler" : 0,
                     "target" : {
-                        "node" : 358,
+                        "node" : 362,
                         "path" : "translation"
                     }
                 },
                 {
                     "sampler" : 1,
                     "target" : {
-                        "node" : 358,
+                        "node" : 362,
                         "path" : "rotation"
                     }
                 }
@@ -12148,14 +12148,14 @@
                 {
                     "sampler" : 0,
                     "target" : {
-                        "node" : 359,
+                        "node" : 363,
                         "path" : "translation"
                     }
                 },
                 {
                     "sampler" : 1,
                     "target" : {
-                        "node" : 359,
+                        "node" : 363,
                         "path" : "rotation"
                     }
                 }
