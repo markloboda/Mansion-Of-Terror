@@ -14,7 +14,11 @@ export class Physics {
                 node.updateMatrix();
                 node.parent?.updateMatrix();
                 if (node.camera) {
-                    this.scene.interactables[0].updateTransform();
+                    for (const interactable of this.scene.interactables) {
+                        if (interactable.inFocus) {
+                            interactable.updateTransform();
+                        }
+                    }
                 }
 
                 // false if not proven true
@@ -29,8 +33,12 @@ export class Physics {
             }
             else if (node.camera) {
                 node.updateMatrix();
-                node.parent.updateMatrix()
-                this.scene.interactables[0].updateTransform();
+                node.parent?.updateMatrix()
+                for (const interactable of this.scene.interactables) {
+                    if (interactable.inFocus) {
+                            interactable.updateTransform();
+                    }
+                }
             }
 
             // reset Y velocity if on ground

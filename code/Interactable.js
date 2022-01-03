@@ -6,7 +6,7 @@ export class Interactable extends Node {
   constructor(options) {
     super(options);
     this.master;
-    this.inFocus = false;
+    this.inFocus = options.inFocus;
     this.yOffset = this.translation[1];
     this.zOffset = this.translation[2];
     this.interactionType = options.interactionType;

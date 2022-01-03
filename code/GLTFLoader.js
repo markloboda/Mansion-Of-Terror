@@ -67,10 +67,11 @@ export class GLTFLoader {
         }
     }
     
-    async load(url) {
-        this.gltfUrl = new URL(url, window.location);
-        this.gltf = await this.fetchJson(url);
+    async load(sceneDef) {
+        this.gltfUrl = new URL(`../common/models/${sceneDef.name}/${sceneDef.name}.gltf`, window.location);
+        this.gltf = await this.fetchJson(`../common/models/${sceneDef.name}/${sceneDef.name}.gltf`);
         this.defaultScene = this.gltf.scene || 0;
+        this.interactables = sceneDef.interactables;
     }
     
     async loadImage(nameOrIndex) {
@@ -398,10 +399,13 @@ export class GLTFLoader {
             }
         }
         let node;
-        if (options.name === "Flashlight") {
-            node = new Interactable(options);
+        for (const interactable of this.interactables) {
+            if (options.name === interactable.name) {
+                node = new Interactable({...options, ...interactable})
+                break;
+            }
         }
-        else {
+        if (node === undefined) {
             node = new Node(options);
         }
         this.cache.set(gltfSpec, node);

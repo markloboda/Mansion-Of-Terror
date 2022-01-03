@@ -6,6 +6,7 @@ import { Camera } from "./Camera.js";
 import { Node } from "./Node.js";
 import { Physics } from "./Physics.js";
 import { PerspectiveCamera } from './PerspectiveCamera.js';
+import { scenes } from './scene_def/scenes.js';
 
 
 class App extends Application {
@@ -17,7 +18,7 @@ class App extends Application {
     this.loader = new GLTFLoader();
     // await this.loader.load('../../common/models/flat_surface/flat_surface.gltf');
     //  await this.loader.load('../../common/models/first_room/first_room.gltf');
-    await this.loader.load('../../common/models/parkour_room/parkour_room.gltf');
+    await this.loader.load(scenes.Room1);
     //await this.loader.load('../../common/models/test_stairs/test_stairs.gltf');
     // await this.loader.load('../../common/models/first_room/cargobox.gltf');
     // await this.loader.load('../../common/models/empty_room/empty_room.gltf');
@@ -31,11 +32,7 @@ class App extends Application {
     this.scene = await this.loader.loadScene(this.loader.defaultScene);
     Object.keys(this.scene.animations).map(animation => this.scene.animations[animation].activate()) // how to activate an animation (activates all animations)
     this.camera = await this.loader.loadNode("Camera_Orientation");
-    //this.camera.addChild(this.scene.interactables[0])
-    this.scene.interactables[0].master = this.camera;
-
-    console.log(this.camera)
-    console.log(this.scene)
+    this.scene.interactables.map(interactable => interactable.master = this.camera);
     // const node = new Node({
     //   children: [  
     //     new Node({
