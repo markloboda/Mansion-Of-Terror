@@ -16,20 +16,10 @@ class App extends Application {
       console.log("gg")
     }
     this.loader = new GLTFLoader();
-    // await this.loader.load('../../common/models/flat_surface/flat_surface.gltf');
     //  await this.loader.load('../../common/models/first_room/first_room.gltf');
     await this.loader.load(scenes.Room1);
     //await this.loader.load(scenes.Room2);
-    //await this.loader.load('../../common/models/test_stairs/test_stairs.gltf');
-    // await this.loader.load('../../common/models/first_room/cargobox.gltf');
-    // await this.loader.load('../../common/models/empty_room/empty_room.gltf');
-    // await this.loader.load('../../common/models/cottage/cottage_blender.gltf');
-    // await this.loader.load('../../common/models/room/room.gltf');
-    // await this.loader.load('../../common/models/croc/croc.gltf');
-    // await this.loader.load("../../common/models/example_cube/AnimatedCube.gltf");
-    // await this.loader.load("../../common/models/step/InterpolationTest.gltf");
     // await this.loader.load('https://webglfundamentals.org/webgl/resources/models/killer_whale/whale.CYCLES.gltf');
-    // await this.loader.load('../../common/models/RiggedFigure/RiggedFigure.gltf')
     this.scene = await this.loader.loadScene(this.loader.defaultScene);
     Object.keys(this.scene.animations).map(animation => this.scene.animations[animation].activate()) // how to activate an animation (activates all animations)
     this.camera = await this.loader.loadNode("Camera_Orientation");
