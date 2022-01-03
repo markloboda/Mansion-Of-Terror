@@ -17,7 +17,7 @@ export class Node {
         this.matrix = options.matrix
             ? mat4.clone(options.matrix)
             : mat4.create();
-        this.euler = [0, 0, 0]
+        this.euler = Node.quaternion_to_euler(this.rotation)
         this.name = options.name;
 
         if (options.matrix) {
@@ -55,14 +55,42 @@ export class Node {
         if (options.mesh) {
             this.renderer = new MeshRenderer(options.mesh);
         }
-
+        
         this.children = [...(options.children || [])];
         for (const child of this.children) {
             child.parent = this;
         }
         this.parent = null;
-        
         this.createAABB();
+    }
+
+    static quaternion_to_euler(q){
+        let w = q[0];
+        let x = q[0];
+        let y = q[0];
+        let z = q[0];
+
+        // roll
+        let t0 = 2 * (w * x + y * z);
+        let t1 = 1 - 2 * (x * x + y * y);
+        let roll = Math.atan2(t0, t1);
+
+        // pitch
+        let t2 = 2 * (w * y - z * x);
+        if (t2 > 1) {
+            t2 = 1;
+        }
+        if (t2 < -1) {
+            t2 = -1;
+        }
+        let pitch = Math.asin(t2);
+
+        // yaw
+        let t3 = 2 * (w * z + x * y);
+        let t4 = 1 - 2 * (y * y + z * z);
+        let yaw = Math.atan2(t3, t4);
+
+        return [roll, pitch, yaw]
     }
 
     createAABB() {
@@ -255,7 +283,6 @@ export class Node {
         mat4.getTranslation(this.translation, this.matrix);
         mat4.getScaling(this.scale, this.matrix);
     }
-
 
     updateMatrix() {
         mat4.fromRotationTranslationScale(

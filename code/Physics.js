@@ -26,7 +26,6 @@ export class Physics {
             }
             else if (node.camera) {
                 node.updateMatrix(); 
-                node.parent.updateMatrix() 
             }
 
             // reset Y velocity if on ground
