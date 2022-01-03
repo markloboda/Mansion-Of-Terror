@@ -28,6 +28,7 @@ export class Animation {
       STEP: this.stepInterpolation.bind(this),
       CUBICSPLINE: this._notImplemented.bind(this),
     };
+    this.loop = false;
   }
 
   activate() {
@@ -35,6 +36,7 @@ export class Animation {
   }
 
   disable() {
+    this.startTime = null;
     this.isActive = false;
   }
 
@@ -45,9 +47,17 @@ export class Animation {
 
     let t = Date.now() - this.startTime;
     if (t > this.timestamps[this.targetKeyframe]) {
-      this.timestamps.length - 1 == this.targetKeyframe
-        ? (this.targetKeyframe = 0)
-        : this.targetKeyframe++;
+      if (this.timestamps.length-1 == this.targetKeyframe) {
+        if (this.loop) {
+          this.targetKeyframe = 0;
+        }
+        else {
+          this.disable();
+        }
+      }
+      else {
+        this.targetKeyframe++;
+      }
       if (!this.targetKeyframe) {
         this.startTime = Date.now();
         t = 0;
