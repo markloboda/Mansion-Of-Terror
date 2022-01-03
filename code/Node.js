@@ -19,6 +19,7 @@ export class Node {
             : mat4.create();
         this.euler = [0, 0, 0]
         this.name = options.name;
+        this.light = options.light;
 
         if (options.matrix) {
             this.updateTransform();
