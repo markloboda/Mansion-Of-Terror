@@ -1,4 +1,4 @@
-import { mat4 } from "../lib/gl-matrix-module.js";
+import { mat4, quat } from "../lib/gl-matrix-module.js";
 import { Node } from "./Node.js";
 
 
@@ -14,7 +14,7 @@ export class Interactable extends Node {
     if (this.master) {
       mat4.getTranslation(this.translation, mat4.clone(this.master.matrix));
       //this.translation[1] += this.yOffset;
-      mat4.getRotation(this.rotation, mat4.clone(this.master.matrix));
+      quat.multiply(this.rotation, this.master.parent.rotation, this.master.rotation);
     }
   }
 }
