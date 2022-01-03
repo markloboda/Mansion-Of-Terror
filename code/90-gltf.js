@@ -16,7 +16,6 @@ class App extends Application {
       console.log("gg")
     }
     this.loader = new GLTFLoader();
-    // await this.loader.load('../../common/models/flat_surface/flat_surface.gltf');
     //  await this.loader.load('../../common/models/first_room/first_room.gltf');
     await this.loader.load(scenes.Room3);
     // await this.loader.load(scenes.Room2);
