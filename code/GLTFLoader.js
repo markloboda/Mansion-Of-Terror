@@ -10,6 +10,8 @@ import { OrthographicCamera } from './OrthographicCamera.js';
 import { Node } from './Node.js';
 import { Scene } from './Scene.js';
 import { Animation } from './animation/Animation.js';
+import { SpotLight } from './lights/SpotLight.js';
+import { Interactable } from './Interactable.js';
 
 // This class loads all GLTF resources and instantiates
 // the corresponding classes. Keep in mind that it loads
@@ -65,10 +67,11 @@ export class GLTFLoader {
         }
     }
     
-    async load(url) {
-        this.gltfUrl = new URL(url, window.location);
-        this.gltf = await this.fetchJson(url);
+    async load(sceneDef) {
+        this.gltfUrl = new URL(`../common/models/${sceneDef.name}/${sceneDef.name}.gltf`, window.location);
+        this.gltf = await this.fetchJson(`../common/models/${sceneDef.name}/${sceneDef.name}.gltf`);
         this.defaultScene = this.gltf.scene || 0;
+        this.interactables = sceneDef.interactables;
     }
     
     async loadImage(nameOrIndex) {
@@ -273,7 +276,7 @@ export class GLTFLoader {
             const transData = this.extractBufferData(transAcc);
             for (let [index, time] of timeData.entries()) {
                 // convert time to ms
-                time = Math.floor(parseFloat(time) * 1000);
+                time = Math.floor(parseFloat(time) * 2000);
                 const dataLen = transAcc.numComponents;
                 if (!keyframes[time]) {
                     keyframes[time] = [
@@ -301,6 +304,22 @@ export class GLTFLoader {
         const animation = new Animation(options);
         this.cache.set(gltfSpec, animation);
         return animation;
+    }
+
+    async loadLight(nameOrIndex) {
+        const gltfSpec = this.findByNameOrIndex(this.gltf.extensions.KHR_lights_punctual.lights, nameOrIndex);
+        if (this.cache.has(gltfSpec)) {
+            return this.cache.get(gltfSpec);
+        }
+        let light = null;
+        if (gltfSpec.type === "spot") {
+            light = new SpotLight(gltfSpec);
+        }
+        else {
+            return;
+        }
+        this.cache.set(gltfSpec, light);
+        return light;
     }
     
     async loadCamera(nameOrIndex) {
@@ -373,10 +392,37 @@ export class GLTFLoader {
             }
             options.aabb = {min, max};
         }
-        
-        const node = new Node(options, nameOrIndex);
+        if (gltfSpec.extensions) {
+            const extensions = gltfSpec.extensions;
+            if (extensions.KHR_lights_punctual) {
+                options.light = await this.loadLight(extensions.KHR_lights_punctual.light)
+            }
+        }
+        let node;
+        for (const interactable of this.interactables) {
+            if (options.name === interactable.name) {
+                node = new Interactable({...options, ...interactable})
+                break;
+            }
+        }
+        if (node === undefined) {
+            node = new Node(options);
+        }
         this.cache.set(gltfSpec, node);
         return node;
+    }
+
+    findLight(node) {
+        let light;
+        for (const child of node.children) {
+            if (child.light) {
+                return child.parent;
+            }
+            light = this.findLight(child);
+            if (light) {
+                return light;
+            }
+        }
     }
     
     async loadScene(nameOrIndex) {
@@ -385,10 +431,17 @@ export class GLTFLoader {
             return this.cache.get(gltfSpec);
         }
         
-        let options = { nodes: [] };
+        let options = { nodes: [], lights: [], interactables: [] };
         if (gltfSpec.nodes) {
             for (const nodeIndex of gltfSpec.nodes) {
                 const node = await this.loadNode(nodeIndex);
+                if (node instanceof Interactable) {
+                    options.interactables.push(node);
+                }
+                const light = this.findLight(node);
+                if (light) {
+                    options.lights.push(light);
+                }
                 options.nodes.push(node);
             }
         }
