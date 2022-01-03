@@ -87,7 +87,7 @@ layout (location = 0) in vec4 aPosition;
 layout (location = 1) in vec2 aTexCoord;
 layout (location = 4) in vec3 aNormal;
 
-uniform vec3 uLightPosition[10];
+uniform vec3 uLightPosition[2];
 uniform vec3 uCameraPosition;
 
 uniform vec4 aColor;
@@ -100,7 +100,7 @@ uniform int numLights;
 out vec3 vNormal;
 out vec4 vColor;
 
-out vec3 vSurfaceToLight[10];
+out vec3 vSurfaceToLight[2];
 out vec3 vSurfaceToCamera;
 out vec2 vTexCoord;
 
@@ -137,17 +137,17 @@ uniform int numLights;
 
 // Passed in from the vertex shader.
 in vec3 vNormal;
-in vec3 vSurfaceToLight[10];
+in vec3 vSurfaceToLight[2];
 in vec3 vSurfaceToCamera;
 in vec2 vTexCoord;
 in vec4 vColor;
 
 uniform sampler2D uTexture;
-uniform vec3 uColor[10];
-uniform float uShininess[10];
-uniform vec3 uLightDirection[10];
-uniform float uInnerLimit[10];          // in dot space
-uniform float uOuterLimit[10];          // in dot space
+uniform vec3 uColor[2];
+uniform float uShininess[2];
+uniform vec3 uLightDirection[2];
+uniform float uInnerLimit[2];          // in dot space
+uniform float uOuterLimit[2];          // in dot space
 
 // we need to declare an output for the fragment shader
 out vec4 oColor;
@@ -168,7 +168,7 @@ void main() {
                                  -uLightDirection[i]);
     float limitRange = uInnerLimit[i] - uOuterLimit[i];
     float inLight = clamp((dotFromDirection - uOuterLimit[i]) / limitRange, 0.0, 1.0);
-    float light = inLight * dot(normal, surfaceToLightDirection) + 0.01;
+    float light = inLight * dot(normal, surfaceToLightDirection) + 0.1;
     float specular = inLight * pow(dot(normal, halfVector), uShininess[i]);
     // Lets multiply just the color portion (not the alpha)
     // by the light

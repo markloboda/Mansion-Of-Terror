@@ -182,13 +182,16 @@ export class Renderer {
     }
 
     getViewProjectionMatrix(camera) {
-        const view = mat4.clone(camera.matrix);
-        let parent = camera.parent;
-        while (parent) {
-            mat4.mul(view, parent.matrix, view);
-            parent = parent.parent;
-        }
+        // const view = mat4.clone(camera.matrix);
+        // let parent = camera.parent;
+        // while (parent) {
+        //     mat4.mul(view, parent.matrix, view);
+        //     parent = parent.parent;
+        // }
+        const view = mat4.clone(camera.parent.matrix);
+        mat4.multiply(view, view, camera.matrix);
         mat4.invert(view, view);
+
         return [view, camera.camera.projection];
     }
 

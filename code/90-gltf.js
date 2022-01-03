@@ -30,6 +30,9 @@ class App extends Application {
     this.scene = await this.loader.loadScene(this.loader.defaultScene);
     Object.keys(this.scene.animations).map(animation => this.scene.animations[animation].activate()) // how to activate an animation (activates all animations)
     this.camera = await this.loader.loadNode("Camera_Orientation");
+    console.log(this.camera)
+    // this.scene.interactables[0].master = this.camera;
+    // this.scene.interactables[0].yOffset -= this.camera.translation[1] - this.scene.interactables[0].yOffset;
     // const node = new Node({
     //   children: [  
     //     new Node({

@@ -26,9 +26,8 @@ export default class MeshRenderer {
       gl.uniformMatrix4fv(program.uniforms.uView, false, view);
       gl.uniformMatrix4fv(program.uniforms.uModel, false, model);
       gl.uniformMatrix4fv(program.uniforms.uProjection, false, projection);
-
       
-      // lightning
+      // lighting
       const modelInverse = mat4.clone(model);
       mat4.invert(modelInverse, modelInverse);
       gl.uniformMatrix4fv(program.uniforms.uModelInverseTranspose, true, modelInverse);
@@ -40,7 +39,7 @@ export default class MeshRenderer {
         const light = lightNode.children[0].light;
         gl.uniform3fv(program.uniforms[`uLightPosition[${index}]`], lightNode.translation);
         gl.uniform1fv(program.uniforms[`uShininess[${index}]`], [light.intensity]);
-        gl.uniform3fv(program.uniforms[`uLightDirection[${index}]`], vec3.transformQuat(vec3.create(), [0, -1, 0], lightNode.children[0].rotation));
+        gl.uniform3fv(program.uniforms[`uLightDirection[${index}]`], vec3.transformQuat(vec3.create(), [0, -1, 0], lightNode.rotation));
         gl.uniform1fv(program.uniforms[`uInnerLimit[${index}]`], [light.spot.innerConeAngle])
         gl.uniform1fv(program.uniforms[`uOuterLimit[${index}]`], [light.spot.outerConeAngle])
         gl.uniform3fv(program.uniforms[`uColor[${index}]`], light.color);
