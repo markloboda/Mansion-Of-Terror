@@ -1,10 +1,12 @@
+import { mat4, vec3 } from "../../lib/gl-matrix-module.js";
+
 export default class MeshRenderer {
   constructor(mesh) {
     this.mesh = mesh;
   }
-  render(gl, mvpMatrix, programs, glObjects) {
-    gl.useProgram(programs.simple.program);
-    const program = programs.simple;
+  render(gl, model, view, projection, programs, glObjects, lights) {
+    const program = programs.spotlight;
+    gl.useProgram(program.program);
     for (const primitive of this.mesh.primitives) {
       const vao = glObjects.get(primitive);
 
@@ -12,13 +14,38 @@ export default class MeshRenderer {
       const texture = material.baseColorTexture;
       const glTexture = glObjects.get(texture.image || texture.data);
       const glSampler = glObjects.get(texture.sampler);
-
+      // mesh related
       gl.bindVertexArray(vao);
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, glTexture);
       gl.bindSampler(0, glSampler);
       gl.uniform4fv(program.uniforms.aColor, material.baseColorFactor)
-      gl.uniformMatrix4fv(program.uniforms.uMvpMatrix, false, mvpMatrix);
+      const uViewModel = mat4.create();
+      mat4.multiply(uViewModel, view, model);
+      // gl.uniformMatrix4fv(program.uniforms.uViewModel, false, uViewModel);
+      gl.uniformMatrix4fv(program.uniforms.uView, false, view);
+      gl.uniformMatrix4fv(program.uniforms.uModel, false, model);
+      gl.uniformMatrix4fv(program.uniforms.uProjection, false, projection);
+      
+      // lighting
+      const modelInverse = mat4.clone(model);
+      mat4.invert(modelInverse, modelInverse);
+      gl.uniformMatrix4fv(program.uniforms.uModelInverseTranspose, true, modelInverse);
+      const cameraMat = mat4.clone(view);
+      const cameraPos = mat4.getTranslation(vec3.create(), mat4.invert(cameraMat, cameraMat));
+      gl.uniform3fv(program.uniforms.uCameraPosition, cameraPos);
+      gl.uniform1iv(program.uniforms.numLights, [lights.length]);
+      for (const [index, lightNode] of lights.entries()) {
+        const light = lightNode.children[0].light;
+        gl.uniform3fv(program.uniforms[`uLightPosition[${index}]`], lightNode.translation);
+        gl.uniform1fv(program.uniforms[`uShininess[${index}]`], [light.intensity]);
+        gl.uniform3fv(program.uniforms[`uLightDirection[${index}]`], vec3.transformQuat(vec3.create(), [0, 0, -1], lightNode.rotation));
+        gl.uniform1fv(program.uniforms[`uInnerLimit[${index}]`], [light.spot.innerConeAngle])
+        gl.uniform1fv(program.uniforms[`uOuterLimit[${index}]`], [light.spot.outerConeAngle])
+        gl.uniform3fv(program.uniforms[`uColor[${index}]`], light.color);
+      }
+
+
       if (primitive.indices) {
         const mode = primitive.mode;
         const count = primitive.indices.count;

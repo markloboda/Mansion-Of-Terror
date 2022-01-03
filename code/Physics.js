@@ -13,6 +13,13 @@ export class Physics {
                 vec3.scaleAndAdd(node.translation, node.translation, velocity, dt);
                 node.updateMatrix();
                 node.parent?.updateMatrix();
+                if (node.camera) {
+                    for (const interactable of this.scene.interactables) {
+                        if (interactable.inFocus) {
+                            interactable.updateTransform();
+                        }
+                    }
+                }
 
                 // false if not proven true
                 node.onGround = false;
@@ -25,8 +32,13 @@ export class Physics {
                 });
             }
             else if (node.camera) {
-                node.updateMatrix(); 
-                node.parent.updateMatrix() 
+                node.updateMatrix();
+                node.parent?.updateMatrix()
+                for (const interactable of this.scene.interactables) {
+                    if (interactable.inFocus) {
+                            interactable.updateTransform();
+                    }
+                }
             }
 
             // reset Y velocity if on ground

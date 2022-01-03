@@ -1,4 +1,4 @@
-import { mat4 } from '../lib/gl-matrix-module.js';
+import { mat4, vec4 } from '../lib/gl-matrix-module.js';
 
 import { WebGL } from '../common/engine/WebGL.js';
 
@@ -131,7 +131,8 @@ export class Renderer {
             POSITION   : 0,
             TEXCOORD_0 : 1,
             JOINTS_0: 2,
-            WEIGHTS_0: 3
+            WEIGHTS_0: 3,
+            NORMAL: 4
         };
         for (const name in primitive.attributes) {
             const accessor = primitive.attributes[name];
@@ -181,15 +182,17 @@ export class Renderer {
     }
 
     getViewProjectionMatrix(camera) {
-        const mvpMatrix = mat4.clone(camera.matrix);
-        let parent = camera.parent;
-        while (parent) {
-            mat4.mul(mvpMatrix, parent.matrix, mvpMatrix);
-            parent = parent.parent;
-        }
-        mat4.invert(mvpMatrix, mvpMatrix);
-        mat4.mul(mvpMatrix, camera.camera.projection, mvpMatrix);
-        return mvpMatrix;
+        // const view = mat4.clone(camera.matrix);
+        // let parent = camera.parent;
+        // while (parent) {
+        //     mat4.mul(view, parent.matrix, view);
+        //     parent = parent.parent;
+        // }
+        const view = mat4.clone(camera.parent.matrix);
+        mat4.multiply(view, view, camera.matrix);
+        mat4.invert(view, view);
+
+        return [view, camera.camera.projection];
     }
 
     render(scene, camera) {
@@ -201,20 +204,20 @@ export class Renderer {
         // gl.useProgram(program.program);
         // gl.uniform1i(program.uniforms.uTexture, 0);
 
-        const mvpMatrix = this.getViewProjectionMatrix(camera);
+        const [view, projection] = this.getViewProjectionMatrix(camera);
         for (const node of scene.nodes) {
-            this.renderNode(node, mvpMatrix);
+            this.renderNode(node, mat4.create(), view, projection, scene.lights);
         }
     }
 
-    renderNode(node, mvpMatrix) {
+    renderNode(node, model, view, projection, lights) {
         const gl = this.gl;
 
-        mvpMatrix = mat4.clone(mvpMatrix);
-        mat4.mul(mvpMatrix, mvpMatrix, node.matrix);
+        model = mat4.clone(model);
+        mat4.mul(model, model, node.matrix);
 
         if (node.renderer) {
-            node.renderer.render(gl, mvpMatrix, this.programs, this.glObjects);
+            node.renderer.render(gl, model, view, projection, this.programs, this.glObjects, lights);
             // const program = this.programs.simple;
             // gl.uniformMatrix4fv(program.uniforms.uMvpMatrix, false, mvpMatrix);
             // for (const primitive of node.mesh.primitives) {
@@ -223,7 +226,7 @@ export class Renderer {
         }
 
         for (const child of node.children) {
-            this.renderNode(child, mvpMatrix);
+            this.renderNode(child, model, view, projection, lights);
         }
     }
 
