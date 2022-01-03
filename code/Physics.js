@@ -81,6 +81,7 @@ export class Physics {
             return;
         }
 
+        // if node b == nextlevelshit && a == camera : load next
 
         // Move node A minimally to avoid collision.
         const diffa = vec3.sub(vec3.create(), maxb, mina);
