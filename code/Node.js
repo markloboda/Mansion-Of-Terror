@@ -50,7 +50,7 @@ export class Node {
         this.mass = 70;
         this.forces = {gravity: -this.g * this.mass};
 
-        if (options.mesh) {
+        if (options.mesh && !options.name.includes("Invisible")) {
             this.renderer = new MeshRenderer(options.mesh);
         }
 
