@@ -17,8 +17,8 @@ class App extends Application {
     }
     this.loader = new GLTFLoader();
     //  await this.loader.load('../../common/models/first_room/first_room.gltf');
-    await this.loader.load(scenes.Room3);
-    // await this.loader.load(scenes.Room2);
+    // await this.loader.load(scenes.Room1);
+    await this.loader.load(scenes.Room2);
     // await this.loader.load(scenes.Room3);
     // await this.loader.load('../../common/models/RiggedFigure/RiggedFigure.gltf')
     this.scene = await this.loader.loadScene(this.loader.defaultScene);
