@@ -72,6 +72,7 @@ export class GLTFLoader {
         this.gltf = await this.fetchJson(`../common/models/${sceneDef.name}/${sceneDef.name}.gltf`);
         this.defaultScene = this.gltf.scene || 0;
         this.interactables = sceneDef.interactables;
+        this.animations = sceneDef.animations;
     }
     
     async loadImage(nameOrIndex) {
@@ -266,6 +267,7 @@ export class GLTFLoader {
             return this.cache.get(gltfSpec);
         }
         const keyframes = {};
+        const disableNodes = [];
         for (const channel of gltfSpec.channels) {
             if (channel.target.node === undefined) continue;
             const transformationType = channel.target.path;
@@ -276,7 +278,7 @@ export class GLTFLoader {
             const transData = this.extractBufferData(transAcc);
             for (let [index, time] of timeData.entries()) {
                 // convert time to ms
-                time = Math.floor(parseFloat(time) * 2000);
+                time = Math.floor(parseFloat(time) * 1000);
                 const dataLen = transAcc.numComponents;
                 if (!keyframes[time]) {
                     keyframes[time] = [
@@ -287,6 +289,10 @@ export class GLTFLoader {
                             transform: new Float32Array(transData.buffer, transData.byteOffset + Float32Array.BYTES_PER_ELEMENT * dataLen*index , dataLen),
                         },
                     ];
+                    if (this.animations[gltfSpec.name].disableNodes && !disableNodes.includes(keyframes[time][0].node.name) && 
+                        this.animations[gltfSpec.name].disableNodes.includes((keyframes[time][0].node.name))) {
+                        disableNodes.push(keyframes[time][0].node);
+                    }
                     continue;
                 }
                 keyframes[time].push({
@@ -295,12 +301,18 @@ export class GLTFLoader {
                     node: await this.loadNode(channel.target.node),
                     transform: new Float32Array(transData.buffer, transData.byteOffset + Float32Array.BYTES_PER_ELEMENT * dataLen*index , dataLen)
                 });
+                if (this.animations[gltfSpec.name].disableNodes && !disableNodes.includes(keyframes[time][0].node.name) && 
+                this.animations[gltfSpec.name].disableNodes.includes((keyframes[time][keyframes[time].length-1].node.name))) {
+                disableNodes.push(keyframes[time][keyframes[time].length-1].node);
+            }
             }
         }
         const options = {
             keyframes: keyframes,
             name: gltfSpec.name
         };
+        this.animations[gltfSpec.name].disableNodes = disableNodes;
+        Object.assign(options, this.animations[gltfSpec.name])
         const animation = new Animation(options);
         this.cache.set(gltfSpec, animation);
         return animation;
@@ -399,6 +411,9 @@ export class GLTFLoader {
             }
         }
         let node;
+        if (!options.name) {
+            options.name = `Node.${nameOrIndex}`;
+        }
         for (const interactable of this.interactables) {
             if (options.name === interactable.name) {
                 node = new Interactable({...options, ...interactable})

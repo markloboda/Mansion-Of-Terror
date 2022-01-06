@@ -12,40 +12,28 @@ export class Physics {
                 let velocity = node.velocity;
                 vec3.scaleAndAdd(node.translation, node.translation, velocity, dt);
                 node.updateMatrix();
-                node.parent?.updateMatrix();
                 if (node.camera) {
                     for (const interactable of this.scene.interactables) {
-                        if (interactable.inFocus) {
-                            interactable.updateTransform();
-                        }
                         const bool = this.checkProximity(node, interactable)
-                        if (interactable.type == "pick_up") {
+                        if (interactable.type == "carry") {
                             if (bool) {
-                                const promptImg = document.getElementById('pickup_prompt');
-                                promptImg.style.visibility = "visible";
+                                interactable.action();
+                                const prompt = document.getElementById('carry_prompt');
+                                prompt.style.visibility = "visible";
                             } else {
-                                const promptImg = document.getElementById('pickup_prompt');
-                                promptImg.style.visibility = "hidden";
-                            }
-                            
-                        }
-                        if (interactable.type == "insert") {
-                            if (bool) {
-                                const promptImg = document.getElementById('insert_prompt');
-                                promptImg.style.visibility = "visible";
-                            } else {
-                                const promptImg = document.getElementById('insert_prompt');
-                                promptImg.style.visibility = "hidden";
+                                const prompt = document.getElementById('carry_prompt');
+                                prompt.style.visibility = "hidden";
                             }
                             
                         }
                         if (interactable.type == "interact") {
                             if (bool) {
-                                const promptImg = document.getElementById('interact_prompt');
-                                promptImg.style.visibility = "visible";
+                            interactable.action();
+                            const prompt = document.getElementById('interact_prompt');
+                                prompt.style.visibility = "visible";
                             } else {
-                                const promptImg = document.getElementById('interact_prompt');
-                                promptImg.style.visibility = "hidden";
+                                const prompt = document.getElementById('interact_prompt');
+                                prompt.style.visibility = "hidden";
                             }
                             
                         }
@@ -57,18 +45,15 @@ export class Physics {
                 this.scene.traverse(other => {
                     // check if node is moving (only check for nodes that are moving)
                     // check for collisions and if on ground
-                    if (node !== other && !other.camera && node.aabb && other.aabb) {
+                    if (node !== other && !other.camera && node.aabbEnabled && other.aabbEnabled && node.aabb && other.aabb) {
                         this.resolveCollision(node, other);
                     }
                 });
             }
             else if (node.camera) {
                 node.updateMatrix();
-                node.parent?.updateMatrix()
                 for (const interactable of this.scene.interactables) {
-                    if (interactable.inFocus) {
-                            interactable.updateTransform();
-                    }
+                    interactable.action();
                 }
             }
 
@@ -143,6 +128,9 @@ export class Physics {
             return;
         }
 
+        if ( a.levelCompletePlane || b.levelCompletePlane) {
+            this.scene.levelComplete = true;
+        }
 
         // Move node A minimally to avoid collision.
         const diffa = vec3.sub(vec3.create(), maxb, mina);

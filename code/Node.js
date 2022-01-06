@@ -20,6 +20,9 @@ export class Node {
         this.euler = [0, 0, 0]
         this.name = options.name;
         this.light = options.light;
+        if (this.name === "Flashlight") {
+            this.direction = vec3.transformQuat(vec3.create(), [0, 0, -1], this.rotation)
+        }
 
         if (options.matrix) {
             this.updateTransform();
@@ -50,8 +53,11 @@ export class Node {
         this.mass = 70;
         this.forces = {gravity: -this.g * this.mass};
 
-        if (options.mesh && !options.name.includes("Invisible")) {
+        if (options.mesh && !this.name?.includes("Invisible")) {
             this.renderer = new MeshRenderer(options.mesh);
+        }
+        if (this.name?.includes("level_complete")) {
+            this.levelCompletePlane = true;
         }
 
         this.children = [...(options.children || [])];
@@ -59,7 +65,7 @@ export class Node {
             child.parent = this;
         }
         this.parent = null;
-        
+        this.aabbEnabled = true;
         this.createAABB();
     }
 
@@ -91,6 +97,14 @@ export class Node {
                 min: min,
                 max: max
             };
+            this.aabbEnabled = true;
+        }
+    }
+
+    disableAABB() {
+        this.aabbEnabled = false;
+        for (const child of this.children) {
+            child.disableAABB();
         }
     }
 

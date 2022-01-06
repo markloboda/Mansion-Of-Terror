@@ -12,9 +12,8 @@ class AnimationError {
  *  */
 export class Animation {
   constructor(options = {}) {
-    this.isActive = false;
-    this.name = options.name;
-    this.keyframes = options.keyframes;
+    Object.assign(this, options);
+    this.isActive = options.playOnLoad;
     if (this.keyframes) {
       this.timestamps = Object.keys(this.keyframes).map((key) => parseInt(key));
       this.duration = Math.max(...this.timestamps);
@@ -29,6 +28,8 @@ export class Animation {
       CUBICSPLINE: this._notImplemented.bind(this),
     };
     this.loop = false;
+    this.parseAfterAction(this.after);
+    document.addEventListener(`play_${this.name}`, this._playAnimation.bind(this))
   }
 
   activate() {
@@ -40,6 +41,23 @@ export class Animation {
     this.isActive = false;
   }
 
+  _playAnimation(e) {
+    let allConditions = false;
+    if (this.conditions) {
+      for (let condition of this.conditions) {
+        const negate = condition[0] === "!";
+        if (negate) {
+          condition = condition.substring(1, condition.length)
+        }
+        allConditions = negate ? !this.gameState[condition] : this.gameState[condition];
+        if (!allConditions) {
+          return;
+        }
+      }
+    }
+    !this.isActive && this.activate()
+  }
+
   update() {
     if (!this.startTime) {
       this.startTime = Date.now();
@@ -48,6 +66,7 @@ export class Animation {
     let t = Date.now() - this.startTime;
     if (t > this.timestamps[this.targetKeyframe]) {
       if (this.timestamps.length-1 == this.targetKeyframe) {
+        this.after && this.after();
         if (this.loop) {
           this.targetKeyframe = 0;
         }
@@ -69,6 +88,34 @@ export class Animation {
     ]) {
       if (transform.transform.length) {
         this.interpolations[transform.interpolation](transform, t);
+      }
+    }
+  }
+
+  
+  parseAfterAction(after) {
+    switch(after) {
+      case "disableAABB": this.after = this.disableAABB; break;
+      case "trigger": this.after = this.triggerAnimation; break;
+      case "setCondition": this.after = this.setCondition; break;
+      default: this.after = null;
+    }
+  }
+
+  disableAABB() {
+    for (const node of this.disableNodes) {
+      node.disableAABB();
+    }
+  }
+
+  triggerAnimation() {
+
+  }
+
+  setCondition() {
+    if (this.gameState) {
+      for (const condition in this.setConditions) {
+        this.gameState[condition] = this.setConditions[condition];
       }
     }
   }
