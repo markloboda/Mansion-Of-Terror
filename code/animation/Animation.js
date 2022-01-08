@@ -12,9 +12,8 @@ class AnimationError {
  *  */
 export class Animation {
   constructor(options = {}) {
-    this.isActive = false;
-    this.name = options.name;
-    this.keyframes = options.keyframes;
+    Object.assign(this, options);
+    this.isActive = options.isActive;
     if (this.keyframes) {
       this.timestamps = Object.keys(this.keyframes).map((key) => parseInt(key));
       this.duration = Math.max(...this.timestamps);
@@ -28,6 +27,10 @@ export class Animation {
       STEP: this.stepInterpolation.bind(this),
       CUBICSPLINE: this._notImplemented.bind(this),
     };
+    this.loop = false;
+    this.after = this.parseAfterAction(this.after);
+    this.before = this.parseAfterAction(this.before);
+    document.addEventListener(`play_${this.name}`, this._playAnimation.bind(this))
   }
 
   activate() {
@@ -35,19 +38,55 @@ export class Animation {
   }
 
   disable() {
+    this.startTime = null;
     this.isActive = false;
   }
 
-  update() {
+  _playAnimation(e) {
+    let allConditions = false;
+    if (this.conditions) {
+      for (let condition of this.conditions) {
+        const negate = condition[0] === "!";
+        if (negate) {
+          condition = condition.substring(1, condition.length)
+        }
+        allConditions = negate ? !this.gameState[condition] : this.gameState[condition];
+        if (!allConditions) {
+          return;
+        }
+      }
+    }
+    !this.isActive && this.activate()
+  }
+
+  update(reset) {
     if (!this.startTime) {
       this.startTime = Date.now();
+      if (this.before) {
+        for (const action of this.before) {
+          action();
+        }
+      }
     }
 
     let t = Date.now() - this.startTime;
     if (t > this.timestamps[this.targetKeyframe]) {
-      this.timestamps.length - 1 == this.targetKeyframe
-        ? (this.targetKeyframe = 0)
-        : this.targetKeyframe++;
+      if (this.timestamps.length-1 == this.targetKeyframe) {
+        if (this.loop) {
+          this.targetKeyframe = 0;
+        }
+        else {
+          if (!reset && this.after) {
+            for (const action of this.after) {
+              action();
+            }
+          }
+          this.disable();
+        }
+      }
+      else {
+        this.targetKeyframe++;
+      }
       if (!this.targetKeyframe) {
         this.startTime = Date.now();
         t = 0;
@@ -59,6 +98,58 @@ export class Animation {
     ]) {
       if (transform.transform.length) {
         this.interpolations[transform.interpolation](transform, t);
+      }
+    }
+  }
+
+  
+  parseAfterAction(after) {
+    if (!after) {
+      return null;
+    }
+    const actions = [];
+    for (const action of after) {
+      switch(action) {
+        case "disableAABB": actions.push(this.disableAABB.bind(this)); break;
+        case "trigger": actions.push(this.triggerAnimation.bind(this)); break;
+        case "setCondition": actions.push(this.setCondition.bind(this)); break;
+        case "disableInteractable": actions.push(this.disableInteractable.bind(this)); break;
+        case "resetAnimation": actions.push(this.resetAnimation.bind(this)); break;
+      }
+    }
+    return actions;
+  }
+
+  resetAnimation() {
+    this.targetKeyframe = 0;
+    this.startTime = 0;
+    this.update(true);
+    this.startTime = null;
+    this.targetKeyframe = 0;
+  }
+
+  disableInteractable() {
+    for (const interactable of this.disableInteractables) {
+      interactable.disable();
+    }
+  }
+
+  disableAABB() {
+    for (const node of this.disableNodes) {
+      node.disableAABB();
+    }
+  }
+
+  triggerAnimation() {
+    for (const animation of this.trigger) {
+      document.dispatchEvent(new Event(`play_${animation}`))
+    }
+  }
+
+  setCondition() {
+    if (this.gameState) {
+      for (const condition in this.setConditions) {
+        this.gameState[condition] = this.setConditions[condition];
       }
     }
   }
