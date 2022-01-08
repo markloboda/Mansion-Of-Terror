@@ -35,7 +35,6 @@ class App extends Application {
     await this.loader.load(scenes[`Room${this.level}`]);
     this.scene = await this.loader.loadScene(this.loader.defaultScene);
     this.scene.gameState = {};
-    this.scene.flashlight = this.scene.interactables.find(interactable => interactable.name === "Flashlight");
     Object.keys(this.scene.animations).map(animation => {
       //this.scene.animations[animation].activate();
       this.scene.animations[animation].loop = false;
@@ -45,6 +44,8 @@ class App extends Application {
       interactable.master = this.camera;
       interactable.gameState = this.scene.gameState;
     });
+    this.scene.flashlight = await this.loader.loadNode("Flashlight");
+    this.scene.interactables = this.scene.interactables.filter(interactable => interactable.name !== "Flashlight")
 
     this.scene.addNode(this.camera);
     if (!this.scene || !this.camera) {
@@ -87,9 +88,9 @@ class App extends Application {
     }
   }
   update() {
-    // if (this.scene?.levelComplete && !this.loading) {
-    //   this.loading = this.loadNextLevel().then(res => {this.loading = false});
-    // }
+    if (this.scene?.levelComplete && !this.loading) {
+      this.loading = this.loadNextLevel().then(res => {this.loading = false});
+    }
     const t = (this.time = Date.now());
     const dt = (this.time - this.startTime) * 0.001;
     this.startTime = this.time;

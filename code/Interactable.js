@@ -19,14 +19,14 @@ export class Interactable extends Node {
 
   showPrompt() {
     if (this.disabled || this.carrying) {
-      this.prompt.style.visibility = "hidden";
+      this.prompt.className = "hide";
       return;
     }
-      this.prompt.style.visibility = "visible";
+    this.prompt.className = "show";
   }
 
   hidePrompt() {
-    this.prompt.style.visibility = "hidden";
+    this.prompt.className = "hide";
   }
 
   _updateTransform() {

@@ -314,13 +314,6 @@ export class GLTFLoader {
 
         this.animations[gltfSpec.name].disableNodes = disableNodes;
         Object.assign(options, this.animations[gltfSpec.name])
-        if (options.trigger) {
-            const triggerAnimations = [];
-            for (const trigger of options.trigger) {
-                triggerAnimations.push(await this.loadAnimation(trigger));
-            }
-            options.trigger = triggerAnimations;
-        }
         const animation = new Animation(options);
         this.cache.set(gltfSpec, animation);
         return animation;

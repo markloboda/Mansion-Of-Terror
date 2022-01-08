@@ -1,5 +1,9 @@
 import { vec3, mat4 } from '../lib/gl-matrix-module.js';
 
+const interactPrompt = document.getElementById("interact_prompt");
+const carryPrompt = document.getElementById("carry_prompt");
+
+
 export class Physics {
 
     constructor(scene) {
@@ -13,31 +17,20 @@ export class Physics {
                 vec3.scaleAndAdd(node.translation, node.translation, velocity, dt);
                 node.updateMatrix();
                 if (node.camera) {
+                    let interactions = false
                     for (const interactable of this.scene.interactables) {
                         const bool = this.checkProximity(node, interactable)
-                        if (interactable.type == "carry") {
-                            if (bool) {
-                                interactable.action();
-                                interactable.showPrompt()
-                            } else {
-                                interactable.hidePrompt()
-                            }
-                            
-                        }
-                        if (interactable.type == "interact") {
-                            if (bool) {
+                        if (bool) {
+                            interactable.showPrompt()
                             interactable.action();
-                            const prompt = document.getElementById('interact_prompt');
-                                prompt.style.visibility = "visible";
-                            } else {
-                                const prompt = document.getElementById('interact_prompt');
-                                prompt.style.visibility = "hidden";
-                            }
-                            
+                            interactions = true;
                         }
                     }
+                    if (!interactions) {
+                        interactPrompt.className = "hide";
+                        carryPrompt.className = "hide";
+                    }
                 }
-
                 // false if not proven true
                 node.onGround = false;
                 this.scene.traverse(other => {
@@ -50,8 +43,18 @@ export class Physics {
             }
             else if (node.camera) {
                 node.updateMatrix();
+                let interactions = false
                 for (const interactable of this.scene.interactables) {
-                    interactable.action();
+                    const bool = this.checkProximity(node, interactable)
+                    if (bool) {
+                        interactable.showPrompt()
+                        interactable.action();
+                        interactions = true;
+                    }
+                }
+                if (!interactions) {
+                    interactPrompt.className = "hide";
+                    carryPrompt.className = "hide";
                 }
             }
 

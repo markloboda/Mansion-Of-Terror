@@ -59,7 +59,7 @@ export class Animation {
     !this.isActive && this.activate()
   }
 
-  update() {
+  update(reset) {
     if (!this.startTime) {
       this.startTime = Date.now();
       if (this.before) {
@@ -72,15 +72,15 @@ export class Animation {
     let t = Date.now() - this.startTime;
     if (t > this.timestamps[this.targetKeyframe]) {
       if (this.timestamps.length-1 == this.targetKeyframe) {
-        if (this.after) {
-          for (const action of this.after) {
-            action();
-          }
-        }
         if (this.loop) {
           this.targetKeyframe = 0;
         }
         else {
+          if (!reset && this.after) {
+            for (const action of this.after) {
+              action();
+            }
+          }
           this.disable();
         }
       }
@@ -121,10 +121,10 @@ export class Animation {
   }
 
   resetAnimation() {
-    this.targetKeyframe = 1;
+    this.targetKeyframe = 0;
     this.startTime = 0;
-    this.update();
-    this.startTime = 0;
+    this.update(true);
+    this.startTime = null;
     this.targetKeyframe = 0;
   }
 
@@ -142,7 +142,7 @@ export class Animation {
 
   triggerAnimation() {
     for (const animation of this.trigger) {
-      animation._playAnimation();
+      document.dispatchEvent(new Event(`play_${animation}`))
     }
   }
 
