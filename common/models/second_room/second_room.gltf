@@ -24075,7 +24075,7 @@
                     }
                 }
             ],
-            "name" : "keyAction",
+            "name" : "otvoritev",
             "samplers" : [
                 {
                     "input" : 7887,
@@ -122809,7 +122809,7 @@
         {
             "bufferView" : 7887,
             "componentType" : 5126,
-            "count" : 2,
+            "count" : 61,
             "max" : [
                 2.5
             ],
@@ -122821,7 +122821,7 @@
         {
             "bufferView" : 7888,
             "componentType" : 5126,
-            "count" : 2,
+            "count" : 61,
             "type" : "SCALAR"
         }
     ],
@@ -162263,13 +162263,13 @@
         },
         {
             "buffer" : 0,
-            "byteLength" : 8,
+            "byteLength" : 244,
             "byteOffset" : 7763724
         },
         {
             "buffer" : 0,
-            "byteLength" : 8,
-            "byteOffset" : 7763732
+            "byteLength" : 244,
+            "byteOffset" : 7763968
         }
     ],
     "samplers" : [
@@ -162280,7 +162280,7 @@
     ],
     "buffers" : [
         {
-            "byteLength" : 7763740,
+            "byteLength" : 7764212,
             "uri" : "second_room.bin"
         }
     ]
