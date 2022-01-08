@@ -1,5 +1,9 @@
 import { vec3, mat4 } from '../lib/gl-matrix-module.js';
 
+const interactPrompt = document.getElementById("interact_prompt");
+const carryPrompt = document.getElementById("carry_prompt");
+
+
 export class Physics {
 
     constructor(scene) {
@@ -12,32 +16,45 @@ export class Physics {
                 let velocity = node.velocity;
                 vec3.scaleAndAdd(node.translation, node.translation, velocity, dt);
                 node.updateMatrix();
-                node.parent?.updateMatrix();
                 if (node.camera) {
+                    let interactions = false
                     for (const interactable of this.scene.interactables) {
-                        if (interactable.inFocus) {
-                            interactable.updateTransform();
+                        const bool = this.checkProximity(node, interactable)
+                        if (bool) {
+                            interactable.showPrompt()
+                            interactable.action();
+                            interactions = true;
                         }
                     }
+                    if (!interactions) {
+                        interactPrompt.className = "hide";
+                        carryPrompt.className = "hide";
+                    }
                 }
-
                 // false if not proven true
                 node.onGround = false;
                 this.scene.traverse(other => {
                     // check if node is moving (only check for nodes that are moving)
                     // check for collisions and if on ground
-                    if (node !== other && !other.camera && node.aabb && other.aabb) {
+                    if (node !== other && !other.camera && node.aabbEnabled && other.aabbEnabled && node.aabb && other.aabb) {
                         this.resolveCollision(node, other);
                     }
                 });
             }
             else if (node.camera) {
                 node.updateMatrix();
-                node.parent?.updateMatrix()
+                let interactions = false
                 for (const interactable of this.scene.interactables) {
-                    if (interactable.inFocus) {
-                            interactable.updateTransform();
+                    const bool = this.checkProximity(node, interactable)
+                    if (bool) {
+                        interactable.showPrompt()
+                        interactable.action();
+                        interactions = true;
                     }
+                }
+                if (!interactions) {
+                    interactPrompt.className = "hide";
+                    carryPrompt.className = "hide";
                 }
             }
 
@@ -46,6 +63,24 @@ export class Physics {
                 node.velocity[1] = 0;
             }
         });
+    }
+
+    checkProximity(a, b) {
+        // use aabb for proximity border of camera
+        const ta = a.getGlobalTransform();
+        const tb = b.getGlobalTransform();
+
+        const posa = mat4.getTranslation(vec3.create(), ta);
+        const posb = mat4.getTranslation(vec3.create(), tb);
+
+        const mina = vec3.sub(vec3.create(), vec3.add(vec3.create(), posa, a.aabb.min), vec3.fromValues(1, 2, 1));
+        const maxa = vec3.add(vec3.create(), vec3.add(vec3.create(), posa, a.aabb.max), vec3.fromValues(1, 2, 1));
+
+        if (posb[0] > mina[0] && posb[1] > mina[1] && posb[2] > mina[2] &&
+            posb[0] < maxa[0] && posb[1] < maxa[1] && posb[2] < maxa[2]) {
+                return true;
+            }
+        return false;
     }
 
     intervalIntersection(min1, max1, min2, max2) {
@@ -94,6 +129,9 @@ export class Physics {
             return;
         }
 
+        if ( a.levelCompletePlane || b.levelCompletePlane) {
+            this.scene.levelComplete = true;
+        }
 
         // Move node A minimally to avoid collision.
         const diffa = vec3.sub(vec3.create(), maxb, mina);

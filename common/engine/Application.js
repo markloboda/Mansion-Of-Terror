@@ -25,7 +25,7 @@ export class Application {
     _update() {
         this._resize();
         this.update();
-        this.render();
+        !this.loading && this.render();
         requestAnimationFrame(this._update);
     }
 

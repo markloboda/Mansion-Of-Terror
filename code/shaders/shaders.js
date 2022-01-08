@@ -87,7 +87,7 @@ layout (location = 0) in vec4 aPosition;
 layout (location = 1) in vec2 aTexCoord;
 layout (location = 4) in vec3 aNormal;
 
-uniform vec3 uLightPosition[2];
+uniform vec3 uLightPosition;
 uniform vec3 uCameraPosition;
 
 uniform vec4 aColor;
@@ -100,7 +100,7 @@ uniform int numLights;
 out vec3 vNormal;
 out vec4 vColor;
 
-out vec3 vSurfaceToLight[2];
+out vec3 vSurfaceToLight;
 out vec3 vSurfaceToCamera;
 out vec2 vTexCoord;
 
@@ -116,9 +116,7 @@ void main() {
 
   // compute the vector of the surface to the light
   // and pass it to the fragment shader
-  for (int i=0; i<numLights; i++) {
-    vSurfaceToLight[i] = uLightPosition[i] - surfaceWorldPosition;
-  }
+  vSurfaceToLight = uLightPosition - surfaceWorldPosition;
 
   // compute the vector of the surface to the view/camera
   // and pass it to the fragment shader
@@ -133,21 +131,19 @@ precision mediump float;
 precision mediump int;
 #pragma vscode_glsllint_stage: frag
 
-uniform int numLights;
-
 // Passed in from the vertex shader.
 in vec3 vNormal;
-in vec3 vSurfaceToLight[2];
+in vec3 vSurfaceToLight;
 in vec3 vSurfaceToCamera;
 in vec2 vTexCoord;
 in vec4 vColor;
 
 uniform sampler2D uTexture;
-uniform vec3 uColor[2];
-uniform float uShininess[2];
-uniform vec3 uLightDirection[2];
-uniform float uInnerLimit[2];          // in dot space
-uniform float uOuterLimit[2];          // in dot space
+uniform vec3 uColor;
+uniform float uShininess;
+uniform vec3 uLightDirection;
+uniform float uInnerLimit;          // in dot space
+uniform float uOuterLimit;          // in dot space
 
 // we need to declare an output for the fragment shader
 out vec4 oColor;
@@ -160,24 +156,21 @@ void main() {
   vec3 normal = normalize(vNormal);
   vec3 surfaceToViewDirection = normalize(vSurfaceToCamera);
   oColor = texture(uTexture, vTexCoord) * vColor;
-  for (int i=0; i<numLights; i++) {
-    vec3 surfaceToLightDirection = normalize(vSurfaceToLight[i]);
-    vec3 halfVector = normalize(surfaceToLightDirection + surfaceToViewDirection);
-  
-    float dotFromDirection = dot(surfaceToLightDirection,
-                                 -uLightDirection[i]);
-    float limitRange = uInnerLimit[i] - uOuterLimit[i];
-    float inLight = clamp((dotFromDirection - uOuterLimit[i]) / limitRange, 0.0, 1.0);
-    float light = inLight * dot(normal, surfaceToLightDirection) + 0.05;
-    float specular = inLight * pow(dot(normal, halfVector), uShininess[i]);
-    // Lets multiply just the color portion (not the alpha)
-    // by the light
-    oColor.rgb = (light + specular) * uColor[i];
-    oColor *= texture(uTexture, vTexCoord) * vColor;
+  vec3 surfaceToLightDirection = normalize(vSurfaceToLight);
+  vec3 halfVector = normalize(surfaceToLightDirection + surfaceToViewDirection);
 
-    // float attenuation = 1.0 / (vSurfaceToCamera*vSurfaceToCamera);
-  
-  }
+  float dotFromDirection = dot(surfaceToLightDirection,
+                                -uLightDirection);
+  float limitRange = uInnerLimit - uOuterLimit;
+  float inLight = clamp((dotFromDirection - uOuterLimit) / limitRange, 0.0, 1.0);
+  float light = inLight * dot(normal, surfaceToLightDirection) + 0.05;
+  float specular = inLight * pow(dot(normal, halfVector), uShininess);
+  // Lets multiply just the color portion (not the alpha)
+  // by the light
+  oColor.rgb = (light + specular) * uColor;
+  oColor *= texture(uTexture, vTexCoord) * vColor;
+
+  // float attenuation = 1.0 / (vSurfaceToCamera*vSurfaceToCamera);
 }
 `;
 

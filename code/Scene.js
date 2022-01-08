@@ -1,4 +1,3 @@
-import { Node } from './Node.js';
 
 
 export class Scene {
@@ -8,6 +7,7 @@ export class Scene {
         this.animations = options.animations
         this.lights = options.lights
         this.interactables = options.interactables;
+        this.levelComplete = false;
     }
 
     addNode(node) {
