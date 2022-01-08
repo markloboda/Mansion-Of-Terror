@@ -35,7 +35,7 @@ class App extends Application {
     await this.loader.load(scenes[`Room${this.level}`]);
     this.scene = await this.loader.loadScene(this.loader.defaultScene);
     this.scene.gameState = {};
-    this.scene.flashlight = this.scene.interactables[0];
+    this.scene.flashlight = this.scene.interactables.find(interactable => interactable.name === "Flashlight");
     Object.keys(this.scene.animations).map(animation => {
       //this.scene.animations[animation].activate();
       this.scene.animations[animation].loop = false;
@@ -105,10 +105,9 @@ class App extends Application {
       this.scene.flashlight.direction = vec3.transformQuat(this.scene.flashlight.direction, [0, 0, -1], this.scene.flashlight.rotation)
       if (this.scene.animations) {
         for (const animation in this.scene.animations) {
-          if (!this.scene.animations[animation].isActive) {
-            continue;
+          if (this.scene.animations[animation].isActive) {
+            this.scene.animations[animation].update();
           }
-          this.scene.animations[animation].update();
         }
       }
   }

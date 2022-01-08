@@ -18,11 +18,9 @@ export class Physics {
                         if (interactable.type == "carry") {
                             if (bool) {
                                 interactable.action();
-                                const prompt = document.getElementById('carry_prompt');
-                                prompt.style.visibility = "visible";
+                                interactable.showPrompt()
                             } else {
-                                const prompt = document.getElementById('carry_prompt');
-                                prompt.style.visibility = "hidden";
+                                interactable.hidePrompt()
                             }
                             
                         }

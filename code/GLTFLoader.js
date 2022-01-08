@@ -311,8 +311,16 @@ export class GLTFLoader {
             keyframes: keyframes,
             name: gltfSpec.name
         };
+
         this.animations[gltfSpec.name].disableNodes = disableNodes;
         Object.assign(options, this.animations[gltfSpec.name])
+        if (options.trigger) {
+            const triggerAnimations = [];
+            for (const trigger of options.trigger) {
+                triggerAnimations.push(await this.loadAnimation(trigger));
+            }
+            options.trigger = triggerAnimations;
+        }
         const animation = new Animation(options);
         this.cache.set(gltfSpec, animation);
         return animation;
@@ -463,6 +471,17 @@ export class GLTFLoader {
         options.animations = {};
         for (const index in this.gltf.animations) {
             const animation = await this.loadAnimation(parseInt(index));
+            if (animation.disableInteractables) {
+                const disableInteractables = [];
+                for (const interactable of animation.disableInteractables) {
+                    for (const node of options.interactables) {
+                        if (node.name === interactable) {
+                            disableInteractables.push(node);
+                        }
+                    }
+                }
+                animation.disableInteractables = disableInteractables;
+            }
             options.animations[animation.name] = animation;
         }
         const scene = new Scene(options);

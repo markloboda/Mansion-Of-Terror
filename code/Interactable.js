@@ -12,12 +12,25 @@ export class Interactable extends Node {
     this.action;
     this._parseAction();
     this.keys = {};
+    this.prompt = document.getElementById(`${this.type}_prompt`);
     document.addEventListener('keydown', this.keydownHandler.bind(this));
     document.addEventListener('keyup', this.keyupHandler.bind(this));
   }
 
+  showPrompt() {
+    if (this.disabled || this.carrying) {
+      this.prompt.style.visibility = "hidden";
+      return;
+    }
+      this.prompt.style.visibility = "visible";
+  }
+
+  hidePrompt() {
+    this.prompt.style.visibility = "hidden";
+  }
+
   _updateTransform() {
-    if (!this.carrying) {
+    if (!this.disabled && !this.carrying) {
       if (this.keys?.KeyF) {
         this.carrying = true;
         this.disableAABB();
@@ -26,7 +39,7 @@ export class Interactable extends Node {
         }
       }
     }
-    else {
+    else if (!this.disabled) {
       mat4.getTranslation(this.translation, this.master.matrix);
       this.translation[1] += this.yOffset;
       // this.translation[2] += this.zOffset;
@@ -46,6 +59,11 @@ export class Interactable extends Node {
         this.action = this._interact;
         break;
     }
+  }
+
+  disable() {
+    this.carrying = false;
+    this.disabled = true;
   }
 
   _interact() {

@@ -65,8 +65,11 @@ export class Node {
             child.parent = this;
         }
         this.parent = null;
-        this.aabbEnabled = true;
+        this.aabbEnabled = options.aabbEnabled !== undefined ? options.aabbEnabled : true;
         this.createAABB();
+        if (this.name === "Fusebox") {
+            this.disableAABB()
+        }
     }
 
     createAABB() {

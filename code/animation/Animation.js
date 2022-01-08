@@ -13,7 +13,7 @@ class AnimationError {
 export class Animation {
   constructor(options = {}) {
     Object.assign(this, options);
-    this.isActive = options.playOnLoad;
+    this.isActive = options.isActive;
     if (this.keyframes) {
       this.timestamps = Object.keys(this.keyframes).map((key) => parseInt(key));
       this.duration = Math.max(...this.timestamps);
@@ -28,7 +28,8 @@ export class Animation {
       CUBICSPLINE: this._notImplemented.bind(this),
     };
     this.loop = false;
-    this.parseAfterAction(this.after);
+    this.after = this.parseAfterAction(this.after);
+    this.before = this.parseAfterAction(this.before);
     document.addEventListener(`play_${this.name}`, this._playAnimation.bind(this))
   }
 
@@ -61,12 +62,21 @@ export class Animation {
   update() {
     if (!this.startTime) {
       this.startTime = Date.now();
+      if (this.before) {
+        for (const action of this.before) {
+          action();
+        }
+      }
     }
 
     let t = Date.now() - this.startTime;
     if (t > this.timestamps[this.targetKeyframe]) {
       if (this.timestamps.length-1 == this.targetKeyframe) {
-        this.after && this.after();
+        if (this.after) {
+          for (const action of this.after) {
+            action();
+          }
+        }
         if (this.loop) {
           this.targetKeyframe = 0;
         }
@@ -94,11 +104,33 @@ export class Animation {
 
   
   parseAfterAction(after) {
-    switch(after) {
-      case "disableAABB": this.after = this.disableAABB; break;
-      case "trigger": this.after = this.triggerAnimation; break;
-      case "setCondition": this.after = this.setCondition; break;
-      default: this.after = null;
+    if (!after) {
+      return null;
+    }
+    const actions = [];
+    for (const action of after) {
+      switch(action) {
+        case "disableAABB": actions.push(this.disableAABB.bind(this)); break;
+        case "trigger": actions.push(this.triggerAnimation.bind(this)); break;
+        case "setCondition": actions.push(this.setCondition.bind(this)); break;
+        case "disableInteractable": actions.push(this.disableInteractable.bind(this)); break;
+        case "resetAnimation": actions.push(this.resetAnimation.bind(this)); break;
+      }
+    }
+    return actions;
+  }
+
+  resetAnimation() {
+    this.targetKeyframe = 1;
+    this.startTime = 0;
+    this.update();
+    this.startTime = 0;
+    this.targetKeyframe = 0;
+  }
+
+  disableInteractable() {
+    for (const interactable of this.disableInteractables) {
+      interactable.disable();
     }
   }
 
@@ -109,7 +141,9 @@ export class Animation {
   }
 
   triggerAnimation() {
-
+    for (const animation of this.trigger) {
+      animation._playAnimation();
+    }
   }
 
   setCondition() {
