@@ -22,6 +22,7 @@ class App extends Application {
       this.pointerlockchangeHandler
     );
     document.addEventListener("setConditions", this.handleSetConditions.bind(this))
+    this.addSoundTrack();
   }
 
   handleSetConditions(e) {
@@ -60,6 +61,12 @@ class App extends Application {
     this.renderer.prepareScene(this.scene);
     this.resize();
     console.log(this.scene);
+  }
+
+  addSoundTrack() {
+    let soundtrackElement = document.createElement("audio");
+    soundtrackElement.src = "../common/sounds/main_sound_track.mp3"
+    // soundtrackElement.play();
   }
   
   enableCamera() {
