@@ -24,7 +24,10 @@ export const scenes = {
     name: "second_room",
     interactables: [
       {name: "Flashlight", type: "carry", carrying: true},
-    ]
+    ],
+    animations: {
+      "otvoritev": {}
+    }
   },
   Room3: {
     name: "parkour_room",
