@@ -12,6 +12,8 @@ gltf = json.load(open(file))
 
 result = {}
 for animation in gltf['animations']:
+  if nameLike != "NULL" and nameLike not in animation["name"]:
+    continue
   result[animation["name"]] = {"conditions": conditions}
 
 print(result)
