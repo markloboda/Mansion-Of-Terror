@@ -21298,7 +21298,7 @@
             "name" : "Camera.001",
             "perspective" : {
                 "aspectRatio" : 1.7777777777777777,
-                "yfov" : 0.8149313109412557,
+                "yfov" : 0.8149313109412556,
                 "zfar" : 1000,
                 "znear" : 0.10000000149011612
             },
@@ -24075,7 +24075,7 @@
                     }
                 }
             ],
-            "name" : "otvoritev",
+            "name" : "keyAction",
             "samplers" : [
                 {
                     "input" : 7887,
@@ -24420,38 +24420,6 @@
             "doubleSided" : true,
             "name" : "soviet_wall1.002",
             "pbrMetallicRoughness" : {
-                "metallicFactor" : 0,
-                "roughnessFactor" : 0.5
-            }
-        },
-        {
-            "doubleSided" : true,
-            "name" : "soviet_wall1.026",
-            "pbrMetallicRoughness" : {
-                "metallicFactor" : 0,
-                "roughnessFactor" : 0.5
-            }
-        },
-        {
-            "doubleSided" : true,
-            "name" : "soviet_wall1.027",
-            "pbrMetallicRoughness" : {
-                "metallicFactor" : 0,
-                "roughnessFactor" : 0.5
-            }
-        },
-        {
-            "doubleSided" : true,
-            "name" : "soviet_wall1.028",
-            "pbrMetallicRoughness" : {
-                "metallicFactor" : 0,
-                "roughnessFactor" : 0.5
-            }
-        },
-        {
-            "doubleSided" : true,
-            "name" : "Material.006",
-            "pbrMetallicRoughness" : {
                 "baseColorTexture" : {
                     "index" : 30
                 },
@@ -24461,7 +24429,7 @@
         },
         {
             "doubleSided" : true,
-            "name" : "SOVIET_WALL.002",
+            "name" : "soviet_wall1.026",
             "pbrMetallicRoughness" : {
                 "baseColorTexture" : {
                     "index" : 31
@@ -24472,7 +24440,7 @@
         },
         {
             "doubleSided" : true,
-            "name" : "Material.007",
+            "name" : "soviet_wall1.027",
             "pbrMetallicRoughness" : {
                 "baseColorTexture" : {
                     "index" : 32
@@ -24483,18 +24451,18 @@
         },
         {
             "doubleSided" : true,
-            "name" : "rusty_iron.002",
+            "name" : "soviet_wall1.028",
             "pbrMetallicRoughness" : {
                 "baseColorTexture" : {
                     "index" : 33
                 },
                 "metallicFactor" : 0,
-                "roughnessFactor" : 0.4000000059604645
+                "roughnessFactor" : 0.5
             }
         },
         {
             "doubleSided" : true,
-            "name" : "Material.008",
+            "name" : "Material.006",
             "pbrMetallicRoughness" : {
                 "baseColorTexture" : {
                     "index" : 34
@@ -24505,10 +24473,54 @@
         },
         {
             "doubleSided" : true,
-            "name" : "Material.009",
+            "name" : "SOVIET_WALL.002",
             "pbrMetallicRoughness" : {
                 "baseColorTexture" : {
                     "index" : 35
+                },
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        },
+        {
+            "doubleSided" : true,
+            "name" : "Material.007",
+            "pbrMetallicRoughness" : {
+                "baseColorTexture" : {
+                    "index" : 36
+                },
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        },
+        {
+            "doubleSided" : true,
+            "name" : "rusty_iron.002",
+            "pbrMetallicRoughness" : {
+                "baseColorTexture" : {
+                    "index" : 37
+                },
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.4000000059604645
+            }
+        },
+        {
+            "doubleSided" : true,
+            "name" : "Material.008",
+            "pbrMetallicRoughness" : {
+                "baseColorTexture" : {
+                    "index" : 38
+                },
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        },
+        {
+            "doubleSided" : true,
+            "name" : "Material.009",
+            "pbrMetallicRoughness" : {
+                "baseColorTexture" : {
+                    "index" : 39
                 },
                 "metallicFactor" : 0,
                 "roughnessFactor" : 0.5
@@ -54134,99 +54146,95 @@
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
-            "source" : 1
-        },
-        {
-            "sampler" : 0,
-            "source" : 1
+            "source" : 4
         },
         {
             "sampler" : 0,
@@ -54242,7 +54250,23 @@
         },
         {
             "sampler" : 0,
-            "source" : 5
+            "source" : 1
+        },
+        {
+            "sampler" : 0,
+            "source" : 1
+        },
+        {
+            "sampler" : 0,
+            "source" : 1
+        },
+        {
+            "sampler" : 0,
+            "source" : 6
+        },
+        {
+            "sampler" : 0,
+            "source" : 1
         },
         {
             "sampler" : 0,
@@ -54255,6 +54279,10 @@
         {
             "sampler" : 0,
             "source" : 8
+        },
+        {
+            "sampler" : 0,
+            "source" : 9
         }
     ],
     "images" : [
@@ -54270,13 +54298,18 @@
         },
         {
             "mimeType" : "image/jpeg",
-            "name" : "soviet floor and soviet celing",
-            "uri" : "soviet%20floor%20and%20soviet%20celing.jpg"
+            "name" : "soviet floor and soviet celing.jpg",
+            "uri" : "soviet%20floor%20and%20soviet%20celing_jpg.jpg"
         },
         {
             "mimeType" : "image/jpeg",
             "name" : "beton22",
             "uri" : "beton22.jpg"
+        },
+        {
+            "mimeType" : "image/jpeg",
+            "name" : "soviet_wall3.jpg",
+            "uri" : "soviet_wall3_jpg.jpg"
         },
         {
             "mimeType" : "image/png",
@@ -122776,9 +122809,9 @@
         {
             "bufferView" : 7887,
             "componentType" : 5126,
-            "count" : 71,
+            "count" : 2,
             "max" : [
-                2.9166666666666665
+                2.5
             ],
             "min" : [
                 0
@@ -122788,7 +122821,7 @@
         {
             "bufferView" : 7888,
             "componentType" : 5126,
-            "count" : 71,
+            "count" : 2,
             "type" : "SCALAR"
         }
     ],
@@ -162230,13 +162263,13 @@
         },
         {
             "buffer" : 0,
-            "byteLength" : 284,
+            "byteLength" : 8,
             "byteOffset" : 7763724
         },
         {
             "buffer" : 0,
-            "byteLength" : 284,
-            "byteOffset" : 7764008
+            "byteLength" : 8,
+            "byteOffset" : 7763732
         }
     ],
     "samplers" : [
@@ -162247,7 +162280,7 @@
     ],
     "buffers" : [
         {
-            "byteLength" : 7764292,
+            "byteLength" : 7763740,
             "uri" : "second_room.bin"
         }
     ]
