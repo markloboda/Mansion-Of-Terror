@@ -16,4 +16,4 @@ for animation in gltf['animations']:
     continue
   result[animation["name"]] = {"conditions": conditions}
 
-print(result)
+print(json.dumps(result))
