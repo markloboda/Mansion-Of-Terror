@@ -32,7 +32,7 @@ class App extends Application {
 
   async loadNextLevel() {
     this.level++;
-    await this.loader.load(scenes[`Room${this.level}`]);
+    await this.loader.load(`Room${this.level}`);
     this.scene = await this.loader.loadScene(this.loader.defaultScene);
     this.scene.gameState = {};
     Object.keys(this.scene.animations).map(animation => {
