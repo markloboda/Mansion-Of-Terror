@@ -110,3 +110,13 @@ a.back:hover {
     font-size: 2vw;
     color: white;
 }
+
+.endingScene {
+    display: none;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    right: 50%;
+    bottom: 50%;
+    color: gold;
+}

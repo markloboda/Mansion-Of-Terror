@@ -114,10 +114,6 @@ export const scenes = {
         type: "interact",
         interact: { play: ["resetke1", "resetke2"] }
       },
-      // {
-      //   name: "Invisible.002",
-      //   aabbEnabled: true,
-      // }
     ],
     animations: room4Animations,
   }

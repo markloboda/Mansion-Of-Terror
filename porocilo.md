@@ -62,15 +62,47 @@ casa). ˇ
 
 ## 1.2 Igralni pogon in uporabljene tehnologije
 
-Za izdelavo igre smo uporabili samo webgl2 + JavaScript, modele in animacije smo naložili iz gltf blender export-ov. Za bazo igralnega pogona smo uporabili 90-gltf primer iz webgl2-examples repozitorija: https://github.com/UL-FRI-LGM/webgl2-examples/tree/master/examples/90-gltf  
+Za izdelavo igre smo uporabili samo webgl2 + JavaScript, modele in animacije smo naložili iz gltf blender izvozov. Za bazo igralnega pogona smo uporabili 90-gltf primer iz webgl2-examples repozitorija: https://github.com/UL-FRI-LGM/webgl2-examples/tree/master/examples/90-gltf  
 
-V izhodiščnem primeru je bilo veliko stvari že implementiranih, ni pa bilo 
+V izhodiščnem primeru je bilo veliko stvari že implementiranih, ker smo hoteli modele vključno z animacijami izvoziti iz blenderja, smo v GLTFLoader.js dodali še podporo za nalaganje animacij. Naredili smo tudi razrez Animation, ki hrani "keyframe" in metode za interpolacije med keyframe-i.  
+Podprte animacije:
+- Step interpolation
+- Linear interpolation
+- Spherical linear interpolation
 
-1.2 
-V poglavju podrobno predstavite katere tehnologije ste
-uporabili pri izdelavi vasega seminarja. V kolikor ste ˇ
-uporabili kaksno dodatno ogrodje oz. orodje ga na tem ˇ
-mestu predstavite in pojasnite cemu. ˇ
+Izhodiščni primer smo tudi nasploh naredili bolj fleksibilen, npr. naredili smo nov razred MeshRenderer in ga ob nalaganju iz gltf datoteke pripeli na Node objekt. Če bi se v prihodnosti odločili, da bi naš pogon podpiral tudi Armature in animacije armatur bi lahko naredili še en razred, ki bi uporabljal nek drug senčilnik, v render zanki pa bi še vedno klicali samo node.renderer.render()...  
+
+Ker ima naša igra določen nek potek (npr: Preden igralec lahko odpre vrata, mora pritisniti gumb), smo si sami zamislili nek json format za opisovanje dogodkov.
+
+### Primer formata:  
+
+```js
+export const scenes = Room1: {
+    name: "first_room",
+    interactables: [
+      { name: "Flashlight", type: "carry", carrying: true },
+      {
+        name: "Switch",
+        type: "interact",
+        interact: { play: ["SwitchAnimation"] },
+      },
+    ],
+    animations: {
+      SwitchAnimation: {
+        before: ["disableAABB", "disableInteractable"],
+        disableInteractables: ["Invisible_openDoors"],
+        disableNodes: ["left_door"],
+        after: [""]
+      }
+  }
+}
+````
+
+## 1.3 Pogled
+
+Uporabili smo Perspektivno kamero uvoženo iz blenderja preko gltf-ja.
+Igralca se ne vidi.
+
 1.3 Pogled
 Definirajte kaksen bo pogled v va ˇ so igro. Kak ˇ sno kamero ˇ
 boste uporabili, kaj vse bo uporabnik videl, kako boste
