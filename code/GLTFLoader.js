@@ -71,6 +71,7 @@ export class GLTFLoader {
         this.gltfUrl = new URL(`../common/models/${sceneDef.name}/${sceneDef.name}.gltf`, window.location);
         this.gltf = await this.fetchJson(`../common/models/${sceneDef.name}/${sceneDef.name}.gltf`);
         this.defaultScene = this.gltf.scene || 0;
+        this.maxDuration = sceneDef.maxDuration;
         this.interactables = sceneDef.interactables;
         this.animations = sceneDef.animations;
     }
@@ -477,6 +478,7 @@ export class GLTFLoader {
             }
             options.animations[animation.name] = animation;
         }
+        options.maxDuration = this.maxDuration;
         const scene = new Scene(options);
         this.cache.set(gltfSpec, scene);
         return scene;

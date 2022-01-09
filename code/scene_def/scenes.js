@@ -98,12 +98,13 @@ const room2Animations = {
   "Cube.076_cell.004_cell.012Action": { conditions: ["breakStairs"] },
   "Cube.076_cell.004_cell.013Action": { conditions: ["breakStairs"] },
   "Cube.076_cell.004_cell.014Action": { conditions: ["breakStairs"] },
-  otvoritev: { after: "levelComplete" },
+  "otvoritev": { after: "levelComplete" },
 };
 
 export const scenes = {
   Room1: {
     name: "first_room",
+    maxDuration: 90000,
     interactables: [
       { name: "Flashlight", type: "carry", carrying: true },
       { name: "Fuse", type: "carry", setConditions: { carry_fuse: true } },
@@ -169,6 +170,7 @@ export const scenes = {
   },
   Room2: {
     name: "second_room",
+    maxDuration: 60000,
     interactables: [
       { name: "Flashlight", type: "carry", carrying: true },
       {
@@ -180,6 +182,7 @@ export const scenes = {
     animations: room2Animations,
   },
   Room3: {
+    maxDuration: 120000,
     name: "parkour_room",
     interactables: [{ name: "Flashlight", type: "carry", carrying: true }],
   },
