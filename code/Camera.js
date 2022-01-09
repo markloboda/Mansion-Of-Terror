@@ -99,7 +99,7 @@ export class Camera extends Node {
         }
 
         c.euler[1] = ((c.euler[1] % twopi) + twopi) % twopi;
-        const deg = c.euler.map(angle => angle*180/Math.PI);
+        const deg = c.euler.map(angle => angle * 180 / Math.PI);
         c.rotation = quat.fromEuler(quat.create(), ...deg);
     }
 
