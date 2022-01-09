@@ -29,7 +29,7 @@ class App extends Application {
       this.scene.gameState[condition] = e.detail[condition];
     }
   }
-  
+
 
   async loadNextLevel() {
     this.level++;
@@ -141,7 +141,7 @@ class App extends Application {
     footsteps.src = "../common/sound/footsteps.mp3";
     footsteps.loop = true;
     document.getElementById("audio-div").appendChild(footsteps);
-    
+
     //
     this.updateVolume();
   }
