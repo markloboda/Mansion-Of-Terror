@@ -111,6 +111,10 @@ export const scenes = Room1: {
   - Ko se sproži door_open_action, se izvede gotoNextLevel, ki naloži naslednjo sobo.
 
 
+## Detekcija trkov
+V igri smo uporabili tehnologijo AABB. To je okrajšava za Axis Aligned Boundry Box. Pri tej vrsti detekcije trkov ima vsak objekt okoli sebe škatlo, katere robovi so poravnani z svetovnim kordinatnim sistemom. Detekcije trkov preverjamo v datoteki Physics.js.
+
+
 ## 1.3 Pogled
 
 Uporabili smo Perspektivno kamero uvoženo iz blenderja preko gltf-ja.
