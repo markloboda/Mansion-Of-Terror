@@ -1,5 +1,6 @@
 import room2Animations from "./room2Animations.js";
 import room3Animations from "./room3Animations.js";
+import room4Animations from "./room4Animations.js";
 
 
 export const scenes = {
@@ -97,7 +98,23 @@ export const scenes = {
   Room3: {
     maxDuration: 120000,
     name: "parkour_room",
-    interactables: [{ name: "Flashlight", type: "carry", carrying: true }],
+    interactables: [
+      { name: "Flashlight", type: "carry", carrying: true },
+      { name: "Ladder.001", type: "interact", interact: { play: ["next.level.cubeAction"] } }
+    ],
     animations: room3Animations
   },
+  Room4: {
+    name: "second_room",
+    maxDuration: 60000,
+    interactables: [
+      { name: "Flashlight", type: "carry", carrying: true },
+      {
+        name: "gumb",
+        type: "interact",
+        interact: { play: ["resetke1", "resetke2"] }
+      },
+    ],
+    animations: room4Animations,
+  }
 };

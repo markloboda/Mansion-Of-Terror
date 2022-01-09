@@ -30,7 +30,7 @@ export class Animation {
     this.loop = false;
     this.after = this.parseAfterAction(this.after);
     this.before = this.parseAfterAction(this.before);
-    document.addEventListener(`play_${this.name}`, this._playAnimation.bind(this))
+    document.addEventListener(`play_${this.name}`, this._playAnimation.bind(this));
   }
 
   activate() {
@@ -128,6 +128,11 @@ export class Animation {
   gotoNextLevel() {
     document.dispatchEvent(new Event("nextLevelEvent"));
   }
+
+  endGame() {
+    document.dispatchEvent(new Event("endGame"));
+  }
+
   
   parseAfterAction(after) {
     if (!after) {
@@ -143,6 +148,7 @@ export class Animation {
         case "resetAnimation": actions.push(this.resetAnimation.bind(this)); break;
         case "playSound": actions.push(this.playSound.bind(this)); break;
         case "gotoNextLevel": actions.push(this.gotoNextLevel.bind(this)); break;
+        case "endGame": actions.push(this.endGame.bind(this)); break;
       }
     }
     return actions;

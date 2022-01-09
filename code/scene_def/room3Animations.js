@@ -1,4 +1,8 @@
 const room3Animations = {
+  "next.level.cubeAction": {
+    "conditions": [],
+    before: ["gotoNextLevel"]
+  },
   "Cube_cell.011Action": {
     before: ["playSound"],
     soundName: "rocks-falling.mp3",
