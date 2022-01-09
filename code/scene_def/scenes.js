@@ -183,4 +183,17 @@ export const scenes = {
     name: "parkour_room",
     interactables: [{ name: "Flashlight", type: "carry", carrying: true }],
   },
+  Room4: {
+    name: "room4",
+    interactables: [{ name: "Flashlight", type: "carry", carrying: true },
+    { name: "Piano", type: "play" }],
+    animations: { "tipka_7": { "conditions": [] },
+    "tipka_6": { "conditions": [] },
+    "tipka_5": { "conditions": [] },
+    "tipka_4": { "conditions": [] },
+    "tipka_3": { "conditions": [] },
+    "tipka_2": { "conditions": [] },
+    "tipka_1": { "conditions": [] },
+    "tipka_0": { "conditions": [] } }
+  },
 };

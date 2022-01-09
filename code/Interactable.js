@@ -58,6 +58,7 @@ export class Interactable extends Node {
       case 'interact': 
         this.action = this._interact;
         break;
+      case 'play': this.action = this._playPiano; break;
     }
   }
 
@@ -75,5 +76,33 @@ export class Interactable extends Node {
         document.dispatchEvent(new Event(`${type}_${event}`));
       }
     }
+  }
+
+  _playPiano() {
+    if (this.keys['Digit0']) {
+      playNote("note0")
+    }
+    if (this.keys['Digit1']) {
+      playNote("note1")
+    }
+    if (this.keys['Digit2']) {
+      playNote("note2")
+    }
+    if (this.keys['Digit3']) {
+      playNote("note3")
+    }
+    if (this.keys['Digit4']) {
+      playNote("note4")
+    }
+    if (this.keys['Digit5']) {
+      playNote("note5")
+    }
+    if (this.keys['Digit6']) {
+      playNote("note6")
+    }
+    if (this.keys['Digit7']) {
+      playNote("note7")
+    }
+    console.log(this.keys);
   }
 }
