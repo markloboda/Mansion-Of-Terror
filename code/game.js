@@ -9,6 +9,9 @@ import { PerspectiveCamera } from './PerspectiveCamera.js';
 import { scenes } from './scene_def/scenes.js';
 import { vec3 } from "../lib/gl-matrix-module.js";
 
+const bloodTexture = new Image();
+bloodTexture.src = "../common/textures/blood_outline.png";
+
 
 class App extends Application {
   async start() {
@@ -22,6 +25,11 @@ class App extends Application {
     document.addEventListener("setConditions", this.handleSetConditions.bind(this))
     this.pointerlock();
     this.loadSound();
+    this.deathPrompt = document.getElementById("death_prompt");
+    document.getElementById("restart-button").addEventListener("click", async() => {
+      await this.loadNextLevel();
+      this.loading = false;
+    });
   }
 
   handleSetConditions(e) {
@@ -67,6 +75,7 @@ class App extends Application {
   updateSensitivity() {
     const sens = document.getElementById("options-sensitivity").value;
     this.camera.mouseSensitivity = sens / 100000;
+    this.levelStart = Date.now();
   }
 
   addSoundTrack() {
@@ -120,6 +129,10 @@ class App extends Application {
     const t = (this.time = Date.now());
     const dt = (this.time - this.startTime) * 0.001;
     this.startTime = this.time;
+    if (this.time - this.levelStart > this.scene?.maxDuration) {
+      this.showDeathPrompt();
+      this.loading = true;
+    }
     if (this.camera) {
       this.camera.update(dt);
     }
@@ -138,6 +151,15 @@ class App extends Application {
         }
       }
     }
+  }
+
+  death() {
+    this.level--;
+    this.showDeathPrompt();
+  }
+
+  showDeathPrompt() {
+    this.deathPrompt.className = "show";
   }
 
   loadSound() {

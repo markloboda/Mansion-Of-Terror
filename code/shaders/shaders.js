@@ -78,9 +78,9 @@ void main() {
 
 
 const spotlightVert = glsl`#version 300 es
+#pragma vscode_glsllint_stage: vert
 precision mediump float;
 precision mediump int;
-#pragma vscode_glsllint_stage: vert
 
 
 layout (location = 0) in vec4 aPosition;
@@ -105,7 +105,7 @@ out vec3 vSurfaceToCamera;
 out vec2 vTexCoord;
 
 void main() {
-  // Multiply the position by the matrix.
+
   gl_Position = uProjection * (uView * uModel * aPosition);
 
   // orient the normals and pass to the fragment shader
@@ -127,9 +127,10 @@ void main() {
 `;
 
 const spotlightFrag = glsl`#version 300 es
+#pragma vscode_glsllint_stage: frag
+
 precision mediump float;
 precision mediump int;
-#pragma vscode_glsllint_stage: frag
 
 // Passed in from the vertex shader.
 in vec3 vNormal;
@@ -139,6 +140,8 @@ in vec2 vTexCoord;
 in vec4 vColor;
 
 uniform sampler2D uTexture;
+uniform sampler2D uBloodOutline;
+uniform float intensity; 
 uniform vec3 uColor;
 uniform float uShininess;
 uniform vec3 uLightDirection;
@@ -169,8 +172,8 @@ void main() {
   // by the light
   oColor.rgb = (light + specular) * uColor;
   oColor *= texture(uTexture, vTexCoord) * vColor;
-
-  // float attenuation = 1.0 / (vSurfaceToCamera*vSurfaceToCamera);
+  oColor *= vColor;
+  // oColor = texture(uBloodOutline, clipSpace);
 }
 `;
 

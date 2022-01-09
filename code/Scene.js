@@ -8,6 +8,7 @@ export class Scene {
         this.lights = options.lights
         this.interactables = options.interactables;
         this.levelComplete = false;
+        this.maxDuration = options.maxDuration;
     }
 
     addNode(node) {

@@ -22,7 +22,7 @@ export class Application {
 
     _update() {
         this._resize();
-        this.update();
+        !this.loading && this.update();
         !this.loading && this.render();
         requestAnimationFrame(this._update);
     }
