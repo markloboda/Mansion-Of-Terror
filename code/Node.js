@@ -51,7 +51,7 @@ export class Node {
         this.maxFallingSpeed = 20;
         this.onGround = true;
         this.mass = 70;
-        this.forces = {gravity: -this.g * this.mass};
+        this.forces = { gravity: -this.g * this.mass };
 
         if (options.mesh && !this.name?.includes("Invisible")) {
             this.renderer = new MeshRenderer(options.mesh);
@@ -111,11 +111,6 @@ export class Node {
         }
     }
 
-    OBBfromAABB() {
-        
-    }
-
-
     getGlobalTransform() {
         return this.matrix;
     }
@@ -126,18 +121,18 @@ export class Node {
 
         this.euler[0] -= dy * this.mouseSensitivity;
         this.euler[1] -= dx * this.mouseSensitivity;
-        
+
         const pi = Math.PI;
         const twopi = pi * 2;
         const halfpi = pi / 2;
-        
+
         if (this.euler[0] > halfpi) {
             this.euler[0] = halfpi;
         }
         if (this.euler[0] < -halfpi) {
             this.euler[0] = -halfpi;
         }
-        
+
 
         this.euler[1] = ((this.euler[1] % twopi) + twopi) % twopi;
         const degVertical = this.euler.map(angle => angle * 180 / Math.PI);
@@ -153,7 +148,7 @@ export class Node {
         const right = vec3.set(vec3.create(),
             Math.cos(c.euler[1]), 0, -Math.sin(c.euler[1]));
         const up = vec3.set(vec3.create(),
-        0, -1, 0);
+            0, -1, 0);
 
 
         // 1: add movement acceleration
@@ -197,13 +192,13 @@ export class Node {
 
         }
         let accelerationY = Physics.acceleration(forceSum, c.mass);
-        
+
 
         // 2: update velocity
         vec3.scaleAndAdd(c.velocity, c.velocity, acc, dt * c.acceleration);
-        vec3.scaleAndAdd(c.velocity, c.velocity, accY, dt * accelerationY);        
-        
-        
+        vec3.scaleAndAdd(c.velocity, c.velocity, accY, dt * accelerationY);
+
+
         // 3: if no movement, apply friction for x an z
         if (!this.keys['KeyW'] &&
             !this.keys['KeyS'] &&
@@ -240,7 +235,27 @@ export class Node {
                 this.velocity[i] = 0;
             }
         }
+
+        // play footsteps sound if camera
+        if (this.camera) {
+            const footsteps = document.getElementById("footsteps-sound");
+            // check if sprinting
+            if (this.keys["ShiftLeft"]) {
+                footsteps.playbackRate = 1.5;
+            } else {
+                footsteps.playbackRate = 1;
+            }
+
+            if ((Math.abs(this.velocity[0]) > 0.2 || Math.abs(this.velocity[2]) > 0.2) && this.onGround) {
+                if (footsteps.paused) {
+                    footsteps.play();
+                }
+            } else {
+                footsteps.pause();
+            }
+        }
     }
+
 
     enableMovement() {
         document.addEventListener('mousemove', this.mousemoveHandler);

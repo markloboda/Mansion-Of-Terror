@@ -14,14 +14,14 @@ class App extends Application {
   async start() {
     this.level = 0;
     this.loader = new GLTFLoader();
+    this.volume = document.getElementById("options-volume").value / 100;
 
     await this.loadNextLevel();
-    this.pointerlockchangeHandler = this.pointerlockchangeHandler.bind(this);
-    document.addEventListener(
-      "pointerlockchange",
-      this.pointerlockchangeHandler
-    );
+    this.pointerunlockHandler = this.pointerunlockHandler.bind(this);
+    document.addEventListener("pointerlockchange", this.pointerunlockHandler);
     document.addEventListener("setConditions", this.handleSetConditions.bind(this))
+    this.pointerlock();
+    this.loadSound();
   }
 
   handleSetConditions(e) {
@@ -29,6 +29,7 @@ class App extends Application {
       this.scene.gameState[condition] = e.detail[condition];
     }
   }
+  
 
   async loadNextLevel() {
     this.level++;
@@ -38,7 +39,8 @@ class App extends Application {
     Object.keys(this.scene.animations).map(animation => {
       //this.scene.animations[animation].activate();
       this.scene.animations[animation].loop = false;
-      this.scene.animations[animation].gameState = this.scene.gameState;}) // how to activate an animation (activates all animations)
+      this.scene.animations[animation].gameState = this.scene.gameState;
+    }) // how to activate an animation (activates all animations)
     this.camera = await this.loader.loadNode("Camera_Orientation");
     this.scene.interactables.map(interactable => {
       interactable.master = this.camera;
@@ -51,7 +53,7 @@ class App extends Application {
     if (!this.scene || !this.camera) {
       throw new Error("Scene or Camera not present in glTF");
     }
-    
+
     if (!this.camera.camera) {
       throw new Error("Camera node does not contain a camera reference");
     }
@@ -59,37 +61,55 @@ class App extends Application {
     this.renderer = new Renderer(this.gl);
     this.renderer.prepareScene(this.scene);
     this.resize();
-    console.log(this.scene);
   }
-  
+
+  addSoundTrack() {
+    let soundtrackElement = document.createElement("audio");
+    soundtrackElement.setAttribute("id", "main-soundtrack");
+    soundtrackElement.className = "audio";
+    soundtrackElement.src = "../common/sound/horror-atmosphere-background.mp3"
+    soundtrackElement.volume = this.volume;
+    soundtrackElement.loop = true;
+    soundtrackElement.play();
+    document.getElementById("audio-div").appendChild(soundtrackElement);
+  }
+
   enableCamera() {
+    console.log("easter egg");
     this.canvas.requestPointerLock();
   }
-  
+
   render() {
     if (this.renderer) {
       this.renderer.render(this.scene, this.camera);
     }
   }
-  
-  enableCamera() {
-    this.canvas.requestPointerLock();
-  }
-  
-  pointerlockchangeHandler() {
+
+  pointerunlockHandler() {
     if (!this.camera) {
       return;
     }
-    
-    if (document.pointerLockElement === this.canvas) {
-      this.camera.enableMovement();
-    } else {
+    if (document.pointerLockElement !== this.canvas) {
       this.camera.disableMovement();
+      // open menu
+      mainCanvas.style.display = "none";
+      fullscreen.style.display = "none";
+
+      showMainMenu();
     }
   }
+
+  pointerlock() {
+    if (!this.camera) {
+      return;
+    }
+    this.camera.enableMovement();
+    this.canvas.requestFullscreen();
+  }
+
   update() {
     if (this.scene?.levelComplete && !this.loading) {
-      this.loading = this.loadNextLevel().then(res => {this.loading = false});
+      this.loading = this.loadNextLevel().then(res => { this.loading = false });
     }
     const t = (this.time = Date.now());
     const dt = (this.time - this.startTime) * 0.001;
@@ -97,7 +117,7 @@ class App extends Application {
     if (this.camera) {
       this.camera.update(dt);
     }
-    
+
     if (this.physics) {
       this.physics.update(dt);
     }
@@ -111,8 +131,25 @@ class App extends Application {
           }
         }
       }
+    }
   }
+
+  loadSound() {
+    // add sounds here
+    const footsteps = document.createElement("audio");
+    footsteps.setAttribute("id", "footsteps-sound")
+    footsteps.src = "../common/sound/footsteps.mp3";
+    footsteps.loop = true;
+    document.getElementById("audio-div").appendChild(footsteps);
+    
+    //
+    this.updateVolume();
   }
+
+  updateVolume() {
+    document.querySelectorAll("audio").forEach(element => element.volume = this.volume);
+  }
+
   resize() {
     const w = this.canvas.clientWidth;
     const h = this.canvas.clientHeight;
@@ -122,11 +159,87 @@ class App extends Application {
     }
   }
 }
-  
-  document.addEventListener("DOMContentLoaded", () => {
-    const canvas = document.querySelector("canvas");
-    const app = new App(canvas);
-    const gui = new GUI();
-    gui.add(app, "enableCamera");
-  });
-  
+
+function hideMainMenu() {
+  document.getElementById("main-menu").style.visibility = "hidden";
+  const mainMenuContents = document.getElementsByClassName("main-menu-contents");
+  for (let i = 0; i < mainMenuContents.length; i++) {
+    mainMenuContents[i].style.display = "none";
+  }
+}
+
+function showMainMenu() {
+  document.getElementById("main-menu").style.visibility = "visible";
+  const mainMenuContents = document.getElementsByClassName("main-menu-contents");
+  for (let i = 0; i < mainMenuContents.length; i++) {
+    mainMenuContents[i].style.display = "block";
+  }
+}
+
+function hideOptionsMenu() {
+  const optionsMenu = document.getElementById("options-menu");
+  optionsMenu.style.display = "none";
+  const optionsContents = document.getElementsByClassName("options-contents");
+  for (let i = 0; i < optionsContents.length; i++) {
+    optionsContents[i].style.display = "none";
+  }
+}
+
+function showOptionsMenu() {
+  const optionsMenu = document.getElementById("options-menu");
+  optionsMenu.style.display = "block";
+  const optionsContents = document.getElementsByClassName("options-contents");
+  for (let i = 0; i < optionsContents.length; i++) {
+    optionsContents[i].style.display = "block";
+  }
+}
+
+
+let loaded = false;
+const canvas = document.querySelector("canvas");
+const app = new App(canvas);
+
+const mainCanvas = document.getElementById("main-canvas");
+const fullscreen = document.getElementById("fullscreen");
+
+fullscreen.style.display = "hidden";
+canvas.style.display = "hidden";
+
+const playButton = document.getElementById("play-button");
+
+playButton.addEventListener("click", () => {
+  hideMainMenu();
+  if (!loaded) {
+    loaded = true;
+    app.play();
+  } else {
+    fullscreen.style.display = "block";
+    canvas.style.display = "block";
+  }
+  app.pointerlock();
+  app.enableCamera();
+  app.addSoundTrack();
+});
+
+const optionsButton = document.getElementById("options-button");
+
+optionsButton.addEventListener("click", () => {
+  hideMainMenu();
+  showOptionsMenu();
+});
+
+document.getElementById("options-back").addEventListener("click", () => {
+  hideOptionsMenu();
+  showMainMenu();
+});
+
+document.getElementById("options-volume").addEventListener("change", event => {
+  app.volume = event.target.value / 100;
+  app.updateVolume();
+});
+
+const quitButton = document.getElementById("quit-button");
+
+quitButton.addEventListener("click", () => {
+  window.close();
+});

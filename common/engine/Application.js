@@ -4,10 +4,8 @@ export class Application {
         this._update = this._update.bind(this);
 
         this.canvas = canvas;
+            
         this._initGL(glOptions);
-        this.start();
-
-        requestAnimationFrame(this._update);
     }
 
     _initGL(glOptions) {
@@ -43,6 +41,12 @@ export class Application {
 
             this.resize();
         }
+    }
+
+    play() {
+        this.start();
+
+        requestAnimationFrame(this._update);
     }
 
     start() {

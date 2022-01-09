@@ -1,6 +1,7 @@
 body, html {
     margin: 0;
     padding: 0;
+    background-color: black;
 }
 
 * {
@@ -51,4 +52,58 @@ a.back {
 
 a.back:hover {
     background: #ddd;
+}
+
+#main-menu {
+  top: 50%;
+  left: 50%;
+  right: 50%;
+  bottom: 50%;
+  position: absolute;
+}
+
+.main-menu .main-menu-contents {
+  transform: translate(-50%, -50%);
+  background-color: rgb(22, 22, 22);
+  color: rgb(248, 110, 110);
+  width: 20vw;
+  height: 4vw;
+  text-align: center;
+  font-size: 3vw;
+  margin: 4px 2px;
+  opacity: 0.6;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.main-menu-contents:hover {
+  background-color: rgb(95, 0, 0);
+}
+
+.options-menu {
+    display: none;
+    top: 50%;
+    left: 50%;
+    right: 50%;
+    bottom: 50%;
+    position: absolute;
+}
+
+.options-menu .options-contents {
+    display: none;
+    transform: translate(-50%, -50%);
+    background-color: rgb(22, 22, 22);
+    color: rgb(248, 110, 110);
+    width: 20vw;
+    height: 4vw;
+    text-align: center;
+    font-size: 3vw;
+    margin: 4px 2px;
+    opacity: 0.6;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+#options-volum {
+    z-index: 10;
 }
