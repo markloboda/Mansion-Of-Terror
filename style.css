@@ -104,6 +104,6 @@ a.back:hover {
     cursor: pointer;
 }
 
-#options-volum {
+.prompt {
     z-index: 10;
 }

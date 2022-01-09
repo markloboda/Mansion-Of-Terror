@@ -33,7 +33,7 @@ class App extends Application {
 
   async loadNextLevel() {
     this.level++;
-    await this.loader.load(`Room${this.level}`);
+    await this.loader.load(scenes[`Room${this.level}`]);
     this.scene = await this.loader.loadScene(this.loader.defaultScene);
     this.scene.gameState = {};
     Object.keys(this.scene.animations).map(animation => {
@@ -174,6 +174,13 @@ function showMainMenu() {
   for (let i = 0; i < mainMenuContents.length; i++) {
     mainMenuContents[i].style.display = "block";
   }
+
+  // hide prompts
+  let overlay = document.getElementById("overlay").childNodes;
+  for (let i = 0; i < overlay.length; i++) {
+    overlay[i].className = "hide";
+  }
+  console.log(overlay);
 }
 
 function hideOptionsMenu() {
