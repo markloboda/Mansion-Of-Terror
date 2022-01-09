@@ -1,6 +1,7 @@
 body, html {
     margin: 0;
     padding: 0;
+    background-color: black;
 }
 
 * {
@@ -24,7 +25,7 @@ body, html {
     height: 100%;
 }
 .overlay h2 {
-    position: absolute;
+    position: fixed;
     left: 50%;
     top: 80%;
     color: rgb(31, 179, 68);
@@ -32,7 +33,7 @@ body, html {
     text-shadow: 0px 0px 5px rgb(0, 173, 52);
 }
 .overlay .show {
-    display: block;
+    display: inline-block;
 }
 
 .overlay .hide {
@@ -51,4 +52,61 @@ a.back {
 
 a.back:hover {
     background: #ddd;
+}
+
+#main-menu {
+  top: 50%;
+  left: 50%;
+  right: 50%;
+  bottom: 50%;
+  position: absolute;
+}
+
+.main-menu .main-menu-contents {
+  transform: translate(-50%, -50%);
+  background-color: rgb(22, 22, 22);
+  color: rgb(248, 110, 110);
+  width: 20vw;
+  height: 4vw;
+  text-align: center;
+  font-size: 3vw;
+  margin: 4px 2px;
+  opacity: 0.6;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.main-menu-contents:hover {
+  background-color: rgb(95, 0, 0);
+}
+
+.options-menu {
+    display: none;
+    top: 50%;
+    left: 50%;
+    right: 50%;
+    bottom: 50%;
+    position: absolute;
+}
+
+.options-menu .options-contents {
+    display: none;
+    transform: translate(-50%, -50%);
+    background-color: rgb(22, 22, 22);
+    color: rgb(248, 110, 110);
+    width: 20vw;
+    height: 4vw;
+    text-align: center;
+    font-size: 3vw;
+    margin: 4px 2px;
+    opacity: 0.6;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.input-label {
+    display: inline-block;
+    text-align: right;
+    font-size: 2vw;
+    color: white;
 }

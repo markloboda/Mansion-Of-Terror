@@ -102,6 +102,32 @@ export class Animation {
     }
   }
 
+  playSound() {
+    const query = document.querySelectorAll("audio");
+    let found = false;
+    let sound;
+    for (let i = 0; i < query.length; i++) {
+      if (i.src == "../common/sound/" + this.soundName) {
+        found = true;
+        sound = i;
+        break;
+      }
+    }
+    if (!found) {
+      let sound = document.createElement("audio");
+      sound.setAttribute("id", "main-soundtrack");
+      sound.className = "audio";
+      sound.src = "../common/sound/" + this.soundName;
+      sound.play();
+      document.getElementById("audio-div").appendChild(sound);
+    } else {
+      i.play();
+    }
+
+    
+
+    
+  }
   
   parseAfterAction(after) {
     if (!after) {
@@ -115,6 +141,7 @@ export class Animation {
         case "setCondition": actions.push(this.setCondition.bind(this)); break;
         case "disableInteractable": actions.push(this.disableInteractable.bind(this)); break;
         case "resetAnimation": actions.push(this.resetAnimation.bind(this)); break;
+        case "playSound": actions.push(this.playSound.bind(this)); break;
       }
     }
     return actions;
