@@ -13,37 +13,31 @@ Igralec mora priti čez vse 3 sobe, da lahko zbeži in s tem zaključi igro.
 V svetu, kjer se dogaja igra, so na 3d modelih uporabljene različne texture,
 da je izgled igre čim bolj realističen in vživljajoč.
 
-## Kljucne lokacije
-Klučne lokacije v igri so lokacije interakcij, kjer mora igralec interaktirati z predmeti, da lahko napreduje.
+## Ključne lokacije
+Klučne lokacije v igri so lokacije interakcij, kjer mora igralec interaktirati s predmeti, da lahko napreduje.
 To so:
--V prvi sobi:
-    -prostor kjer igralec pobere varovalko s tal,
-    -varovalna omarica, kamor igralec vstavi varovalko,
-    -dvižna vrata, ki se lahko odprejo le ko igralec poveže električni krog z vstavljanjem varovalke v omarico,
-    -stikalo za dvižna vrata
+- V prvi sobi:
+    - prostor kjer igralec pobere varovalko s tal,
+    - varovalna omarica, kamor igralec vstavi varovalko,
+    - dvižna vrata, ki se lahko odprejo le ko igralec poveže električni krog z vstavljanjem varovalke v omarico,
+    - stikalo za dvižna vrata
 
--V drugi sobi:
-    -prostor, na koncu stopnic, kjer se stopnice udrejo, in igralec z njimi pade v črno globino, da se zgodi prehod v tretjo sobo,
-    -Ko igralec zaključi s tretjo sobo se ponovno znajde v drugi sobi, sedaj lahko odpre vrata dvigala, dvigalo pa ga popelje v konec igre
+- V drugi sobi:
+    - prostor, na koncu stopnic, kjer se stopnice udrejo, in igralec z njimi pade v črno globino, da se zgodi prehod v tretjo sobo,
+    - Ko igralec zaključi s tretjo sobo se ponovno znajde v drugi sobi, sedaj lahko odpre vrata dvigala, dvigalo pa ga popelje v konec igre
 
--V tretji sobi:
-    -prostor na drugem koncu kanalizacije, kjer je lestev, katero mora igralec doseči za napredovanje,
-    -do lestve za napredovanje pride s prečaknjem kanalizacijskega potoka na večih mestih, s pomočjo skakanja po odpadkih in ruševinah, ki so v potoku
+- V tretji sobi:
+    - prostor na drugem koncu kanalizacije, kjer je lestev, katero mora igralec doseči za napredovanje,
+    - do lestve za napredovanje pride s prečaknjem kanalizacijskega potoka na večih mestih, s pomočjo skakanja po odpadkih in ruševinah, ki so v potoku
 
-1.1.4 Velikost
+## Velikost
 Igralec se po stavbi premika v pogledu prve osebe.
 Velikosti sob so približne meram prostorov v realnem življenju,
 Prva soba ki je skladišče, je večja in vsebuje velike police.
-Najvišji nivo interakcije igralca z objektom, je nošenje varovalke do omarice.
-Pri ostalih interakcijah pa se izvede animacija.
 
-1.1.5 Objekti
-Vse modele objektov in sob smo izdelali sami, teksture pa smo našli na spletu in nekatere modificirali.
+## Objekti
+Vse modele objektov in sob smo izdelali sami s pomočjo programa blender, teksture pa smo našli na spletu in nekatere modificirali.
 Poglavitni objekti so varovalka, dvižna vrata, stikalo za dvižna vrata, tla, ki se vdrejo, vrata dvigala.
-
-1.1.6 Cas ˇ
-V igri je uporabljen realni čas.
-
 
 ## 2.) Igralni pogon in uporabljene tehnologije
 
