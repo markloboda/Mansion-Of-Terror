@@ -12,7 +12,7 @@ import { vec3 } from "../lib/gl-matrix-module.js";
 
 class App extends Application {
   async start() {
-    this.level = 1;
+    this.level = 0;
     this.loader = new GLTFLoader();
     this.volume = document.getElementById("options-volume").value / 100;
 
