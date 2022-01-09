@@ -7,21 +7,13 @@
 Igra Mansion of Terror je strašljiva sestavljanka. Vse sobe so temne, edina svetloba prihaja iz svetilke kar poskrbi za bolj strašno vzdušje, v ozadju pa se tudi predvaja strašljiva glasba.
 Svetilka je realizirana v glsl senčilniku. V igri so objekti s katerimi igralec lahko interektira. Ob interakciji se lahko zgodijo različne stvari, ponavadi pa so to animacije.
 
-1.1 Opis sveta
+## 1.) Opis sveta
 Igra se dogaja v stavbi s tremi sobami.
 Igralec mora priti čez vse 3 sobe, da lahko zbeži in s tem zaključi igro.
 V svetu, kjer se dogaja igra, so na 3d modelih uporabljene različne texture,
-da je izgled igre čim bolj realistično in vživljajoče.
+da je izgled igre čim bolj realističen in vživljajoč.
 
-1.1.1 Pregled
-Podpoglavje naj vsebuje podrobnejso predstavitev sveta, ˇ
-s katerim interaktira uporabnik.
-
-1.1.2 Ozadje
-Igra Mansion of terror se dogaja v zaprtih, zatemnjenih prostorih, edino ozadje, ki se vidi so teksutre na stenah in predmetih v sobi.
-V prehodu ko igralec pade iz druge sobe v tretjo, smo za ozadje uporabili le črno barvo.
-
-1.1.3 Kljucne lokacije ˇ
+## Kljucne lokacije
 Klučne lokacije v igri so lokacije interakcij, kjer mora igralec interaktirati z predmeti, da lahko napreduje.
 To so:
 -V prvi sobi:
@@ -60,7 +52,7 @@ nega casa ali 1 minuta v igri predstavlja 1 uro igralnega ˇ
 casa). ˇ
 
 
-## 1.2 Igralni pogon in uporabljene tehnologije
+## 2.) Igralni pogon in uporabljene tehnologije
 
 Za izdelavo igre smo uporabili samo webgl2 + JavaScript, modele in animacije smo naložili iz gltf blender izvozov. Za bazo igralnega pogona smo uporabili 90-gltf primer iz webgl2-examples repozitorija: https://github.com/UL-FRI-LGM/webgl2-examples/tree/master/examples/90-gltf  
 
@@ -120,21 +112,7 @@ V igri smo uporabili tehnologijo AABB. To je okrajšava za Axis Aligned Boundry 
 Uporabili smo Perspektivno kamero uvoženo iz blenderja preko gltf-ja.
 Igralca se ne vidi.
 
-## 2. Osebek
-V tem poglavju podrobno predstavite osebek oz. osebke
-v igri. Povejte nad katerimi osebki bo imel nadzor uporabnik in nad katerimi ne. Kako se z osebkom oz. osebki
-upravlja, Kaksne so akcije osebka ipd. ˇ
-3 Uporabniski vmesnik ˇ
-Poglavje naj podrobno predstavi uporabniski vmesnik. Od ˇ
-izgleda pa do same implementacije in interakcije. Utemeljite zakaj ste uporabili taksen vmesnik kot ste ga. ˇ
-4 Glasba in zvok
-V kolikor v igri uporabite glasbo in zvok predstavite kaksna glasba je v va ˇ si igri in zakaj. Ali se glasba prilagaja ˇ
-posameznim situacijam? Kako je z zvocnimi efekti? Kje ˇ
-ste jih pridobili? Kje uporabili?
-5 Gameplay
-Nenazadnje predstavite tudi sam gameplay - potek igranja vase igre. Kako se igra pri ˇ cne in na kak ˇ sne na ˇ cine jo ˇ
-lahko zakljucimo? Kak ˇ sne akcije so uporabniku na voljo ˇ
-med samo igro in na kaj vplicajo?
+
 6 Zakljucki in mo ˇ zne nadgradnje ˇ
 V poglavju povzemite cesa ste se pri izdelavi igre nau ˇ cili. ˇ
 Ali ste pri predmetu pridobili dovolj znanja oz. kje je bilo
