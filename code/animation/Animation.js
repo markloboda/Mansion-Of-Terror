@@ -115,6 +115,7 @@ export class Animation {
         case "setCondition": actions.push(this.setCondition.bind(this)); break;
         case "disableInteractable": actions.push(this.disableInteractable.bind(this)); break;
         case "resetAnimation": actions.push(this.resetAnimation.bind(this)); break;
+        case "playKey": actions.push(this.playKey.bind(this)); break;
       }
     }
     return actions;
@@ -152,6 +153,9 @@ export class Animation {
         this.gameState[condition] = this.setConditions[condition];
       }
     }
+  }
+  playKey() {
+    
   }
 
   linearInterpolation(transform, t) {
