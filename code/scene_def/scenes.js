@@ -54,7 +54,10 @@ export const scenes = {
         disableInteractables: ["Invisible_openDoors"],
         disableNodes: ["right_door"],
       },
-      garage_open_action: { conditions: ["fuse_inserted"] }, // garage open
+      garage_open_action: { 
+        conditions: ["fuse_inserted"],
+        after: ["gotoNextLevel"]  
+      }, // garage open
       fusebox_open_action: {
         conditions: ["!fusebox_open"],
         after: ["setCondition"],
