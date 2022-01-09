@@ -5,29 +5,45 @@
 ## Abstract
 
 Igra Mansion of Terror je strašljiva sestavljanka. Vse sobe so temne, edina svetloba prihaja iz svetilke kar poskrbi za bolj strašno vzdušje, v ozadju pa se tudi predvaja strašljiva glasba.
-Svetilka je realizirana v glsl senčilniku. V igri so objekti s katerimi igralec lahko interektira. Ob interakciji se lahko zgodijo različne stvari, ponavadi pa so to animacije.  
-Igralec mora rešiti sestavljanko da lahko napreduje v drugo sobo.
-
+Svetilka je realizirana v glsl senčilniku. V igri so objekti s katerimi igralec lahko interektira. Ob interakciji se lahko zgodijo različne stvari, ponavadi pa so to animacije.
 
 1.1 Opis sveta
-Na tem mestu podajte grob opis sveta v igri, ki ga podrobenje definirate v sledecih podpoglavjih. Prav tako ˇ
-definirajte v kaksnem stilu bo izdelan svet (npr. reali- ˇ
-sticen, stiliziran, risankast, ipd.). Opredelite tudi ali se ˇ
-bodo osebki v svetu pomikali v eni, dveh ali treh dimenzijah.
+Igra se dogaja v stavbi s tremi sobami.
+Igralec mora priti čez vse 3 sobe, da lahko zbeži in s tem zaključi igro.
+V svetu, kjer se dogaja igra, so na 3d modelih uporabljene različne texture,
+da je izgled igre čim bolj realistično in vživljajoče.
+
 1.1.1 Pregled
 Podpoglavje naj vsebuje podrobnejso predstavitev sveta, ˇ
 s katerim interaktira uporabnik.
+
 1.1.2 Ozadje
-Opisite kako je predstavljeno ozadje sveta v igri - pre- ˇ
-deli s katerimi uporabnik ne interaktira a se vedno pred- ˇ
-stavljajo del sveta v igri (npr. nebo v ozadju, oddaljeni
-predmeti ipd.)
+Igra Mansion of terror se dogaja v zaprtih, zatemnjenih prostorih, edino ozadje, ki se vidi so teksutre na stenah in predmetih v sobi.
+V prehodu ko igralec pade iz druge sobe v tretjo, smo za ozadje uporabili le črno barvo.
+
 1.1.3 Kljucne lokacije ˇ
-Izpostavite kljucne lokacije v svetu, ki igrajo pomembno ˇ
-vlogo za uporabnika. Navedite zakaj so pomembne, na
-kaksne na ˇ cin bodo predstavljene (npr. doma ˇ ci tabor, na- ˇ
-sprotnikov tabor, nahajalisˇca dobrin ipd.). ˇ
+Klučne lokacije v igri so lokacije interakcij, kjer mora igralec interaktirati z predmeti, da lahko napreduje.
+To so:
+-V prvi sobi:
+    -prostor kjer igralec pobere varovalko s tal
+    -varovalna omarica, kamor igralec vstavi varovalko
+    -dvižna vrata, ki se lahko odprejo le ko igralec poveže električni krog z vstavljanjem varovalke v omarico
+
+-V drugi sobi:
+    -prostor, na koncu stopnic, kjer se stopnice udrejo, in igralec z njimi pade v črno globino, da se zgodi prehod v tretjo sobo
+    -Ko igralec zaključi s tretjo sobo se ponovno znajde v drugi sobi, sedaj lahko odpre vrata dvigala, dvigalo pa ga popelje v konec igre
+
+-V tretji sobi:
+    -prostor na drugem koncu kanalizacije, kjer je lestev, katero mora igralec doseči za napredovanje
+    -do lestve za napredovanje pride s prečaknjem kanalizacijskega potoka na večih mestih, s pomočjo skakanja po odpadkih in ruševinah, ki so v potoku
+
 1.1.4 Velikost
+Igralec se po stavbi premika v pogledu prve osebe.
+Velikosti sob so približne meram prostorov v realnem življenju, 
+Prva soba ki je skladišče, je večja in vsebuje velike police.
+Najvišji nivo interakcije igralca z objektom, je no
+
+
 Dobro opredelite velikost sveta in nivo na katerem bo
 s svetom interaktiral uporabnik. Kaksen pogled v svet ˇ
 bo primarno zajet v igri (npr. obmocje mize, sobe, me- ˇ
