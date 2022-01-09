@@ -1,38 +1,186 @@
-
+const room2Animations = {
+  "initial_cell.001_cellAction": { conditions: ["breakStairs"] },
+  "initial_cell.001_cell.001Action": { conditions: ["breakStairs"] },
+  "initial_cell.001_cell.002Action": { conditions: ["breakStairs"] },
+  "initial_cell.001_cell.003Action": { conditions: ["breakStairs"] },
+  "initial_cell.001_cell.004Action": { conditions: ["breakStairs"] },
+  "initial_cell.001_cell.005Action": { conditions: ["breakStairs"] },
+  "initial_cell.001_cell.006Action": { conditions: ["breakStairs"] },
+  "initial_cell.002Action": { conditions: ["breakStairs"] },
+  "initial_cell.003_cellAction": { conditions: ["breakStairs"] },
+  "initial_cell.003_cell.001Action": { conditions: ["breakStairs"] },
+  "initial_cell.003_cell.002Action": { conditions: ["breakStairs"] },
+  "initial_cell.003_cell.003Action": { conditions: ["breakStairs"] },
+  "initial_cell.003_cell.004Action": { conditions: ["breakStairs"] },
+  "initial_cell.003_cell.005Action": { conditions: ["breakStairs"] },
+  "initial_cell.003_cell.006Action": { conditions: ["breakStairs"] },
+  initial_cell_cellAction: { conditions: ["breakStairs"] },
+  "initial_cell_cell.001Action": { conditions: ["breakStairs"] },
+  "initial_cell_cell.002Action": { conditions: ["breakStairs"] },
+  "initial_cell_cell.003Action": { conditions: ["breakStairs"] },
+  "initial_cell_cell.004Action": { conditions: ["breakStairs"] },
+  "Cube.070_cellAction": { conditions: ["breakStairs"] },
+  "Cube.070_cell.003Action": { conditions: ["breakStairs"] },
+  "Cube.070_cell.004Action": { conditions: ["breakStairs"] },
+  "Cube.070_cell.006_cellAction": { conditions: ["breakStairs"] },
+  "Cube.070_cell.006_cell.001Action": { conditions: ["breakStairs"] },
+  "Cube.070_cell.006_cell.002Action": { conditions: ["breakStairs"] },
+  "Cube.070_cell.006_cell.004Action": { conditions: ["breakStairs"] },
+  "Cube.070_cell.006_cell.005Action": { conditions: ["breakStairs"] },
+  "Cube.070_cell.007_cellAction": { conditions: ["breakStairs"] },
+  "Cube.070_cell.007_cell.001Action": { conditions: ["breakStairs"] },
+  "Cube.070_cell.007_cell.002Action": { conditions: ["breakStairs"] },
+  "Cube.070_cell.007_cell.003Action": { conditions: ["breakStairs"] },
+  "Cube.070_cell.007_cell.004Action": { conditions: ["breakStairs"] },
+  "Cube.070_cell.007_cell.005Action": { conditions: ["breakStairs"] },
+  "Cube.070_cell.007_cell.007Action": { conditions: ["breakStairs"] },
+  "Cube.070_cell.008Action": { conditions: ["breakStairs"] },
+  "Cube.070_cell.009_cellAction": { conditions: ["breakStairs"] },
+  "Cube.070_cell.009_cell.001Action": { conditions: ["breakStairs"] },
+  "Cube.070_cell.009_cell.002Action": { conditions: ["breakStairs"] },
+  "Cube.070_cell.009_cell.003Action": { conditions: ["breakStairs"] },
+  "Cube.070_cell.009_cell.005Action": { conditions: ["breakStairs"] },
+  "Cube.075_cell.002Action": { conditions: ["breakStairs"] },
+  "Cube.075_cell.003Action": { conditions: ["breakStairs"] },
+  "Cube.075_cell.005_cellAction": { conditions: ["breakStairs"] },
+  "Cube.075_cell.005_cell.001Action": { conditions: ["breakStairs"] },
+  "Cube.075_cell.005_cell.003_cell.001Action": {
+    conditions: ["breakStairs"],
+  },
+  "Cube.075_cell.005_cell.003_cell.003Action": {
+    conditions: ["breakStairs"],
+  },
+  "Cube.075_cell.005_cell.003_cell.005Action": {
+    conditions: ["breakStairs"],
+  },
+  "Cube.075_cell.005_cell.003_cell.006Action": {
+    conditions: ["breakStairs"],
+  },
+  "Cube.075_cell.005_cell.003_cell.007Action": {
+    conditions: ["breakStairs"],
+  },
+  "Cube.075_cell.005_cell.004Action": { conditions: ["breakStairs"] },
+  "Cube.075_cell.005_cell.006Action": { conditions: ["breakStairs"] },
+  "Cube.075_cell.005_cell.007Action": { conditions: ["breakStairs"] },
+  "Cube.075_cell.006Action": { conditions: ["breakStairs"] },
+  "Cube.075_cell_cellAction": { conditions: ["breakStairs"] },
+  "Cube.075_cell_cell.001Action": { conditions: ["breakStairs"] },
+  "Cube.075_cell_cell.002Action": { conditions: ["breakStairs"] },
+  "Cube.075_cell_cell.003Action": { conditions: ["breakStairs"] },
+  "Cube.075_cell_cell.004Action": { conditions: ["breakStairs"] },
+  "Cube.075_cell_cell.005Action": { conditions: ["breakStairs"] },
+  "Cube.075_cell_cell.006Action": { conditions: ["breakStairs"] },
+  "Cube.075_cell_cell.007Action": { conditions: ["breakStairs"] },
+  "Cube.076_cellAction": { conditions: ["breakStairs"] },
+  "Cube.076_cell.001_cell.002Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.001_cell.003Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.001_cell.004Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.002_cell.001Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.002_cell.002Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.002_cell.004Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.002_cell.005Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.004_cell.002Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.004_cell.004Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.004_cell.005Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.004_cell.006Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.004_cell.007Action": { conditions: ["breakStairs"] },
+  floorfall: { conditions: ["breakStairs"] },
+  "Cube.076_cell.001_cell.007Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.001_cell.008Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.001_cell.009Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.002_cell.006Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.002_cell.007Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.002_cell.009Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.002_cell.010Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.007Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.004_cell.009Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.004_cell.011Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.004_cell.012Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.004_cell.013Action": { conditions: ["breakStairs"] },
+  "Cube.076_cell.004_cell.014Action": { conditions: ["breakStairs"] },
+  otvoritev: { after: "levelComplete" },
+};
 
 export const scenes = {
   Room1: {
     name: "first_room",
     interactables: [
-      {name: "Flashlight", type: "carry", carrying: true},
-      {name: "Fuse", type: "carry", setConditions: {"carry_fuse": true}},
-      {name: "Fusebox", type: "interact", interact: {play: ["fusebox_open_action", "Fuse_upper_insert", "Fuse_lower_insert"]}},
-      {name: "Switch", type: "interact", interact: {play: ["HandleAnimation"]}},
-      {name: "Invisible_openDoors", aabbEnabled: false, type: "interact", interact: {play: ["left_doorAction", "right_doorAction"]}},
+      { name: "Flashlight", type: "carry", carrying: true },
+      { name: "Fuse", type: "carry", setConditions: { carry_fuse: true } },
+      {
+        name: "Fusebox",
+        type: "interact",
+        interact: {
+          play: [
+            "fusebox_open_action",
+            "Fuse_upper_insert",
+            "Fuse_lower_insert",
+          ],
+        },
+      },
+      {
+        name: "Switch",
+        type: "interact",
+        interact: { play: ["HandleAnimation"] },
+      },
+      {
+        name: "Invisible_openDoors",
+        aabbEnabled: false,
+        type: "interact",
+        interact: { play: ["left_doorAction", "right_doorAction"] },
+      },
     ],
     animations: {
-      "left_doorAction": {before: ["disableAABB", "disableInteractable"], disableInteractables: ["Invisible_openDoors"], disableNodes: ["left_door"]},
-      "right_doorAction": {before: ["disableAABB", "disableInteractable"], disableInteractables: ["Invisible_openDoors"], disableNodes: ["right_door"]},
-      "garage_open_action": {conditions: ["fuse_inserted"]}, // garage open
-      "fusebox_open_action": {conditions: ["!fusebox_open"], after: ["setCondition"], setConditions: {"fusebox_open": true}}, // open fusebox
-      "Fuse_upper_insert": {before: ["disableInteractable"], disableInteractables: ["Fuse", "Fusebox"], conditions: ["carry_fuse", "fusebox_open", "!fuse_inserted"], after: ["setCondition"], setConditions: {"fuse_inserted": true}},
-      "Fuse_lower_insert": {before: ["disableInteractable"], disableInteractables: ["Fuse", "Fusebox"], conditions: ["carry_fuse", "fusebox_open", "!fuse_inserted"], after: ["setCondition"], setConditions: {"fuse_inserted": true}},
-      "HandleAnimation": {after: ["trigger", "resetAnimation"], trigger: ["garage_open_action"]}
-    }
+      left_doorAction: {
+        before: ["disableAABB", "disableInteractable"],
+        disableInteractables: ["Invisible_openDoors"],
+        disableNodes: ["left_door"],
+      },
+      right_doorAction: {
+        before: ["disableAABB", "disableInteractable"],
+        disableInteractables: ["Invisible_openDoors"],
+        disableNodes: ["right_door"],
+      },
+      garage_open_action: { conditions: ["fuse_inserted"] }, // garage open
+      fusebox_open_action: {
+        conditions: ["!fusebox_open"],
+        after: ["setCondition"],
+        setConditions: { fusebox_open: true },
+      }, // open fusebox
+      Fuse_upper_insert: {
+        before: ["disableInteractable"],
+        disableInteractables: ["Fuse", "Fusebox"],
+        conditions: ["carry_fuse", "fusebox_open", "!fuse_inserted"],
+        after: ["setCondition"],
+        setConditions: { fuse_inserted: true },
+      },
+      Fuse_lower_insert: {
+        before: ["disableInteractable"],
+        disableInteractables: ["Fuse", "Fusebox"],
+        conditions: ["carry_fuse", "fusebox_open", "!fuse_inserted"],
+        after: ["setCondition"],
+        setConditions: { fuse_inserted: true },
+      },
+      HandleAnimation: {
+        after: ["trigger", "resetAnimation"],
+        trigger: ["garage_open_action"],
+      },
+    },
   },
   Room2: {
     name: "second_room",
     interactables: [
-      {name: "Flashlight", type: "carry", carrying: true},
+      { name: "Flashlight", type: "carry", carrying: true },
+      {
+        name: "Invisible_activate_floor_break",
+        type: "interact",
+        interact: { play: Object.keys(room2Animations) },
+      },
     ],
-    animations: {
-      "otvoritev": {}
-    }
+    animations: room2Animations,
   },
   Room3: {
     name: "parkour_room",
-    interactables: [
-      {name: "Flashlight", type: "carry", carrying: true}
-    ]
-  }
-}
+    interactables: [{ name: "Flashlight", type: "carry", carrying: true }],
+  },
+};
