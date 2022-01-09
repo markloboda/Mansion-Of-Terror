@@ -160,6 +160,7 @@ Med samim igranjem igre se na ekranu pokaže "Press [F] to interact." ali "Press
 ![carry prompt](./screenshots/room1_gameplay2.png)
 ![interact](./screenshots/room1_gameplay4.png)
 
+<div style="page-break-after: always;"></div>
 
 ## 4.) Glasba in zvok
 Med igranjem igre se predvaja strašljiva glasba. Nivo glasnosti lahko znižamo v meniju.
