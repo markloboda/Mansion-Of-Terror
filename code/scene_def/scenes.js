@@ -25,7 +25,7 @@ export const scenes = {
         type: "interact",
         interact: { play: ["HandleAnimation"] },
       },
-    {
+      {
         name: "Invisible_openDoors",
         aabbEnabled: false,
         type: "interact",
@@ -43,9 +43,9 @@ export const scenes = {
         disableInteractables: ["Invisible_openDoors"],
         disableNodes: ["right_door"],
       },
-      garage_open_action: { 
+      garage_open_action: {
         conditions: ["fuse_inserted"],
-        after: ["gotoNextLevel"]  
+        after: ["gotoNextLevel"]
       }, // garage open
       fusebox_open_action: {
         conditions: ["!fusebox_open"],
@@ -80,9 +80,16 @@ export const scenes = {
       {
         name: "Invisible.002",
         type: "collide",
-        interact: { play: Object.keys(room2Animations).filter(string => {
-          return string.includes("cell");
-        } ) },
+        aabbEnabled: false,
+        interact: {
+          play: Object.keys(room2Animations).filter(string => {
+            return string.includes("cell");
+          })
+        }
+      }, {
+        name: "gumb",
+        type: "interact",
+        interact: { play: ["resetke1", "resetke2"] }
       },
     ],
     animations: room2Animations,

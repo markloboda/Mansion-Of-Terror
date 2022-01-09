@@ -1,4 +1,6 @@
 const room2Animations = {
+  "resetke1": {"conditions": ["switchTrigger"]},
+  "resetke2": {"conditions": ["switchTrigger"]},
   "Wall.018Action": { conditions: [] },
   "initial_cell.001_cellAction": { conditions: [] },
   "initial_cell.001_cell.001Action": { conditions: [] },
