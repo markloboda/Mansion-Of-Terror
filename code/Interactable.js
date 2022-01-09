@@ -78,30 +78,35 @@ export class Interactable extends Node {
     }
   }
 
+
+  _playnote() {
+    
+  }
+
   _playPiano() {
     if (this.keys['Digit0']) {
-      playNote("note0")
+      _playnote("note0")
     }
     if (this.keys['Digit1']) {
-      playNote("note1")
+      _playnote("note1")
     }
     if (this.keys['Digit2']) {
-      playNote("note2")
+      _playnote("note2")
     }
     if (this.keys['Digit3']) {
-      playNote("note3")
+      _playnote("note3")
     }
     if (this.keys['Digit4']) {
-      playNote("note4")
+      _playnote("note4")
     }
     if (this.keys['Digit5']) {
-      playNote("note5")
+      _playnote("note5")
     }
     if (this.keys['Digit6']) {
-      playNote("note6")
+      _playnote("note6")
     }
     if (this.keys['Digit7']) {
-      playNote("note7")
+      _playnote("note7")
     }
     console.log(this.keys);
   }

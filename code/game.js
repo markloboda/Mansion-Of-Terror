@@ -141,7 +141,14 @@ class App extends Application {
     footsteps.src = "../common/sound/footsteps.mp3";
     footsteps.loop = true;
     document.getElementById("audio-div").appendChild(footsteps);
-    
+
+    for (let i = 1; i < 8; i++) {
+      const key = document.createElement("audio");
+      key.setAttribute("id", "piano-key" + i);
+      key.setAttribute("class", "piano-key");
+      key.src = "../common/sound/piano/tipka" + i + ".mp3";
+      document.getElementById("audio-div").appendChild(key);
+    }
     //
     this.updateVolume();
   }
