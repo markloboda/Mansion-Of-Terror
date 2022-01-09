@@ -62,36 +62,45 @@ Ker ima naša igra določen nek potek (npr: Preden igralec lahko odpre vrata, mo
 
 ```js
 export const scenes = Room1: {
-    name: "first_room",
-    interactables: [
-      { name: "Flashlight", type: "carry", carrying: true },
-      {
-        name: "Switch",
-        type: "interact",
-        interact: { play: ["SwitchAnimation"] },
-      },
-    ],
-    animations: {
-      SwitchAnimation: {
-        before: ["disableAABB", "disableInteractable"],
-        disableInteractables: ["Invisible_openDoors"],
-        disableNodes: ["left_door"],
-        after: [""]
-      }
+  name: "first_room",
+  interactables: [
+    { name: "Flashlight", type: "carry", carrying: true },
+    {
+      name: "Switch",
+      type: "interact",
+      interact: { play: ["SwitchAnimation"] },
+      setConditions: ["switch_active"]
+    },
+  ],
+  animations: {
+    SwitchAnimation: {
+      after: ["trigger"],
+      trigger: ["door_open_action"]
+    }
+  },
+  door_open_action: {
+    conditions: ["switch_active"],
+    after: ["gotoNextLevel"]
   }
 }
-````
+```
+
+### Interpretacija zgornjega opisa iz formata:  
+- Definirana sta dva interactables objekta. 
+  - Prvi je Flashlight, ki je definiran v vsaki sobi. Flashlight ima definiran `type: carry`, kar pomeni; ko bo igralec interaktiral s Flashlight objektom, ga bo nosil s seboj. Objekt bo imel od tam naprej rotacijo in translacijo od kamere. 
+  - Drugi interactable objekt je Switch, ko interaktiramo z njim se zažene animacija SwitchAnimation, ki je definirana spodaj, postavi se pogoj `switch_active`.
+
+- Definirani sta dve animaciji. 
+  - Prva je SwitchAnimation, animacija ima definiran `after: ["trigger"]`, to je ime funkcije, ki se bo izvedla po animaciji. `trigger` je funkcija, ki sproži animacijo. V tem primeru se sproži animacija definirana pod trigger property-jom -> `trigger: ["door_open_action"]`. Animacija se sproži pogojno: `conditions: ["switch_active"]`.Lahko se sproži več animacij.
+  - Ko se sproži door_open_action, se izvede gotoNextLevel, ki naloži naslednjo sobo.
+
 
 ## 1.3 Pogled
 
 Uporabili smo Perspektivno kamero uvoženo iz blenderja preko gltf-ja.
 Igralca se ne vidi.
 
-1.3 Pogled
-Definirajte kaksen bo pogled v va ˇ so igro. Kak ˇ sno kamero ˇ
-boste uporabili, kaj vse bo uporabnik videl, kako boste
-poudarjali posamezne stvari ipd.
-2 Osebek
+## 2. Osebek
 V tem poglavju podrobno predstavite osebek oz. osebke
 v igri. Povejte nad katerimi osebki bo imel nadzor uporabnik in nad katerimi ne. Kako se z osebkom oz. osebki
 upravlja, Kaksne so akcije osebka ipd. ˇ
