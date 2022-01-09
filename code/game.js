@@ -21,6 +21,7 @@ class App extends Application {
     document.addEventListener("pointerlockchange", this.pointerunlockHandler);
     document.addEventListener("setConditions", this.handleSetConditions.bind(this))
     document.addEventListener("nextLevelEvent", this.loadNextLevel.bind(this));
+    document.addEventListener("endGame", this.endGame.bind(this));
     this.pointerlock();
     this.loadSound();
     this.enableCamera();
@@ -71,6 +72,29 @@ class App extends Application {
   updateSensitivity() {
     const sens = document.getElementById("options-sensitivity").value;
     this.camera.mouseSensitivity = sens / 100000;
+  }
+
+  async endGame() {
+    mainCanvas.style.display = "none";
+    fullscreen.style.display = "none";
+    let elem = [...document.getElementsByClassName("endingScene")];
+    elem.forEach(element => {
+      element.style.display = "block";
+    })
+    await this.waitingSpacePress();
+    window.close();
+  }
+
+  waitingSpacePress() {
+    return new Promise((resolve) => {
+      document.addEventListener('keydown', onKeyHandler);
+      function onKeyHandler(e) {
+        if (e.keyCode === 32) {
+          document.removeEventListener('keydown', onKeyHandler);
+          resolve();
+        }
+      }
+    });
   }
 
   addSoundTrack() {
