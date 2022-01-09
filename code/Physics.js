@@ -26,6 +26,10 @@ export class Physics {
                             interactions = true;
                         }
                     }
+                    if (!interactions) {
+                        interactPrompt.className = "hide";
+                        carryPrompt.className = "hide";
+                    }
                 }
                 // false if not proven true
                 node.onGround = false;
@@ -47,6 +51,10 @@ export class Physics {
                         interactable.action();
                         interactions = true;
                     }
+                }
+                if (!interactions) {
+                    interactPrompt.className = "hide";
+                    carryPrompt.className = "hide";
                 }
             }
 
