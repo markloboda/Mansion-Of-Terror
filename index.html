@@ -10,12 +10,26 @@
     <script type="module" src="./code/game.js"></script>
 </head>
 <body>
-    <div class="overlay">
-        <h2 id="interact_prompt" class="hide">Press [F] to interact</h2>
-        <h2 id="carry_prompt" class="hide">Press [F] to pick up</h2>
+    <div id="overlay" class="overlay">
+        <h2 id="interact_prompt" class="hide prompt">Press [F] to interact</h2>
+        <h2 id="carry_prompt" class="hide prompt">Press [F] to pick up</h2>
     </div>
-    <div class="fullscreen">
-        <canvas></canvas>
+    <div class="main-menu" id="main-menu">
+        <button id="play-button" class="main-menu-contents">Play</button>
+        <button id="options-button" class="main-menu-contents">Options</button>
+        <button id="quit-button" class="main-menu-contents">Quit</button>
     </div>
+
+    <div class="options-menu" id="options-menu">
+        <input type="range" id="options-volume" name="options-volume" class="options-contents" min="0" max="100" value="20">
+        <label for="options-volume">Volume</label>
+        <button class="options-contents" id="options-back">Back</button>
+    </div>
+
+    <div class="fullscreen" id="fullscreen">
+        <canvas id="main-canvas"></canvas>
+    </div>
+
+    <div class="audio" id="audio-div"></div>
 </body>
 </html>
