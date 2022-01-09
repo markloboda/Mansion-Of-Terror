@@ -37,7 +37,6 @@ export class Node {
 
         if (this.camera) {
             this.keys = {}
-            this.mouseSensitivity = 0.001;
             this.mouseSensitivity = 0.002;
             this.maxSpeed = 3;
             this.groundFriction = 0.2;
