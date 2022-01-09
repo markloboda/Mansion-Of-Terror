@@ -25,7 +25,7 @@ body, html {
     height: 100%;
 }
 .overlay h2 {
-    position: absolute;
+    position: fixed;
     left: 50%;
     top: 80%;
     color: rgb(31, 179, 68);
@@ -33,7 +33,7 @@ body, html {
     text-shadow: 0px 0px 5px rgb(0, 173, 52);
 }
 .overlay .show {
-    display: block;
+    display: inline-block;
 }
 
 .overlay .hide {
@@ -104,6 +104,9 @@ a.back:hover {
     cursor: pointer;
 }
 
-.prompt {
-    z-index: 10;
+.input-label {
+    display: inline-block;
+    text-align: right;
+    font-size: 2vw;
+    color: white;
 }
