@@ -30,7 +30,7 @@ export class Animation {
     this.loop = false;
     this.after = this.parseAfterAction(this.after);
     this.before = this.parseAfterAction(this.before);
-    document.addEventListener(`play_${this.name}`, this._playAnimation.bind(this))
+    document.addEventListener(`play_${this.name}`, this._playAnimation.bind(this));
   }
 
   activate() {
@@ -128,6 +128,7 @@ export class Animation {
   gotoNextLevel() {
     document.dispatchEvent(new Event("nextLevelEvent"));
   }
+
   
   parseAfterAction(after) {
     if (!after) {
