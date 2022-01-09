@@ -61,6 +61,12 @@ class App extends Application {
     this.renderer = new Renderer(this.gl);
     this.renderer.prepareScene(this.scene);
     this.resize();
+    this.updateSensitivity();
+  }
+
+  updateSensitivity() {
+    const sens = document.getElementById("options-sensitivity").value;
+    this.camera.mouseSensitivity = sens / 100000;
   }
 
   addSoundTrack() {
@@ -234,6 +240,13 @@ document.getElementById("options-volume").addEventListener("change", event => {
   app.volume = event.target.value / 100;
   app.updateVolume();
 });
+
+document.getElementById("options-sensitivity").addEventListener("change", event => {
+  if (app.camera) {
+    app.updateSensitivity();
+  }
+
+})
 
 const quitButton = document.getElementById("quit-button");
 
