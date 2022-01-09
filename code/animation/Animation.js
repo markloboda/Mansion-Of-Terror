@@ -123,10 +123,10 @@ export class Animation {
     } else {
       i.play();
     }
-  }
 
-  gotoNextLevel() {
-    document.dispatchEvent(new Event("nextLevelEvent"));
+    
+
+    
   }
   
   parseAfterAction(after) {
@@ -142,7 +142,6 @@ export class Animation {
         case "disableInteractable": actions.push(this.disableInteractable.bind(this)); break;
         case "resetAnimation": actions.push(this.resetAnimation.bind(this)); break;
         case "playSound": actions.push(this.playSound.bind(this)); break;
-        case "gotoNextLevel": actions.push(this.gotoNextLevel.bind(this)); break;
       }
     }
     return actions;
