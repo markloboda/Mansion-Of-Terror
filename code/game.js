@@ -20,8 +20,10 @@ class App extends Application {
     this.pointerunlockHandler = this.pointerunlockHandler.bind(this);
     document.addEventListener("pointerlockchange", this.pointerunlockHandler);
     document.addEventListener("setConditions", this.handleSetConditions.bind(this))
+    document.addEventListener("nextLevelEvent", this.loadNextLevel.bind(this));
     this.pointerlock();
     this.loadSound();
+    this.enableCamera();
   }
 
   handleSetConditions(e) {
@@ -30,8 +32,8 @@ class App extends Application {
     }
   }
 
-
   async loadNextLevel() {
+    this.loading = true;
     this.level++;
     await this.loader.load(scenes[`Room${this.level}`]);
     this.scene = await this.loader.loadScene(this.loader.defaultScene);
@@ -62,6 +64,8 @@ class App extends Application {
     this.renderer.prepareScene(this.scene);
     this.resize();
     this.updateSensitivity();
+    this.loading = false;
+    playAfterPlayButton();
   }
 
   updateSensitivity() {
@@ -200,6 +204,18 @@ function showOptionsMenu() {
   }
 }
 
+function playAfterPlayButton() {
+  hideMainMenu();
+  if (!loaded) {
+    loaded = true;
+    app.play();
+  } else {
+    fullscreen.style.display = "block";
+    canvas.style.display = "block";
+    app.enableCamera();
+  }
+  app.camera.enableMovement();
+}
 
 let loaded = false;
 const canvas = document.querySelector("canvas");
@@ -218,9 +234,9 @@ playButton.addEventListener("click", () => {
   } else {
     fullscreen.style.display = "block";
     canvas.style.display = "block";
+    app.enableCamera();
   }
   app.pointerlock();
-  app.enableCamera();
   app.addSoundTrack();
 });
 

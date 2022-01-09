@@ -18,6 +18,9 @@ export class Interactable extends Node {
   }
 
   showPrompt() {
+    if (!this.prompt) {
+      return;
+    }
     if (this.disabled || this.carrying || document.getElementById("main-menu").style.visibility != "hidden") {
       this.prompt.className = "hide";
       return;
@@ -26,6 +29,9 @@ export class Interactable extends Node {
   }
 
   hidePrompt() {
+    if (!this.prompt) {
+      return;
+    }
     this.prompt.className = "hide";
   }
 
@@ -58,6 +64,9 @@ export class Interactable extends Node {
       case 'interact': 
         this.action = this._interact;
         break;
+      case 'collide':
+        this.action = this._collide;
+        break;
     }
   }
 
@@ -70,6 +79,14 @@ export class Interactable extends Node {
     if (!this.keys?.KeyF) {
       return;
     }
+    for (const type in this.interact) {
+      for (const event of this.interact[type]) {
+        document.dispatchEvent(new Event(`${type}_${event}`));
+      }
+    }
+  }
+  
+  _collide() {
     for (const type in this.interact) {
       for (const event of this.interact[type]) {
         document.dispatchEvent(new Event(`${type}_${event}`));

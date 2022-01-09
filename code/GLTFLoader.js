@@ -269,6 +269,9 @@ export class GLTFLoader {
         }
         const keyframes = {};
         const disableNodes = [];
+        if (!this.animations[gltfSpec.name]) {
+            console.error(gltfSpec.name, "Not defined")
+        }
         for (const channel of gltfSpec.channels) {
             if (channel.target.node === undefined) continue;
             const transformationType = channel.target.path;
