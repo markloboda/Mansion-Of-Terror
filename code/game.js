@@ -104,7 +104,7 @@ class App extends Application {
       return;
     }
     this.camera.enableMovement();
-    this.canvas.requestFullscreen();
+    document.body.requestFullscreen();
   }
 
   update() {
@@ -174,13 +174,6 @@ function showMainMenu() {
   for (let i = 0; i < mainMenuContents.length; i++) {
     mainMenuContents[i].style.display = "block";
   }
-
-  // hide prompts
-  let overlay = document.getElementById("overlay").childNodes;
-  for (let i = 0; i < overlay.length; i++) {
-    overlay[i].className = "hide";
-  }
-  console.log(overlay);
 }
 
 function hideOptionsMenu() {
@@ -208,9 +201,6 @@ const app = new App(canvas);
 
 const mainCanvas = document.getElementById("main-canvas");
 const fullscreen = document.getElementById("fullscreen");
-
-fullscreen.style.display = "hidden";
-canvas.style.display = "hidden";
 
 const playButton = document.getElementById("play-button");
 

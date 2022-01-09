@@ -18,7 +18,7 @@ export class Interactable extends Node {
   }
 
   showPrompt() {
-    if (this.disabled || this.carrying) {
+    if (this.disabled || this.carrying || document.getElementById("main-menu").style.visibility != "hidden") {
       this.prompt.className = "hide";
       return;
     }
