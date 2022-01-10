@@ -144,7 +144,7 @@ Dodana je tudi možnost skakanja, a le, ko se kamera nahaja na tleh.
 Prav tako je dodana možnost hitrega teka ob pritisku tipke "Shift". Tudi tu se preverja, če se kamera nahaja na tleh.
 
 ## Teksture in barva objekta
-Tu smo imeli problem omogočiti dodajanje "baseColorFactor".
+Igralni pogon omogoča renderanje baseColorTexture in baseColorFactor-jev.
 
 ## Možne nadgradnje
 Zgoraj omenjeno smo stvari delali kar se da strukturirano, da je v prihodnosti možno igro nadgraditi.
@@ -157,12 +157,15 @@ Dodali bi lahko tudi nove zvoke za različne animacije.
 ## Pogled
 Uporabili smo Perspektivno kamero uvoženo iz blenderja preko gltf-ja.
 Igralca se ne vidi.
-
+![fps](./screenshots/room2_2.png)
+![fps1](./screenshots/room3_gameplay4.png)
 ## 3.) Uporabniški vmesnik
 Naredili smo meni v katerem lahko uporabnik prične z igranjem igre, na voljo pa mu je tudi opcija options. Če uporabnik pritisne na gumb options, se mu odpre meni v, katerem lahko nastavlja glasnost zvoka in občutljivost miške.
 
 Med samim igranjem igre se na ekranu pokaže "Press [F] to interact." ali "Press [F] to carry.". S tem napisom uporabniku sporočimo, da je v bližini nekega objekta, s katerim lahko upravlja.
 ![carry prompt](./screenshots/room1_gameplay2.png)
+![interact](./screenshots/room1_gameplay4.png)
+
 
 ## 4.) Glasba in zvok
 Med igranjem igre se predvaja strašljiva glasba. Nivo glasnosti lahko znižamo v meniju.
