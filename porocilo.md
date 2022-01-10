@@ -5,16 +5,6 @@
   width:40%;
   height:25%;
 }
-h1 {
-    top: 30%;
-    font-size: 30px;
-    position: absolute;
-}
-h2 {
-    top: 40%;
-    font-size: 30px;
-    position: absolute;
-}
 </style>
 </head>
 
@@ -61,6 +51,8 @@ To so:
 
 ## Velikost
 Velikost sob in objektov se zgleduje po objektih v realnem svetu. V prvi sobi smo naredili skladišče zelo visoko, da to vzbuja občutje ogromnosti. Svet igre so samo notranji prostori in iz njih v poteku ne odide.
+
+<div style="page-break-after: always;"></div>
 
 ## Objekti
 Vse modele objektov in sob smo izdelali sami s pomočjo programa Blender, teksture pa smo našli na spletu, nekatere pa modificirali.
@@ -153,6 +145,8 @@ Fiziko smo implementirali na način, da bi jo z lahkoto lahko malo spremenili in
 Prav tako je možnost nadrgadnje druga tehnologija za detekcijo trkov.
 Implementirali bi tudi lahko še animacije armatur.
 Dodali bi lahko tudi nove zvoke za različne animacije.
+
+<div style="page-break-after: always;"></div>
 
 ## Pogled
 Uporabili smo Perspektivno kamero uvoženo iz blenderja preko gltf-ja.
