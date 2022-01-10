@@ -137,6 +137,14 @@ Med samim igranjem igre se na ekranu pokaže "Press [F] to interact." ali "Press
 
 ## 4.) Glasba in zvok
 Med igranjem igre se predvaja strašljiva glasba. Nivo glasnosti lahko znižamo v meniju.
-Poleg glasbe, ki se predvaja konstantno, se ob hoji in teku sliši tudi zvok stopinj. 
-Zvok stopinj se predvaja hitreje, ko tečeš in počasneje, ko hodiš.
+Poleg glasbe, ki se predvaja konstantno, se ob hoji in teku sliši tudi zvok stopinj.
+Zvok stopinj se predvaja hitreje ko tečeš in počasneje ko hodiš.
 Dodali smo tudi zvok rušenja kamnov, ki se sproži ob predvajanju animacije v tretji sobi.
+
+## 5.) Gameplay
+Igra se začne, ko se igralec zbudi v transportnem zaboju.
+Ko igralec odpre vrata zaboja se znajde v zapuščenem skladišču.
+V skladišču je veliko polic, ki v sobi sestavljajo labirint, v katerem se mora igralec znajti, da najde varovalko, in električno omarico, v katro vstavi varovalko, da lahko odpre dvižna vrata na koncu sobe in napreduje v naslednjo sobo.
+Po skladišču se igralec znajde na stopnišču, vidi vrata dvigala, katera ne more odpredi, igralec lahko raziskuje po sobi, ko se po stopnicah spusti do najnižje točke sobe, se tla sesujejo in igralec pade oz. napreduje v tretjo sobo (kanalizacija).
+Ko se igralec pride v kanalizacijo, se sesuje strop in pusti v kanalizacijskem potoku poleg odpadkov tudi ruševine, preko katerih lahko igralec na več mestih preskoči potok in se prebije do lestve, po kateri spleza v zadnjo sobo.
+Igralec se spet znajde v drugi sobi, tokrat lahko odpre vrata dvigala, tako zbeži in zaključi igro.
