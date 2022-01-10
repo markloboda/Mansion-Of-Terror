@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>porocilo.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<head>
+<style type="text/css">
+.logo {
+  float: right;
+  width:40%;
+  height:25%;
+}
+h1 {
+    top: 40%;
+    font-size: 30px;
+}
+</style>
+</head>
+<body>
+<div class="logo">
+<img class="logo" src="./fri_logo.png">
+</div>
+<h1>Seminarksa naloga: Računalniška igra Mansion of Terror</h1>
+</body>
+<div style="page-break-after: always;"></div>
+<h2 id="povzetek">Povzetek</h2>
+<p>Igra Mansion of Terror je strašljiva sestavljanka. Vse sobe so temne, edina svetloba prihaja iz svetilke kar poskrbi za bolj strašno vzdušje, v ozadju pa se tudi predvaja strašljiva glasba.
+Svetilka je realizirana v glsl senčilniku. V igri so objekti s katerimi igralec lahko interektira. Ob interakciji se lahko zgodijo različne stvari, ponavadi pa so to animacije.</p>
+<h2 id="1-opis-sveta">1.) Opis sveta</h2>
+<p>Igra vsebuje tri sobe. Igralec mora priti čez vse tri sobe, da lahko zbeži in s tem zaključi igro.
+Svet smo opremili z različnimi teksturami, da je igranje kar se da razburljivo. Dodali smo razne animacije padanja skal, razdrtja stehe in tal in podobno.</p>
+<h2 id="klju%C4%8Dne-lokacije">Ključne lokacije</h2>
+<p>Klučne lokacije v igri so lokacije interakcij, kjer mora igralec interaktirati s predmeti, da lahko napreduje.
+To so:</p>
+<ul>
+<li>
+<p>V prvi sobi:</p>
+<ul>
+<li>varovalka, ki jo mora igralec najti in jo prinesti do varovalne omarice,</li>
+<li>varovalna omarica, kamor igralec vstavi varovalko,</li>
+<li>dvižna vrata, ki se lahko odprejo le, ko igralec poveže električni krog z vstavljanjem varovalke v omarico,</li>
+<li>stikalo za dvižna vrata</li>
+</ul>
+</li>
+<li>
+<p>V drugi sobi:</p>
+<ul>
+<li>prostor, na koncu stopnic, kjer se stopnice udrejo, in igralec z njimi pade v črno globino, kjer vstopi v tretjo sobo,</li>
+</ul>
+</li>
+<li>
+<p>V tretji sobi:</p>
+<ul>
+<li>prostor na drugem koncu kanalizacije, kjer je lestev, katero mora igralec doseči za napredovanje,</li>
+<li>do lestve za napredovanje pride s prečaknjem kanalizacijskega potoka na večih mestih, s pomočjo skakanja po odpadkih in ruševinah, ki so v potoku</li>
+</ul>
+</li>
+<li>
+<p>V četrti sobi:</p>
+<ul>
+<li>igralec se ponovno vrne v drugo sobo, kjer se nahaja dvigalo</li>
+<li>ob prisku na gumb se dvigalo odpre, igralec pa zbeži in s tem zmaga</li>
+<li>to dvigalo v prvem obisku sobe ni bilo možno odpreti</li>
+</ul>
+</li>
+</ul>
+<h2 id="velikost">Velikost</h2>
+<p>Velikost sob in objektov se zgleduje po objektih v realnem svetu. V prvi sobi smo naredili skladišče zelo visoko, da to vzbuja občutje ogromnosti. Svet igre so samo notranji prostori in iz njih v poteku ne odide.</p>
+<h2 id="objekti">Objekti</h2>
+<p>Vse modele objektov in sob smo izdelali sami s pomočjo programa Blender, teksture pa smo našli na spletu, nekatere pa modificirali.
+Poglavitni objekti so varovalka, varovalna omarica, dvižna vrata, stikalo za dvižna vrata, tla, ki se vdrejo, vrata dvigala in podobno.</p>
+<p><img src="./screenshots/room1_blender1.png" alt="">
+<img src="./screenshots/room1_blender2.png" alt="">
+<img src="./screenshots/room2_blender1.png" alt="">
+<img src="./screenshots/room2_blender2.png" alt="">
+<img src="./screenshots/room3_blender1.png" alt="">
+<img src="./screenshots/room3_blender2.png" alt="">
+<img src="./screenshots/room2_blender3.png" alt=""></p>
+<h2 id="2-igralni-pogon-in-uporabljene-tehnologije">2.) Igralni pogon in uporabljene tehnologije</h2>
+<p>Za izdelavo igre smo uporabili samo webgl2 in JavaScript, modele in animacije smo naložili iz gltf blender izvozov. Za bazo igralnega pogona smo uporabili 90-gltf primer iz webgl2-examples repozitorija: https://github.com/UL-FRI-LGM/webgl2-examples/tree/master/examples/90-gltf .</p>
+<p>V izhodiščnem primeru je bilo veliko stvari že implementiranih, ker smo hoteli modele vključno z animacijami izvoziti iz blenderja, smo v GLTFLoader.js dodali še podporo za nalaganje animacij. Naredili smo tudi razrez Animation, ki hrani &quot;keyframe&quot;-e in metode za interpolacije med &quot;keyframe&quot;-i.<br>
+Podprte animacije:</p>
+<ul>
+<li>Step interpolation</li>
+<li>Linear interpolation</li>
+<li>Spherical linear interpolation</li>
+</ul>
+<p>Izhodiščni primer smo tudi nasploh naredili bolj fleksibilen, npr. naredili smo nov razred MeshRenderer in ga ob nalaganju iz gltf datoteke pripeli na Node objekt. Če bi se v prihodnosti odločili, da bi naš pogon podpiral tudi Armature in animacije armatur bi lahko naredili še en razred, ki bi uporabljal nek drug senčilnik, v render zanki pa bi še vedno klicali samo node.renderer.render()...</p>
+<p>Ker ima naša igra določen nek potek (npr: Preden igralec lahko odpre vrata, mora pritisniti gumb), smo si sami zamislili nek &quot;json&quot; format za opisovanje dogodkov in objektov, s katerimi lahko igralec upravlja.</p>
+<p>To smo naredili z razlogom, da je možno tudi v prihodnosti dodati objekte in razširiti igro.<br>
+&quot;Mogoče celo iz trenutnega projekta nastane nov Crysis.&quot;</p>
+<h3 id="primer-formata">Primer formata:</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> scenes = {
+  <span class="hljs-attr">Room1</span>: {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">"first_room"</span>,
+    <span class="hljs-attr">interactables</span>: [
+      { <span class="hljs-attr">name</span>: <span class="hljs-string">"Flashlight"</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">"carry"</span>, <span class="hljs-attr">carrying</span>: <span class="hljs-literal">true</span> },
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">"Switch"</span>,
+        <span class="hljs-attr">type</span>: <span class="hljs-string">"interact"</span>,
+        <span class="hljs-attr">interact</span>: { <span class="hljs-attr">play</span>: [<span class="hljs-string">"SwitchAnimation"</span>] },
+        <span class="hljs-attr">setConditions</span>: [<span class="hljs-string">"switch_active"</span>]
+      },
+    ],
+    <span class="hljs-attr">animations</span>: {
+      <span class="hljs-attr">SwitchAnimation</span>: {
+        <span class="hljs-attr">after</span>: [<span class="hljs-string">"trigger"</span>],
+        <span class="hljs-attr">trigger</span>: [<span class="hljs-string">"door_open_action"</span>]
+      }
+    },
+    <span class="hljs-attr">door_open_action</span>: {
+      <span class="hljs-attr">conditions</span>: [<span class="hljs-string">"switch_active"</span>],
+      <span class="hljs-attr">after</span>: [<span class="hljs-string">"gotoNextLevel"</span>]
+    }
+  }
+}
+</div></code></pre>
+<h3 id="interpretacija-zgornjega-opisa-iz-formata">Interpretacija zgornjega opisa iz formata:</h3>
+<ul>
+<li>
+<p>Definirana sta dva interactables objekta.</p>
+<ul>
+<li>Prvi je &quot;Flashlight&quot; - svetilka, ki je definiran v vsaki sobi. Svetilka ima definiran tip &quot;carry&quot; <code>type: carry</code>, kar pomeni; da ko bo igralčeva interakcija z objektom nošenje le tega. Objekt bo imel od tam naprej rotacijo in translacijo od kamere.</li>
+<li>Drugi interactable objekt je &quot;Switch&quot; - stikalo. Interakcija z njim požene animacijo &quot;SwitchAnimation&quot;, ki je definirana spodaj. Postavi se pogoj <code>switch_active</code>.</li>
+</ul>
+</li>
+<li>
+<p>Definirani sta dve animaciji.</p>
+<ul>
+<li>Prva je &quot;SwitchAnimation&quot;. Animacija ima definiran <code>after: [&quot;trigger&quot;]</code>. To je ime funkcije, ki se bo izvedla po animaciji, <code>trigger</code> pa je funkcija, ki sproži animacijo. V tem primeru se sproži animacija definirana pod trigger &quot;property&quot;-jom -&gt; <code>trigger: [&quot;door_open_action&quot;]</code>. Animacija se sproži pogojno: <code>conditions: [&quot;switch_active&quot;]</code>.Lahko se sproži več animacij.</li>
+<li>Ko se sproži door_open_action, se izvede gotoNextLevel, ki naloži naslednjo sobo.</li>
+</ul>
+</li>
+<li>
+<p>Poleg tega je še nekaj ostalih stvari, ki jih naš format omogoča. Lahko namesto after imenuješ funkcije, ki se bodo izvedle pred izvajanjem. <code>before: [&quot;function1&quot;, &quot;function2&quot;]</code></p>
+</li>
+</ul>
+<h2 id="detekcija-trkov">Detekcija trkov</h2>
+<p>V igri smo uporabili tehnologijo detekcije trkov imenovano Axis Aligned Boundary Box. Pogosteje uporabljena je kratica AABB. Pri tej vrsti detekcije trkov ima vsak objekt okoli sebe škatlo, katere robovi so poravnani z svetovnim kordinatnim sistemom. Detekcije trkov preverjamo v datoteki Physics.js.
+Ta tehnologija se sliši zelo slaba in zastarela, a je z njo mogoče narediti zelo zanimivo in vživljajoče okolje. Prav tako pa je detekcija zelo hitra.
+Detekcijo trkov tudi le za tiste objekte, ki so se v prejšni igralni sliki (&quot;frame&quot;-u) premaknili.</p>
+<h2 id="fizika">Fizika</h2>
+<p>Implementirali smo tudi nekaj fizike. Ko kamera nima več tal pod sabo, pade. Vse je narejeno zelo objektno in omogoča razširitve. Kamera vsebuje seznam, kjer so definirane sile na Y osi. Tako lahko kameri dodaš neko silo od spodaj in jo tako dvigneš, če le ta premaga silo gravitacije. Prav tako poteka izračun gravitacijskega pospeška.
+Dodana je tudi možnost skakanja, a le, ko se kamera nahaja na tleh.
+Prav tako je dodana možnost hitrega teka ob pritisku tipke &quot;Shift&quot;. Tudi tu se preverja, če se kamera nahaja na tleh.</p>
+<h2 id="teksture-in-barva-objekta">Teksture in barva objekta</h2>
+<p>Tu smo imeli problem omogočiti dodajanje &quot;baseColorFactor&quot;.</p>
+<h2 id="mo%C5%BEne-nadgradnje">Možne nadgradnje</h2>
+<p>Zgoraj omenjeno smo stvari delali kar se da strukturirano, da je v prihodnosti možno igro nadgraditi.
+Zamislili smo si JSON format za opis animacij in interaktivnih objektov.
+Fiziko smo implementirali na način, da bi jo z lahkoto lahko malo spremenili in omogočili celo potiske objektov in podobno.
+Prav tako je možnost nadrgadnje druga tehnologija za detekcijo trkov.
+Implementirali bi tudi lahko še animacije armatur.
+Dodali bi lahko tudi nove zvoke za različne animacije.</p>
+<h2 id="pogled">Pogled</h2>
+<p>Uporabili smo Perspektivno kamero uvoženo iz blenderja preko gltf-ja.
+Igralca se ne vidi.</p>
+<h2 id="3-uporabni%C5%A1ki-vmesnik">3.) Uporabniški vmesnik</h2>
+<p>Naredili smo meni v katerem lahko uporabnik prične z igranjem igre, na voljo pa mu je tudi opcija options. Če uporabnik pritisne na gumb options, se mu odpre meni v, katerem lahko nastavlja glasnost zvoka in občutljivost miške.</p>
+<p>Med samim igranjem igre se na ekranu pokaže &quot;Press [F] to interact.&quot; ali &quot;Press [F] to carry.&quot;. S tem napisom uporabniku sporočimo, da je v bližini nekega objekta, s katerim lahko upravlja.
+<img src="./screenshots/room1_gameplay2.png" alt="carry prompt"></p>
+<h2 id="4-glasba-in-zvok">4.) Glasba in zvok</h2>
+<p>Med igranjem igre se predvaja strašljiva glasba. Nivo glasnosti lahko znižamo v meniju.
+Poleg glasbe, ki se predvaja konstantno, se ob hoji in teku sliši tudi zvok stopinj.
+Zvok stopinj se predvaja hitreje ko tečeš in počasneje ko hodiš.
+Dodali smo tudi zvok rušenja kamnov, ki se sproži ob predvajanju animacije v tretji sobi.</p>
+<h2 id="5-gameplay">5.) Gameplay</h2>
+<p>Igra se začne, ko se igralec zbudi v transportnem zaboju.
+Ko igralec odpre vrata zaboja se znajde v zapuščenem skladišču.
+V skladišču je veliko polic, ki v sobi sestavljajo labirint, v katerem se mora igralec znajti, da najde varovalko, in električno omarico, v katro vstavi varovalko, da lahko odpre dvižna vrata na koncu sobe in napreduje v naslednjo sobo.
+Po skladišču se igralec znajde na stopnišču, vidi vrata dvigala, katera ne more odpredi, igralec lahko raziskuje po sobi, ko se po stopnicah spusti do najnižje točke sobe, se tla sesujejo in igralec pade oz. napreduje v tretjo sobo (kanalizacija).
+Ko se igralec pride v kanalizacijo, se sesuje strop in pusti v kanalizacijskem potoku poleg odpadkov tudi ruševine, preko katerih lahko igralec na več mestih preskoči potok in se prebije do lestve, po kateri spleza v zadnjo sobo.
+Igralec se spet znajde v drugi sobi, tokrat lahko odpre vrata dvigala, tako zbeži in zaključi igro.</p>
+
+</body>
+</html>

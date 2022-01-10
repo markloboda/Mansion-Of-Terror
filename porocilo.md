@@ -1,6 +1,34 @@
-<!-- NASLOVNICA -->
+<head>
+<style type="text/css">
+.logo {
+  float: right;
+  width:40%;
+  height:25%;
+}
+h1 {
+    top: 30%;
+    font-size: 30px;
+    position: absolute;
+}
+h2 {
+    top: 40%;
+    font-size: 30px;
+    position: absolute;
+}
+</style>
+</head>
 
-# Računalniška grafika
+<body>
+<div class="logo">
+<img class="logo" src="./fri_logo.png">
+</div>
+
+<h1>Seminarksa naloga: Računalniška igra Mansion of Terror</h1>
+<h2>Avtorji: Mark Loboda, Filip Jeretina, Irinej Slapal</h2>
+
+</body>
+
+<div style="page-break-after: always;"></div>
 
 ## Povzetek
 
