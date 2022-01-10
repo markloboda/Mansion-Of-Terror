@@ -8,35 +8,36 @@ Igra Mansion of Terror je strašljiva sestavljanka. Vse sobe so temne, edina sve
 Svetilka je realizirana v glsl senčilniku. V igri so objekti s katerimi igralec lahko interektira. Ob interakciji se lahko zgodijo različne stvari, ponavadi pa so to animacije.
 
 ## 1.) Opis sveta
-Igra se dogaja v stavbi s tremi sobami.
-Igralec mora priti čez vse 3 sobe, da lahko zbeži in s tem zaključi igro.
-V svetu, kjer se dogaja igra, so na 3d modelih uporabljene različne texture,
-da je izgled igre čim bolj realističen in vživljajoč.
+Igra vsebuje tri sobe. Igralec mora priti čez vse tri sobe, da lahko zbeži in s tem zaključi igro.
+Svet smo opremili z različnimi teksturami, da je igranje kar se da razburljivo. Dodali smo razne animacije padanja skal, razdrtja stehe in tal in podobno.
 
 ## Ključne lokacije
 Klučne lokacije v igri so lokacije interakcij, kjer mora igralec interaktirati s predmeti, da lahko napreduje.
 To so:
 - V prvi sobi:
-    - prostor kjer igralec pobere varovalko s tal,
+    - varovalka, ki jo mora igralec najti in jo prinesti do varovalne omarice,
     - varovalna omarica, kamor igralec vstavi varovalko,
-    - dvižna vrata, ki se lahko odprejo le ko igralec poveže električni krog z vstavljanjem varovalke v omarico,
+    - dvižna vrata, ki se lahko odprejo le, ko igralec poveže električni krog z vstavljanjem varovalke v omarico,
     - stikalo za dvižna vrata
 
 - V drugi sobi:
-    - prostor, na koncu stopnic, kjer se stopnice udrejo, in igralec z njimi pade v črno globino, da se zgodi prehod v tretjo sobo,
-    - Ko igralec zaključi s tretjo sobo se ponovno znajde v drugi sobi, sedaj lahko odpre vrata dvigala, dvigalo pa ga popelje v konec igre
+    - prostor, na koncu stopnic, kjer se stopnice udrejo, in igralec z njimi pade v črno globino, kjer vstopi v tretjo sobo,
 
 - V tretji sobi:
     - prostor na drugem koncu kanalizacije, kjer je lestev, katero mora igralec doseči za napredovanje,
     - do lestve za napredovanje pride s prečaknjem kanalizacijskega potoka na večih mestih, s pomočjo skakanja po odpadkih in ruševinah, ki so v potoku
+- V četrti sobi:
+  - igralec se ponovno vrne v drugo sobo, kjer se nahaja dvigalo
+  - ob prisku na gumb se dvigalo odpre, igralec pa zbeži in s tem zmaga
+  - to dvigalo v prvem obisku sobe ni bilo možno odpreti
 
 ## Velikost
-Velikosti sob so približne meram prostorov v realnem življenju,
-Prva soba ki je skladišče, je večja in vsebuje velike police.
+Velikost sob in objektov se zgleduje po objektih v realnem svetu. V prvi sobi smo naredili skladišče zelo visoko, da to vzbuja občutje ogromnosti. Svet igre so samo notranji prostori in iz njih v poteku ne odide.
 
 ## Objekti
-Vse modele objektov in sob smo izdelali sami s pomočjo programa blender, teksture pa smo našli na spletu in nekatere modificirali.
-Poglavitni objekti so varovalka, dvižna vrata, stikalo za dvižna vrata, tla, ki se vdrejo, vrata dvigala.
+Vse modele objektov in sob smo izdelali sami s pomočjo programa Blender, teksture pa smo našli na spletu, nekatere pa modificirali.
+Poglavitni objekti so varovalka, varovalna omarica, dvižna vrata, stikalo za dvižna vrata, tla, ki se vdrejo, vrata dvigala in podobno.
+
 ![](./screenshots/room1_blender1.png)
 ![](./screenshots/room1_blender2.png)
 ![](./screenshots/room2_blender1.png)
@@ -47,9 +48,9 @@ Poglavitni objekti so varovalka, dvižna vrata, stikalo za dvižna vrata, tla, k
 
 ## 2.) Igralni pogon in uporabljene tehnologije
 
-Za izdelavo igre smo uporabili samo webgl2 + JavaScript, modele in animacije smo naložili iz gltf blender izvozov. Za bazo igralnega pogona smo uporabili 90-gltf primer iz webgl2-examples repozitorija: https://github.com/UL-FRI-LGM/webgl2-examples/tree/master/examples/90-gltf  
+Za izdelavo igre smo uporabili samo webgl2 in JavaScript, modele in animacije smo naložili iz gltf blender izvozov. Za bazo igralnega pogona smo uporabili 90-gltf primer iz webgl2-examples repozitorija: https://github.com/UL-FRI-LGM/webgl2-examples/tree/master/examples/90-gltf .
 
-V izhodiščnem primeru je bilo veliko stvari že implementiranih, ker smo hoteli modele vključno z animacijami izvoziti iz blenderja, smo v GLTFLoader.js dodali še podporo za nalaganje animacij. Naredili smo tudi razred Animation, ki hrani "keyframe" in metode za interpolacije med keyframe-i.  
+V izhodiščnem primeru je bilo veliko stvari že implementiranih, ker smo hoteli modele vključno z animacijami izvoziti iz blenderja, smo v GLTFLoader.js dodali še podporo za nalaganje animacij. Naredili smo tudi razrez Animation, ki hrani "keyframe"-e in metode za interpolacije med "keyframe"-i.  
 Podprte animacije:
 - Step interpolation
 - Linear interpolation
@@ -57,7 +58,10 @@ Podprte animacije:
 
 Izhodiščni primer smo tudi nasploh naredili bolj fleksibilen, npr. naredili smo nov razred MeshRenderer in ga ob nalaganju iz gltf datoteke pripeli na Node objekt. Če bi se v prihodnosti odločili, da bi naš pogon podpiral tudi Armature in animacije armatur bi lahko naredili še en razred, ki bi uporabljal nek drug senčilnik, v render zanki pa bi še vedno klicali samo node.renderer.render()...  
 
-Ker ima naša igra določen nek potek (npr: Preden igralec lahko odpre vrata, mora pritisniti gumb), smo si sami zamislili nek json format za opisovanje dogodkov.
+Ker ima naša igra določen nek potek (npr: Preden igralec lahko odpre vrata, mora pritisniti gumb), smo si sami zamislili nek "json" format za opisovanje dogodkov in objektov, s katerimi lahko igralec upravlja.
+
+To smo naredili z razlogom, da je možno tudi v prihodnosti dodati objekte in razširiti igro.  
+"Mogoče celo iz trenutnega projekta nastane nov Crysis."
 
 ### Primer formata:  
 
@@ -90,15 +94,25 @@ export const scenes = {
 
 ### Interpretacija zgornjega opisa iz formata:  
 - Definirana sta dva interactables objekta. 
-  - Prvi je Flashlight, ki je definiran v vsaki sobi. Flashlight ima definiran `type: carry`, kar pomeni; ko bo igralec interaktiral s Flashlight objektom, ga bo nosil s seboj. Objekt bo imel od tam naprej rotacijo in translacijo od kamere. 
-  - Drugi interactable objekt je Switch, ko interaktiramo z njim se zažene animacija SwitchAnimation, ki je definirana spodaj, postavi se pogoj `switch_active`.
+  - Prvi je "Flashlight" - svetilka, ki je definiran v vsaki sobi. Svetilka ima definiran tip "carry" `type: carry`, kar pomeni; da ko bo igralčeva interakcija z objektom nošenje le tega. Objekt bo imel od tam naprej rotacijo in translacijo od kamere.
+  - Drugi interactable objekt je "Switch" - stikalo. Interakcija z njim požene animacijo "SwitchAnimation", ki je definirana spodaj. Postavi se pogoj `switch_active`.
 
 - Definirani sta dve animaciji. 
-  - Prva je SwitchAnimation, animacija ima definiran `after: ["trigger"]`, to je ime funkcije, ki se bo izvedla po animaciji. `trigger` je funkcija, ki sproži animacijo. V tem primeru se sproži animacija definirana pod trigger property-jom -> `trigger: ["door_open_action"]`. Animacija se sproži pogojno: `conditions: ["switch_active"]`.Lahko se sproži več animacij.
+  - Prva je "SwitchAnimation". Animacija ima definiran `after: ["trigger"]`. To je ime funkcije, ki se bo izvedla po animaciji, `trigger` pa je funkcija, ki sproži animacijo. V tem primeru se sproži animacija definirana pod trigger "property"-jom -> `trigger: ["door_open_action"]`. Animacija se sproži pogojno: `conditions: ["switch_active"]`.Lahko se sproži več animacij.
   - Ko se sproži door_open_action, se izvede gotoNextLevel, ki naloži naslednjo sobo.
 
+- Poleg tega je še nekaj ostalih stvari, ki jih naš format omogoča. Lahko namesto after imenuješ funkcije, ki se bodo izvedle pred izvajanjem. `before: ["function1", "function2"]`
+
+
 ## Detekcija trkov
-V igri smo uporabili tehnologijo AABB. To je okrajšava za Axis Aligned Boundry Box. Pri tej vrsti detekcije trkov ima vsak objekt okoli sebe škatlo, katere robovi so poravnani z svetovnim kordinatnim sistemom. Detekcije trkov preverjamo v datoteki Physics.js.
+V igri smo uporabili tehnologijo detekcije trkov imenovano Axis Aligned Boundary Box. Pogosteje uporabljena je kratica AABB. Pri tej vrsti detekcije trkov ima vsak objekt okoli sebe škatlo, katere robovi so poravnani z svetovnim kordinatnim sistemom. Detekcije trkov preverjamo v datoteki Physics.js.
+Ta tehnologija se sliši zelo slaba in zastarela, a je z njo mogoče narediti zelo zanimivo in vživljajoče okolje. Prav tako pa je detekcija zelo hitra.
+Detekcijo trkov tudi le za tiste objekte, ki so se v prejšni igralni sliki ("frame"-u) premaknili.
+
+
+## Fizika
+Implementirali smo tudi nekaj fizike. Ko kamera nima več tal pod sabo, pade. Vse je narejeno zelo objektno in omogoča razširitve. Kamera vsebuje seznam, kjer so definirane sile na Y osi. Tako lahko kameri dodaš neko silo od spodaj in jo tako dvigneš, če le ta premaga silo gravitacije. Prav tako poteka izračun gravitacijskega pospeška.
+Dodana je tudi možnost skakanja, a le, ko se kamera nahaja na tleh.
 
 
 
