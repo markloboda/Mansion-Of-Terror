@@ -113,26 +113,30 @@ Detekcijo trkov tudi le za tiste objekte, ki so se v prejšni igralni sliki ("fr
 ## Fizika
 Implementirali smo tudi nekaj fizike. Ko kamera nima več tal pod sabo, pade. Vse je narejeno zelo objektno in omogoča razširitve. Kamera vsebuje seznam, kjer so definirane sile na Y osi. Tako lahko kameri dodaš neko silo od spodaj in jo tako dvigneš, če le ta premaga silo gravitacije. Prav tako poteka izračun gravitacijskega pospeška.
 Dodana je tudi možnost skakanja, a le, ko se kamera nahaja na tleh.
+Prav tako je dodana možnost hitrega teka ob pritisku tipke "Shift". Tudi tu se preverja, če se kamera nahaja na tleh.
 
+## Teksture in barva objekta
+Tu smo imeli problem omogočiti dodajanje "baseColorFactor".
 
-
-6 Zakljucki in mo ˇ zne nadgradnje ˇ
-V poglavju povzemite cesa ste se pri izdelavi igre nau ˇ cili. ˇ
-Ali ste pri predmetu pridobili dovolj znanja oz. kje je bilo
-pomanjkanje? Povzemite tudi do kaksnih razlik je pri ˇ slo ˇ
-med predvidenim scenarijem in koncno izvedbo igre. 
+## Možne nadgradnje
+Zgoraj omenjeno smo stvari delali kar se da strukturirano, da je v prihodnosti možno igro nadgraditi.
+Zamislili smo si JSON format za opis animacij in interaktivnih objektov.
+Fiziko smo implementirali na način, da bi jo z lahkoto lahko malo spremenili in omogočili celo potiske objektov in podobno.
+Prav tako je možnost nadrgadnje druga tehnologija za detekcijo trkov.
+Implementirali bi tudi lahko še animacije armatur.
 
 ## Pogled
 Uporabili smo Perspektivno kamero uvoženo iz blenderja preko gltf-ja.
-Igralca se ne vidi.  
+Igralca se ne vidi.
 
 ## 3.) Uporabniški vmesnik
-Naredili smo meni v katerem lahko uporabnik prične z igranjem igre, na voljo pa mu je tudi opcija options. Če uporabnik klikne options, se mu odpre meni v katerem lahko nastavlja glasnost zvoka in občutljivost miške.
+Naredili smo meni v katerem lahko uporabnik prične z igranjem igre, na voljo pa mu je tudi opcija options. Če uporabnik pritisne na gumb options, se mu odpre meni v, katerem lahko nastavlja glasnost zvoka in občutljivost miške.
 
-Med samim igranjem igre se na ekranu lahko pokaže "Press [F] to interact." ali "Press [F] tp carry.", s tem napisom uporabniku sporočimo, da je v bližini nekega objekta s katerim lahko upravlja.
+Med samim igranjem igre se na ekranu pokaže "Press [F] to interact." ali "Press [F] to carry.". S tem napisom uporabniku sporočimo, da je v bližini nekega objekta, s katerim lahko upravlja.
 ![carry prompt](./screenshots/room1_gameplay2.png)
 
 ## 4.) Glasba in zvok
 Med igranjem igre se predvaja strašljiva glasba. Nivo glasnosti lahko znižamo v meniju.
 Poleg glasbe, ki se predvaja konstantno, se ob hoji in teku sliši tudi zvok stopinj. 
-Zvok stopinj se predvaja hitreje ko tečeš in počasneje ko hodiš.
+Zvok stopinj se predvaja hitreje, ko tečeš in počasneje, ko hodiš.
+Dodali smo tudi zvok rušenja kamnov, ki se sproži ob predvajanju animacije v tretji sobi.
