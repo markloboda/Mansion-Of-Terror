@@ -177,3 +177,8 @@ V skladišču je veliko polic, ki v sobi sestavljajo labirint, v katerem se mora
 Po skladišču se igralec znajde na stopnišču, vidi vrata dvigala, katera ne more odpredi, igralec lahko raziskuje po sobi, ko se po stopnicah spusti do najnižje točke sobe, se tla sesujejo in igralec pade oz. napreduje v tretjo sobo (kanalizacija).
 Ko se igralec pride v kanalizacijo, se sesuje strop in pusti v kanalizacijskem potoku poleg odpadkov tudi ruševine, preko katerih lahko igralec na več mestih preskoči potok in se prebije do lestve, po kateri spleza v zadnjo sobo.
 Igralec se spet znajde v drugi sobi, tokrat lahko odpre vrata dvigala, tako zbeži in zaključi igro.
+
+## 6.) Zaključki in možne nadgradnje
+Gradnja igre od začetka brez podpore nekega velikega game engine-a je bilo za vse nas nekaj novega. Všeč nam je bilo, da smo imeli popolno kontrolo nad tem kako se stvari dogajajo, je pa res da so nam veliko časa vzele precej osnovne stvari, kot npr. premikanje kamere. Pri računalniški grafiki je dobro to, da včasih tudi če nekaj narobe narediš v senčilniku dobiš kakšen zanimiv efekt na ekranu. Slabost je pa to, da če nekaj narediš preveč narobe na ekranu ne vidiš ničesar razhroščevanje senčilnikov pa je težko.
+
+Veliko časa smo porabili tudi za to, da bi bilo dodajanje novih sob čim enostavnejše in nakoncu so vse sobe ostale neizpiljene. Mogoče smo se malo preveč fokusirali na fleksibilnost naše kode in premalo na gameplay.
