@@ -124,6 +124,7 @@ Zamislili smo si JSON format za opis animacij in interaktivnih objektov.
 Fiziko smo implementirali na način, da bi jo z lahkoto lahko malo spremenili in omogočili celo potiske objektov in podobno.
 Prav tako je možnost nadrgadnje druga tehnologija za detekcijo trkov.
 Implementirali bi tudi lahko še animacije armatur.
+Dodali bi lahko tudi nove zvoke za različne animacije.
 
 ## Pogled
 Uporabili smo Perspektivno kamero uvoženo iz blenderja preko gltf-ja.
