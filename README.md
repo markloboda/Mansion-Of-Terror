@@ -1,11 +1,4 @@
 <head>
-<style type="text/css">
-.logo {
-  float: right;
-  width:40%;
-  height:25%;
-}
-</style>
 </head>
 
 <body>
